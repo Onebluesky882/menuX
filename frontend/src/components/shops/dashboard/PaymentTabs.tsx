@@ -55,21 +55,6 @@ export const PaymentTab = () => {
     }));
   };
 
-  const handleSave = () => {
-    toast({
-      title: "Payment settings saved!",
-      description: "Your payment information has been updated successfully.",
-    });
-  };
-
-  const handleQRUpload = () => {
-    // Simulate file upload
-    toast({
-      title: "QR Code uploaded!",
-      description: "Your payment QR code has been uploaded successfully.",
-    });
-  };
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Payment Settings Form */}
@@ -92,11 +77,7 @@ export const PaymentTab = () => {
                     <p className="text-sm text-muted-foreground">
                       QR Code uploaded successfully
                     </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleQRUpload}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => {}}>
                       Replace QR Code
                     </Button>
                   </div>
@@ -113,7 +94,7 @@ export const PaymentTab = () => {
                       <p className="text-xs text-muted-foreground mb-4">
                         Supports PNG, JPG files up to 5MB
                       </p>
-                      <Button onClick={handleQRUpload}>Upload QR Code</Button>
+                      <Button onClick={() => {}}>Upload QR Code</Button>
                     </div>
                   </div>
                 )}
@@ -242,7 +223,7 @@ export const PaymentTab = () => {
               />
             </div>
 
-            <Button onClick={handleSave} className="w-full">
+            <Button onClick={() => {}} className="w-full">
               Save Payment Settings
             </Button>
           </CardContent>
