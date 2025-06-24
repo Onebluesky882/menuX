@@ -16,6 +16,11 @@ export class R2Controller {
     console.log('got file', file);
     const result = await this.r2Service.uploadFile(file);
     console.log('result :', result);
+    
+    // func insert image path/key into menu table -> col img_path /123-345asd-vzxc.jpg -> {endpoint}/{path}
+    // <img src={menu.url} />
+    // url -> (uuid-img).jpg
+    // url -> (shop-id)/(uuid-img).jpg -> (shop-id)/*
     return result;
   }
 }

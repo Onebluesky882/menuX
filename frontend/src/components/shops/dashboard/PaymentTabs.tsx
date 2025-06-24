@@ -317,3 +317,20 @@ export const PaymentTab = () => {
     </div>
   );
 };
+
+// export const DebugAPI = () =>{
+//   return <div>
+//     <button onClick={() => {
+//       api.insertCart('12')
+//     }}>insertCart Success</button>
+//     <button onClick={() => {
+//       api.insertCart(123)
+//     }}>insertCart fail</button>
+//     <button onClick={() => {
+//       api.insertCart('12')
+//     }}>insertCart</button>
+//   </div>
+
+// }
+
+// metric

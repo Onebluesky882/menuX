@@ -65,3 +65,7 @@ export class MenusController {
     return this.menusService.delete(id, shopId);
   }
 }
+
+
+// Search Text sql
+// EXPLAIN SELECT * FROM menu WHERE name LIKE '%กะเพรา'
