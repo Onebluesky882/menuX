@@ -3,31 +3,33 @@ import { convertBlobUrlToFile } from "./convertBlobUrlFile";
 
 export async function compressAndUpload(
   previewUrl: string,
-  uploader: (formData: FormData) => Promise<string>
+  uploader: (formData: FormData) => Promise<string>,
+  metadata: { type: string; shopId: string; menuId: string }
 ): Promise<string | null> {
   try {
-    const file = await convertBlobUrlToFile(previewUrl);
+    const image = await convertBlobUrlToFile(previewUrl);
 
-    const compressed = await imageCompression(file, {
+    const compressed = await imageCompression(image, {
       maxSizeMB: 0.5,
       useWebWorker: true,
       maxWidthOrHeight: 1024,
     });
 
-    // 🟡 Rename the compressed file here
-    const renamedCompressed = new File([compressed], file.name, {
+    const imageReducted = new File([compressed], image.name, {
       type: compressed.type,
     });
 
     const formData = new FormData();
-    formData.append("file", renamedCompressed);
+    formData.append("file", imageReducted);
+    formData.append("type", metadata.type);
+    formData.append("shopId", metadata.shopId);
+    formData.append("menuId", metadata.menuId);
 
-    const url = await uploader(formData);
+    const uploaded = await uploader(formData);
 
-    console.log("Original:", file.name, file.size);
-    console.log("Compressed:", renamedCompressed.name, renamedCompressed.size);
+    console.log("uploaded :", uploaded);
 
-    return url;
+    return uploaded;
   } catch (err) {
     return null;
   }

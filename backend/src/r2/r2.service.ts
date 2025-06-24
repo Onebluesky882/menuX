@@ -34,10 +34,9 @@ export class R2Service {
       ContentType: file.mimetype,
     });
     await this.s3.send(command);
-    console.log('Got file:', file.originalname, file.size, file.mimetype);
-    const endpoint = this.configService
-      .get('R2_ENDPOINT')!
-      .replace(/^https?:\/\//, '');
-    return `https://${this.bucket}.${endpoint}/${file.originalname}`;
+
+    const publicUrl = this.configService.get('R2_PUBLIC');
+
+    return `${publicUrl}/${file.originalname}`;
   }
 }

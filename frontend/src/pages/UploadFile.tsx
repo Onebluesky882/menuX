@@ -3,17 +3,19 @@
 import { useEffect, useState } from "react";
 import UploadImage from "@/components/uploadImage";
 import useImages from "@/hooks/useImage";
-
+import { v4 as uuidv4 } from "uuid";
 const UploadFile = () => {
   const { addImage, upload, images } = useImages();
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
 
   const handleUpload = async () => {
     const uploaded = await upload();
-    console.log("Uploaded URLs:", uploaded);
-    alert("Upload complete!");
   };
-
+  const image = {
+    type: "shop",
+    menuId: "394aaaf2-2ef4-464e-9b60-6388c958be35",
+    shopId: "150d9c0c-6b45-4e58-a8fe-52e7ebe6faf2",
+  };
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">Test Image Upload</h1>
@@ -25,11 +27,17 @@ const UploadFile = () => {
             addImage({
               previewUrl: url,
               status: "idle",
+              type: image.type,
+              menuId: image.menuId,
+              shopId: image.shopId,
             });
           });
         }}
         onDialogClosed={() => setUploadingIndex(null)}
         trigger={uploadingIndex !== null}
+        type={image.type}
+        menuId={image.menuId}
+        shopId={image.shopId}
       />
 
       <div className="mt-4 space-x-2">

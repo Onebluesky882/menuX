@@ -5,6 +5,10 @@ type UploadImageProps = {
   onImagesSelected: (files: FileList) => void;
   trigger: boolean;
   onDialogClosed?: () => void;
+
+  type: string;
+  menuId: string;
+  shopId: string;
 };
 
 const UploadImage = ({

@@ -3,6 +3,9 @@ interface ImageItem {
   previewUrl: string; // blob url
   status: "idle" | "uploading" | "uploaded" | "error";
   uploadedUrl?: string;
+  type?: string;
+  shopId?: string;
+  menuId?: string;
 }
 
 interface ImagesState {

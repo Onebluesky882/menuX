@@ -9,7 +9,6 @@ export const images = pgTable('images', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),
-  imageName: text('image_name'),
   imageUrl: text('image_url'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   type: text('type').notNull(), // e.g., 'menu' | 'shop' | 'profile'

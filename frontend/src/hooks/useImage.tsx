@@ -17,6 +17,11 @@ const useImages = () => {
           async (formData) => {
             const res = await uploadImageApi.create(formData);
             return res.data.imageUrl || res.data.url || null;
+          },
+          {
+            type: img.type ?? "",
+            shopId: img.shopId ?? "", // <---
+            menuId: img.menuId ?? "", // <---
           }
         );
         if (result) {
@@ -30,7 +35,6 @@ const useImages = () => {
       })
     );
 
-    console.log("uploadedUrl hook", uploadedUrl);
     return uploadedUrl.filter((url): url is string => url !== null);
   };
 
