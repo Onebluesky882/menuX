@@ -39,6 +39,7 @@ export class R2Controller {
     };
 
     const picture = await this.imagesService.postImage(image, userId);
+    console.log(picture);
 
     return result;
   }

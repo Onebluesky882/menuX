@@ -26,7 +26,7 @@ export class ImagesService {
         .insert(images)
         .values({ ...data, userId: userId })
         .returning();
-
+      console.log('result image service : ', result);
       return {
         status: 'success',
         success: true,

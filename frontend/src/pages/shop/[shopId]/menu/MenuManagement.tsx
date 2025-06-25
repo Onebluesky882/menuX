@@ -176,6 +176,9 @@ const MenuManagement = () => {
                     }}
                     trigger={uploadingIndex === index}
                     onDialogClosed={() => setUploadingIndex(null)}
+                    type={""}
+                    menuId={""}
+                    shopId={""}
                   />
                 </div>
               ))}
