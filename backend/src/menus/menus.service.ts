@@ -52,38 +52,6 @@ export class MenusService {
       );
     }
   }
-  async getMenuAvailable(shopId: string) {
-    try {
-      const result = await this.db
-        .select({
-          name: menus.name,
-          price: menus.price,
-          categoryId: menus.categoryId,
-          available: menus.available,
-          createdBy: menus.createdBy,
-          description: menus.description,
-          pageId: menus.pageId,
-          imageId: menus.imageId,
-          shopId: menus.shopId,
-        })
-        .from(menus)
-        .where(and(eq(menus.shopId, shopId), eq(menus.available, true)));
-
-      return {
-        success: true,
-        data: result,
-      };
-    } catch (error) {
-      this.logger?.error?.('Failed to fetch available menus:', error);
-      throw new HttpException(
-        {
-          success: false,
-          message: 'failed fetch menu',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
 
   async getAll(shopId: string) {
     try {
@@ -96,7 +64,6 @@ export class MenusService {
           createdBy: menus.createdBy,
           description: menus.description,
           pageId: menus.pageId,
-          imageId: menus.imageId,
           shopId: menus.shopId,
         })
         .from(menus)
@@ -118,26 +85,23 @@ export class MenusService {
     }
   }
 
-  async getById(id: string, shopId: string) {
+  async getByName(name: string, shopId: string) {
     try {
       const result = await this.db
         .select({
           name: menus.name,
           price: menus.price,
-          categoryId: menus.categoryId,
           available: menus.available,
           createdBy: menus.createdBy,
-          description: menus.description,
           pageId: menus.pageId,
-          imageId: menus.imageId,
           shopId: menus.shopId,
         })
         .from(menus)
-        .where(and(eq(menus.id, id), eq(menus.shopId, shopId)));
+        .where(and(eq(menus.name, name), eq(menus.shopId, shopId)));
       return {
         data: result[0],
         success: true,
-        message: 'Fetched menu by ID successfully',
+        status: 'success',
       };
     } catch (error) {
       this.logger.error(error);

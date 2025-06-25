@@ -5,7 +5,7 @@ export const schema = z.object({
     .string()
     .min(1, "require")
     .transform((val) => val.trim()),
-  price: z.number().min(1, "require"),
+  price: z.coerce.number().min(1, "require"),
 });
 
 export type QuickAddMenu = z.infer<typeof schema>;

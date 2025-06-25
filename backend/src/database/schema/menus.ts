@@ -11,12 +11,9 @@ import { shops } from './shops';
 import { users } from './users';
 import { pages } from './pages';
 import { categories } from './categories';
-import { images } from './images';
 
 export const menus = pgTable('menus', {
-  id: uuid('id')
-    .primaryKey()
-    .default(sql`gen_random_uuid()`),
+  id: uuid('id').primaryKey().unique().notNull(),
   createdBy: uuid('created_by').references(() => users.id),
   name: text('name').notNull().unique(),
   description: text('description'),

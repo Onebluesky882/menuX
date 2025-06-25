@@ -1,5 +1,7 @@
 import imageCompression from "browser-image-compression";
 import { convertBlobUrlToFile } from "./convertBlobUrlFile";
+import { uploadImageApi } from "@/Api/uploadImage.api";
+import { create } from "zustand";
 
 export async function compressAndUpload(
   previewUrl: string,
@@ -24,10 +26,9 @@ export async function compressAndUpload(
     formData.append("type", metadata.type);
     formData.append("shopId", metadata.shopId);
     formData.append("menuId", metadata.menuId);
+    console.log("[compressAndUpload] FormData prepared");
 
     const uploaded = await uploader(formData);
-
-    console.log("uploaded :", uploaded);
 
     return uploaded;
   } catch (err) {

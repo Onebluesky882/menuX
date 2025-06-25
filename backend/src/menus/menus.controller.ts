@@ -39,10 +39,9 @@ export class MenusController {
   }
   // get by id
   // @UseGuards(ShopAccessGuard)
-  @Get(':id')
-  @Roles('manager', 'owner', 'customer', 'guest', 'staff')
-  getById(@Param('id') id: string, @Query('shopId') shopId: string) {
-    return this.menusService.getById(id, shopId);
+  @Get('name')
+  getById(@Query('name') name: string, @Query('shopId') shopId: string) {
+    return this.menusService.getByName(name, shopId);
   }
 
   // update
@@ -65,7 +64,6 @@ export class MenusController {
     return this.menusService.delete(id, shopId);
   }
 }
-
 
 // Search Text sql
 // EXPLAIN SELECT * FROM menu WHERE name LIKE '%กะเพรา'
