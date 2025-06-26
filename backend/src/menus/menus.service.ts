@@ -59,11 +59,7 @@ export class MenusService {
         .select({
           name: menus.name,
           price: menus.price,
-          categoryId: menus.categoryId,
           available: menus.available,
-          createdBy: menus.createdBy,
-          description: menus.description,
-          pageId: menus.pageId,
           shopId: menus.shopId,
         })
         .from(menus)

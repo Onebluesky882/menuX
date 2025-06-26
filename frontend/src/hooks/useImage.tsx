@@ -4,13 +4,14 @@ import useImagesStore from "@/stores/uploadImages";
 import { compressAndUpload } from "@/utils/imageCompression";
 import { useState } from "react";
 
+export type MenuImage = { id: string; url: string };
+
 const useImages = () => {
   const images = useImagesStore((state) => state.images);
   const addImage = useImagesStore((state) => state.addImage);
   const uploadImage = useImagesStore((state) => state.uploadImage);
   const resetImages = useImagesStore((state) => state.resetImages);
-
-  const [menuImage, setMenuImage] = useState([]);
+  const [menuImage, setMenuImage] = useState<MenuImage[]>([]);
   const upload = async () => {
     const uploadedUrl = await Promise.all(
       images.map(async (img, index) => {
@@ -44,9 +45,10 @@ const useImages = () => {
 
   const getMenuImage = async (shopId: string, type: string) => {
     const res = await imagesApi.getImages(shopId, type);
-    console.log("res data data", res.data.data);
-    setMenuImage(res.data.data);
-    console.log("menuImage :", menuImage);
+
+    const items = res.data.data;
+    console.log("items hook :", items);
+    setMenuImage(items);
   };
 
   return {

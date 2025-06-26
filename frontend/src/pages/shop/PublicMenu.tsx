@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingCart, Filter } from "lucide-react";
-import MenuCard from "@/components/menu/MenuCard";
 import useMenu from "@/hooks/useMenu";
 import useShop from "@/hooks/useShop";
 import { useParams } from "react-router-dom";
@@ -45,98 +44,10 @@ const sampleMenus: MenuProps[] = [
     isPopular: true,
     discount: 15,
   },
-  {
-    id: "2",
-    available: true,
-    name: "ส้มตำปูปลาร้า",
-    price: "150",
-    image: [
-      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=500&h=400&fit=crop&auto=format",
-    ],
-    amount: 0,
-    description:
-      "ส้มตำตำสดใหม่ทุกวัน ใส่ถั่วฝักยาว มะเขือเทศ ปูปลาร้าแท้ รสชาติจัดจ้าน เผ็ดร้อนแซ่บ",
-    category: "ยำ/สลัด",
-    rating: 4.7,
-    prepTime: "8 นาที",
-    isSpicy: true,
-    isPopular: false,
-  },
-  {
-    id: "3",
-    available: false,
-    name: "แกงเขียวหวานไก่",
-    price: "190",
-    image: [
-      "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1569718212750-6d4466ec2b5c?w=500&h=400&fit=crop&auto=format",
-    ],
-    amount: 0,
-    description:
-      "แกงเขียวหวานไก่เนื้อนุ่ม ใส่มะเขือพวงสด ใบโหระพาหอม กะทิข้นหวานมัน",
-    category: "แกง/ต้ม",
-    rating: 4.8,
-    prepTime: "18 นาที",
-    isSpicy: true,
-    isPopular: true,
-  },
-  {
-    id: "4",
-    available: true,
-    name: "ข้าวผัดปูจริง",
-    price: "320",
-    image: [
-      "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1559847844-d418898e3957?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1563379091339-03246963d96c?w=500&h=400&fit=crop&auto=format",
-    ],
-    amount: 0,
-    description:
-      "ข้าวผัดปูแท้ 100% เนื้อปูแน่นเต็มคำ หอมกลิ่นหอมใหญ่เจียว ใส่ไข่ดาวกรอบ",
-    category: "อาหารจานหลัก",
-    rating: 4.9,
-    prepTime: "15 นาที",
-    isSpicy: false,
-    isPopular: true,
-  },
-  {
-    id: "5",
-    available: true,
-    name: "ต้มยำกุ้งน้ำข้น",
-    price: "220",
-    image: [
-      "https://images.unsplash.com/photo-1569718212750-6d4466ec2b5c?w=500&h=400&fit=crop&auto=format",
-    ],
-    amount: 0,
-    description: "ต้มยำกุ้งน้ำข้นรสจัด กุ้งสดใหม่ เห็ดฟาง มะเขือเทศ ใบมะกรูด",
-    category: "แกง/ต้ม",
-    rating: 4.6,
-    prepTime: "20 นาที",
-    isSpicy: true,
-    isPopular: false,
-  },
-  {
-    id: "6",
-    available: true,
-    name: "มะม่วงข้าวเหนียว",
-    price: "120",
-    image: [
-      "https://images.unsplash.com/photo-1563379091339-03246963d96c?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&h=400&fit=crop&auto=format",
-    ],
-    amount: 0,
-    description: "ข้าวเหนียวหวานนุ่ม มะม่วงสุกหวาน กะทิข้นหอม โรยงาคั่วหอม",
-    category: "ของหวาน",
-    rating: 4.8,
-    prepTime: "5 นาที",
-    isSpicy: false,
-    isPopular: true,
-  },
 ];
 
 // Public Menu Component
-const PublicMenu: React.FC = () => {
+const PublicMenu = () => {
   const { shopId } = useParams<{ shopId: string }>();
   const [menus, setMenus] = useState<MenuProps[]>(sampleMenus);
   const [showFilters, setShowFilters] = useState(false);
@@ -147,7 +58,6 @@ const PublicMenu: React.FC = () => {
 
   const { selectedShop, setShopById } = useShop();
 
-  //
   const { getAllMenu, menus: item } = useMenu();
 
   useEffect(() => {
@@ -156,9 +66,9 @@ const PublicMenu: React.FC = () => {
     getAllMenu(shopId!);
     getMenuImage(shopId!, "menu");
   }, [shopId]);
-  console.log("item :", item);
-  console.log("selectedShop :", selectedShop?.name);
-  console.log("menuImage :", menuImage);
+
+  console.log("item menu :", item);
+
   const totalItems = menus.reduce((sum, menu) => sum + menu.amount, 0);
   const totalPrice = menus.reduce((sum, menu) => {
     const price = menu.discount
