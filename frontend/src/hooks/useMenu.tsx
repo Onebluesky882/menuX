@@ -1,17 +1,16 @@
 import { menuApi } from "@/Api/menu.api";
 import { useState } from "react";
 
-export type Menu = {};
 const useMenu = () => {
   const [menus, setMenus] = useState([]);
   const getAllMenu = async (shopId: string) => {
     const res = await menuApi.getAll(shopId);
     if (res) {
-      const menuItems = res.data.map(() => ({}));
+      const menuItems = res.data;
 
-      setMenus([]);
+      setMenus(menuItems);
     }
   };
-  return {};
+  return { getAllMenu, menus };
 };
 export default useMenu;

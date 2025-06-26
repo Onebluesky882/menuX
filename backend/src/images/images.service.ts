@@ -90,10 +90,14 @@ export class ImagesService {
       );
     }
   }
-  async getMenuImages(data: Pick<ImageDto, 'type'>, userId: string) {
+  async getMenuImages(shopId: string, type: string) {
     try {
-      const result = await this.db.select().from(images);
-      and(eq(images.userId, userId!), eq(images.type, data.type));
+      const result = await this.db
+        .select({ url: images.imageUrl })
+        .from(images)
+        .where(
+          and(eq(images.shopId, shopId), eq(images.type, (type = 'menu'))),
+        );
 
       return {
         success: true,

@@ -8,6 +8,7 @@ import CreateCategory from "@/pages/shop/[shopId]/CreateCategory";
 import CreateNewShop from "@/pages/shop/CreateShop";
 import Dashboard from "@/pages/Dashboard";
 import ShopLayout from "@/pages/shop/[shopId]/ShopLayout";
+import PublicMenu from "@/pages/shop/PublicMenu";
 
 export const ShopRoute = (
   <>
@@ -23,5 +24,12 @@ export const ShopRoute = (
         <Route path="cctv" element={<Cctv />} />
       </Route>
     </Route>
+  </>
+);
+export const MenuRoute = (
+  <>
+    <Route path="/menu/:shopId" element={<PublicMenu />} />
+
+    <Route path="order" element={<CreateNewShop />} />
   </>
 );
