@@ -15,18 +15,19 @@ import { AuthRequest } from 'types/auth';
 import { CreateShopDto, UpdateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 import { AuthGuard } from '@nestjs/passport';
-@UseGuards(AuthGuard('jwt'))
+
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
   //getAll
   // @UseGuards(ShopAccessGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   getAll(@Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.ShopsService.getAll(userId);
   }
-
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   // @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
@@ -38,13 +39,14 @@ export class ShopsController {
     return this.ShopsService.getById(id);
   }
   // update
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   @Roles('manager', 'owner')
   update(@Param('id') id: string, @Body() body: UpdateShopDto) {
     return this.ShopsService.update(id, body);
   }
 
-  // delete
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string) {

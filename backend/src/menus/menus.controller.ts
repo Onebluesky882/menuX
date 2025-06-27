@@ -15,13 +15,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthRequest } from '../../types/auth';
 import { MenuDto } from './menus.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-@UseGuards(AuthGuard('jwt'))
+
 @Controller('menus')
 export class MenusController {
   constructor(private readonly menusService: MenusService) {}
 
   //create
   // @UseGuards(ShopAccessGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   // @Roles('manager', 'owner')
   create(@Body() body: MenuDto, @Req() req: AuthRequest) {

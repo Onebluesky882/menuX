@@ -4,7 +4,7 @@ import useImagesStore from "@/stores/uploadImages";
 import { compressAndUpload } from "@/utils/imageCompression";
 import { useState } from "react";
 
-export type MenuImage = { id: string; url: string };
+export type MenuImage = { id: string; url: string; menuId: string };
 
 const useImages = () => {
   const images = useImagesStore((state) => state.images);
@@ -47,7 +47,6 @@ const useImages = () => {
     const res = await imagesApi.getImages(shopId, type);
 
     const items = res.data.data;
-    console.log("items hook :", items);
     setMenuImage(items);
   };
 

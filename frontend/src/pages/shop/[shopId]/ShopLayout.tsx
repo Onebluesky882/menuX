@@ -1,9 +1,14 @@
-import { Link, Outlet } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { Link, Outlet, useParams } from "react-router-dom";
+import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import useShop from "@/hooks/useShop";
 import MenuManagement from "./menu/MenuManagement";
+import KitchenOrderPanel, {
+  type Order,
+} from "@/components/menu/KitchenOrderPanel";
+import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
 import { menuApi } from "@/Api/menu.api";
+import { se } from "date-fns/locale";
 
 type MenuProps = {
   available: boolean;
@@ -12,41 +17,70 @@ type MenuProps = {
   image: string[];
   amount: number;
 };
+
+type OrdersProps = {
+  mockOrders?: Order[];
+};
+
+type Shop = {
+  name: string;
+  id: string;
+};
 // get image url belong with menu Id
 
 const ShopLayout = () => {
+  const [menus, setMenus] = useState([]);
+
   const { selectedShop } = useShop();
 
-  const shopName = selectedShop?.name;
+  useEffect(() => {
+    const getShopMenu = async () => {
+      const res = await menuApi.getAll(selectedShop?.id!);
+      console.log(res.data);
+      const items = res.data;
+      setMenus(items);
+    };
+    getShopMenu();
+  }, []);
 
-  const [menus, setMenus] = useState([]);
-  // useEffect(() => {
-  //   const getShopMenu = async () => {
-  //     const res = await menuApi.getAll(selectedShop?.id!);
-  //     console.log(res.data);
-  //     const items = res.data;
-  //     setMenus(items);
-  //   };
-  //   getShopMenu();
-  // }, []);
-
-  console.log("shopName :", shopName);
+  const mockOrders = [
+    {
+      available: true,
+      name: "กะเพราไก่ไข่ดาว",
+      price: "45",
+      image: ["https://example.com/img1.jpg"],
+      amount: 2,
+      category: "อาหารจานเดียว",
+      description: "เผ็ดนิดๆ ใส่ใบกะเพราแท้",
+      isSpicy: true,
+      isPopular: true,
+    },
+    {
+      available: true,
+      name: "ต้มยำกุ้ง",
+      price: "60",
+      image: ["https://example.com/img2.jpg"],
+      amount: 1,
+      category: "ซุป",
+      prepTime: "10 นาที",
+    },
+  ];
 
   return (
     <div>
       <Outlet />
       <div>
         <div>
-          <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-10 px-4">
+          <div className="min-h-screen  py-10 px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-md md:text-2xl font-bold text-primary  text-center">
-                {selectedShop ? `Shop : ${shopName}` : "need login!"}
+                {selectedShop ? `Shop : ${selectedShop.name}` : "need login!"}
               </h2>
 
-              <div className="bg-white rounded-2xl shadow-lg p-6 animate-fade-in">
-                <Tabs defaultValue="menu" className="w-full">
-                  {/*    // menu Tab */}
-                  <ShopTitle />
+              <div className=" bg-amber-50  rounded-2xl shadow-lg p-6 animate-fade-in">
+                <Tabs defaultValue="menu" className="   w-full">
+                  {" "}
+                  <ShopTabsLayout />
                   <AddMenu />
                   <Menus
                     available={false}
@@ -54,10 +88,9 @@ const ShopLayout = () => {
                     price={""}
                     image={[]}
                     amount={0}
-                    shopId={selectedShop?.id!}
+                    shopId={selectedShop?.id ?? ""}
                   />
-                  <Promotions />
-                  <Orders />
+                  <Orders mockOrders={mockOrders} />
                 </Tabs>
               </div>
             </div>
@@ -67,52 +100,10 @@ const ShopLayout = () => {
     </div>
   );
 };
-const ShopTitle = () => {
-  return (
-    <TabsList className="flex flex-wrap justify-center gap-3 mb-6">
-      <TabsTrigger
-        value="menu"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        🍽 Add Menu
-      </TabsTrigger>
-      <TabsTrigger
-        value="shop-menu"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        ShopMenu
-      </TabsTrigger>
-      <TabsTrigger
-        value="promotions"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        🧾 promotions
-      </TabsTrigger>
-      <TabsTrigger
-        value="orders"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        🧾 Orders
-      </TabsTrigger>
-      <TabsTrigger
-        value="staff"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        👥 Staff
-      </TabsTrigger>
-      <TabsTrigger
-        value="settings"
-        className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-      >
-        ⚙️ Settings
-      </TabsTrigger>
-    </TabsList>
-  );
-};
 
 const AddMenu = () => {
   return (
-    <TabsContent value="menu">
+    <TabsContent value="menu" className=" ">
       <MenuManagement />
     </TabsContent>
   );
@@ -127,23 +118,17 @@ const Menus = ({
   return (
     <TabsContent value="shop-menu">
       <Link to={`/menu/${shopId}`}>
-        <u>live </u>
+        <u>live menu</u>
       </Link>
-      <p>{}</p>
     </TabsContent>
   );
 };
-const Promotions = () => {
-  return (
-    <TabsContent value="promotions">
-      <p className="text-gray-700">promotions</p>
-    </TabsContent>
-  );
-};
-const Orders = () => {
+
+const Orders = ({ mockOrders }: OrdersProps) => {
   return (
     <TabsContent value="orders">
-      <p className="text-gray-700">📦 Order management is coming soon.</p>
+      {mockOrders &&
+        mockOrders.map((item) => <KitchenOrderPanel order={item} />)}
     </TabsContent>
   );
 };

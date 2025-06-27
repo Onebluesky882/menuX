@@ -13,3 +13,19 @@ export type PartialCreateMenu = Pick<
 >;
 
 export type MenuImage = { id: string; url: string; menuId: string };
+
+export type Menu = {
+  id: string;
+  available: boolean;
+  name: string;
+  price: string;
+  image: string[];
+  amount: number;
+  description?: string;
+  category?: string;
+  rating?: number;
+  prepTime?: string;
+  isSpicy?: boolean;
+  isPopular?: boolean;
+  discount?: number;
+};
