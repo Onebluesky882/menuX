@@ -2,9 +2,9 @@ import { sql } from 'drizzle-orm';
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { orderTable } from './orderTable';
 import { shops } from './shops';
-import { menus } from './menus';
 import { customers } from './customers';
 import { users } from './users';
+import { menus } from './menus';
 
 export const orders = pgTable('orders', {
   id: uuid('id')
@@ -17,6 +17,7 @@ export const orders = pgTable('orders', {
   orderTableId: uuid('order_table_id').references(() => orderTable.id, {
     onDelete: 'cascade',
   }),
+  menuId: uuid('menu_id').references(() => menus.id),
   status: text('status').default('pending'),
   customerId: uuid('customer_id').references(() => customers.id),
   createdById: uuid('create_by_id')

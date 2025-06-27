@@ -4,7 +4,7 @@ import { Minus, Plus, Flame, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import type { Menu } from "frontend/types/menu.types";
+import { orderApi } from "@/Api/orders.api";
 
 // ---------------------------------------------
 // Type declarations
@@ -51,17 +51,27 @@ export default function ItemCard({
   useEffect(() => {
     setAmount(propAmount);
   }, [propAmount]);
-
-  const update = (newAmount: number) => {
+  const [cart, setCart] = useState<ItemCardComponentProps[]>();
+  const update = async (newAmount: number) => {
     if (newAmount < 0) return;
     setAmount(newAmount);
     onAmountChange?.(id, newAmount);
-
-    console.log("🧾 Updating amount", {
-      itemId: id,
-      from: amount,
-      to: newAmount,
-    });
+    // update to cart and send object to db
+    try {
+      const res = await orderApi.create({
+        menuId: id,
+        quantity: newAmount,
+        priceEach: parseFloat(price),
+        totalPrice: parseFloat(price) * newAmount,
+        status: "pending",
+        shopId: "shopId",
+        customerId: "",
+        orderType: "dine-in",
+      });
+      console.log("store order success ", res);
+    } catch (error) {
+      console.log("store order failed ");
+    }
   };
 
   const handleIncrement = () => update(amount + 1);
@@ -70,64 +80,108 @@ export default function ItemCard({
   const isSoldOut = !available;
 
   return (
-    <motion.div whileTap={{ scale: 0.97 }} className="w-full">
+    <motion.div
+      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -2 }}
+      className="w-full"
+    >
       <Card
         className={clsx(
-          "rounded-2xl shadow-md overflow-hidden transition-colors",
-          isSoldOut && "opacity-50 grayscale"
+          "group relative rounded-3xl overflow-hidden transition-all duration-300",
+          "bg-gradient-to-br from-white to-gray-50/50",
+          "border-0 shadow-lg hover:shadow-2xl hover:shadow-gray-200/40",
+          "backdrop-blur-sm",
+          isSoldOut && "opacity-60 grayscale"
         )}
       >
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-gray-100/30 pointer-events-none" />
+
         {/* Image */}
-        <div className="relative aspect-[4/3] w-full">
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
             src={image[0]}
             alt={name}
-            className="object-cover"
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+
+          {/* Sold out overlay */}
+          {isSoldOut && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                สินค้าหมด
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Content */}
-        <CardContent className="flex flex-col gap-2 p-2 md:p-4 ">
-          <div className="flex flex-col  items-center gap-1   justify-center text-center">
-            <h3 className="font-semibold text-base md:text-lg line-clamp-1 flex-1">
+        <CardContent className="relative p-4 md:p-6 space-y-4">
+          {/* Title and Price */}
+          <div className="text-center space-y-2">
+            <h3 className="font-semibold text-lg md:text-xl text-gray-900 line-clamp-1 tracking-tight">
               {name}
             </h3>
-            <p>ราคา {price}</p>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                ฿{Number(price) * amount}
+              </span>
+            </div>
           </div>
 
-          {/* Price & controls */}
-          <div className="mt-auto flex items-center justify-center ">
-            {/* Amount controls */}
-            <div className="flex items-center gap-1">
+          {/* Amount controls */}
+          <div className="flex items-center justify-center">
+            <div className="flex items-center gap-3 bg-gray-50/80 backdrop-blur-sm rounded-full p-2 border border-gray-200/50">
               <Button
                 size="icon"
-                variant="outline"
+                variant="ghost"
                 onClick={handleDecrement}
                 disabled={amount === 0 || isSoldOut}
-                className="w-9 h-9 md:w-10 md:h-10 rounded-full"
+                className={clsx(
+                  "w-10 h-10 rounded-full transition-all duration-200",
+                  "hover:bg-red-50 hover:text-red-600 hover:scale-105",
+                  "active:scale-95",
+                  "disabled:opacity-40 disabled:hover:scale-100"
+                )}
               >
-                <Minus size={16} />
+                <Minus size={18} strokeWidth={2.5} />
               </Button>
-              <span className="w-6 text-center text-sm md:text-base select-none">
-                {amount}
-              </span>
+
+              <div className="min-w-[3rem] text-center">
+                <span className="text-lg md:text-xl font-semibold text-gray-900 tabular-nums">
+                  {amount}
+                </span>
+              </div>
+
               <Button
                 size="icon"
                 onClick={handleIncrement}
                 disabled={isSoldOut}
-                className="w-9 h-9 md:w-10 md:h-10 rounded-full"
+                className={clsx(
+                  "w-10 h-10 rounded-full transition-all duration-200",
+                  "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600",
+                  "text-white shadow-lg hover:shadow-xl hover:shadow-green-200/50",
+                  "hover:scale-105 active:scale-95",
+                  "disabled:opacity-40 disabled:hover:scale-100"
+                )}
               >
-                <Plus size={16} />
+                <Plus size={18} strokeWidth={2.5} />
               </Button>
             </div>
           </div>
 
           {/* Prep time */}
           {prepTime && (
-            <span className="text-[10px] md:text-xs text-gray-500 mt-1">
-              ⏱️ {prepTime}
-            </span>
+            <div className="flex items-center justify-center pt-2">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+                <span className="text-blue-600">⏱️</span>
+                <span className="text-xs md:text-sm font-medium text-blue-700">
+                  {prepTime}
+                </span>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

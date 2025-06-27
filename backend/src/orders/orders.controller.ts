@@ -1,7 +1,6 @@
 import {
   Controller,
   Req,
-  UseGuards,
   Post,
   Body,
   Get,
@@ -17,14 +16,15 @@ import { AuthRequest } from 'types/auth';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-@UseGuards(AuthGuard('jwt'))
+import { UseGuards } from '@nestjs/common';
+
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   //@UseGuards(ShopAccessGuard)
+  // @UseGuards(AuthGuard('jwt'))
   @Post()
-  @Roles('manager', 'staff', 'owner', 'customer')
   create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
     const { shopId, customerId } = body;
