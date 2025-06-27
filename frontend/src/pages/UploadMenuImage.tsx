@@ -1,4 +1,4 @@
-// pages/test-upload.tsx
+// pages/upload.tsx
 
 import { useState } from "react";
 import UploadImage from "@/components/uploadMenuImage";
@@ -9,7 +9,7 @@ const UploadFile = () => {
 
   const image = {
     type: "shop",
-    menuId: "422a91d8-a4cb-423b-a308-30fc55fb5b8b",
+    menuId: "d0006b44-1912-4fa1-bb54-20935f529ed5",
     shopId: "150d9c0c-6b45-4e58-a8fe-52e7ebe6faf2",
   };
   const handleUpload = async () => {

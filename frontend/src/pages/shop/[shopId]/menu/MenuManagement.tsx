@@ -21,12 +21,16 @@ import UploadImage from "@/components/uploadImage";
 import { cn } from "@/lib/utils";
 import { compressAndUpload } from "@/utils/imageCompression";
 import { v4 as uuidv4 } from "uuid";
+type Draft = {
+  menu: QuickAddMenu;
+  imageFiles: File[];
+};
 
 export default function MenuManagement() {
+  const menuId = uuidv4();
   /* ---------------- state --------------- */
-  const [drafts, setDrafts] = useState<
-    { menu: QuickAddMenu; imageFile?: File }[]
-  >([]);
+
+  const [drafts, setDrafts] = useState<Draft[]>([]);
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -43,14 +47,18 @@ export default function MenuManagement() {
 
   /* ---------- form handlers -------------- */
   const onSubmit = (data: QuickAddMenu) => {
-    setDrafts((prev) => [...prev, { menu: data }]);
+    setDrafts((prev) => [...prev, { menu: data, imageFiles: [] }]);
     toast.success("Draft menu added");
     reset();
   };
 
-  const attachImage = (index: number, file: File) =>
+  const attachImages = (index: number, files: File[]) =>
     setDrafts((prev) =>
-      prev.map((d, i) => (i === index ? { ...d, imageFile: file } : d))
+      prev.map((d, i) =>
+        i === index
+          ? { ...d, imageFiles: [...(d.imageFiles ?? []), ...files] }
+          : d
+      )
     );
 
   /* ------------- save all --------------- */
@@ -63,33 +71,39 @@ export default function MenuManagement() {
       /* 1️⃣  create menus in parallel */
       const createResults = await Promise.allSettled(
         drafts.map(({ menu }) => {
-          const newMenuId = uuidv4();
-
+          const menuId = uuidv4(); // ⚠️ make sure this is scoped correctly per draft
           return menuApi
             .create({
-              id: newMenuId,
+              id: menuId,
               ...transformKeysToSnakeCase(menu),
               shopId,
             })
-            .then((res) => ({ id: newMenuId, result: res }));
+            .then((res) => ({ id: menuId, result: res }));
         })
       );
 
-      /* 2️⃣  for each draft: fetch menuId then upload image */
+      /* 2️⃣  for each draft: fetch menuId then upload ALL image files */
       for (let i = 0; i < drafts.length; i++) {
-        const { imageFile } = drafts[i];
+        const { imageFiles } = drafts[i];
 
-        if (!imageFile) continue;
+        if (!imageFiles || imageFiles.length === 0) continue;
         const createResult = createResults[i];
         if (createResult.status !== "fulfilled") continue;
+
         const menuId = createResult.value.id;
 
-        const previewUrl = URL.createObjectURL(imageFile);
+        // Upload all images for this menu
+        await Promise.all(
+          imageFiles.map((file) => {
+            const previewUrl = URL.createObjectURL(file);
 
-        await compressAndUpload(
-          previewUrl,
-          (fd: FormData) => uploadImageApi.create(fd).then((r) => r.data.url),
-          { type: "menu", shopId, menuId }
+            return compressAndUpload(
+              previewUrl,
+              (fd: FormData) =>
+                uploadImageApi.create(fd).then((r) => r.data.url),
+              { type: "menu", shopId, menuId }
+            );
+          })
         );
       }
 
@@ -102,7 +116,6 @@ export default function MenuManagement() {
       setLoading(false);
     }
   };
-
   /* -------------- jsx ------------------- */
   return (
     <div className="container mx-auto">
@@ -147,15 +160,20 @@ export default function MenuManagement() {
                     trigger={uploadingIndex === idx}
                     onDialogClosed={() => setUploadingIndex(null)}
                     onImagesSelected={(files) => {
-                      const file = files[0];
-                      if (!file) return;
-                      addImage({
-                        previewUrl: URL.createObjectURL(file),
-                        status: "idle",
+                      const fileArray = Array.from(files);
+                      fileArray.forEach((file) => {
+                        addImage({
+                          previewUrl: URL.createObjectURL(file),
+                          status: "idle",
+                          type: "menu",
+                          shopId: selectedShop?.id ?? "",
+                          menuId: menuId,
+                        });
                       });
-                      attachImage(idx, file);
+
+                      attachImages(idx, fileArray);
                     }}
-                    type={""}
+                    type={"menu"}
                     menuId={""}
                     shopId={""}
                   />

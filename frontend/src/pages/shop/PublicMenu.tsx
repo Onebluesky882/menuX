@@ -69,7 +69,7 @@ const PublicMenu = () => {
   }, [shopId]);
 
   const imageMap = new Map<string, string>(
-    menuImage.map((img) => [img.menuId, img.url])
+    menuImage.map((img) => [img.id, img.url])
   );
 
   const menuWithImage: MenuProps[] = (menuItems ?? []).map((menu) => ({

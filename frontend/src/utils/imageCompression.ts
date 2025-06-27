@@ -1,7 +1,5 @@
 import imageCompression from "browser-image-compression";
 import { convertBlobUrlToFile } from "./convertBlobUrlFile";
-import { uploadImageApi } from "@/Api/uploadImage.api";
-import { create } from "zustand";
 
 export async function compressAndUpload(
   previewUrl: string,

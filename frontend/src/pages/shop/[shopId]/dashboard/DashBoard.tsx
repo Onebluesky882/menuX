@@ -94,7 +94,6 @@ const activeTables = [
 ];
 
 const Dashboard = () => {
-  // Calculate summary metrics
   const todayRevenue = 14320;
   const totalOrders = 86;
   const averageOrderValue = Math.round(todayRevenue / totalOrders);
