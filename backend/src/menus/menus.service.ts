@@ -57,6 +57,7 @@ export class MenusService {
     try {
       const result = await this.db
         .select({
+          id: menus.id,
           name: menus.name,
           price: menus.price,
           available: menus.available,

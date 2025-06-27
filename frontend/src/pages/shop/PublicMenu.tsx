@@ -7,7 +7,6 @@ import useImages from "@/hooks/useImage";
 
 // Types
 type MenuProps = {
-  id: string;
   available: boolean;
   name: string;
   price: string;
@@ -25,7 +24,6 @@ type MenuProps = {
 // Sample menu data
 const sampleMenus: MenuProps[] = [
   {
-    id: "1",
     available: true,
     name: "ผัดไทยกุ้งสด Premium",
     price: "280",
@@ -49,6 +47,7 @@ const sampleMenus: MenuProps[] = [
 // Public Menu Component
 const PublicMenu = () => {
   const { shopId } = useParams<{ shopId: string }>();
+
   const [menus, setMenus] = useState<MenuProps[]>(sampleMenus);
   const [showFilters, setShowFilters] = useState(false);
   const { menuImage, getMenuImage } = useImages();
@@ -58,7 +57,9 @@ const PublicMenu = () => {
 
   const { selectedShop, setShopById } = useShop();
 
-  const { getAllMenu, menus: item } = useMenu();
+  const { getAllMenu, menus: menuItems } = useMenu();
+
+  // get Image.menuId
 
   useEffect(() => {
     if (!shopId) return;
@@ -67,8 +68,18 @@ const PublicMenu = () => {
     getMenuImage(shopId!, "menu");
   }, [shopId]);
 
-  console.log("item menu :", item);
+  const imageMap = new Map<string, string>(
+    menuImage.map((img) => [img.menuId, img.url])
+  );
 
+  const menuWithImage: MenuProps[] = (menuItems ?? []).map((menu) => ({
+    ...menu,
+    price: menu.price,
+    image: [imageMap.get(menu.id) ?? ""],
+    amount: 1,
+  }));
+
+  console.log("menuWithImage", menuWithImage);
   const totalItems = menus.reduce((sum, menu) => sum + menu.amount, 0);
   const totalPrice = menus.reduce((sum, menu) => {
     const price = menu.discount
@@ -106,10 +117,10 @@ const PublicMenu = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
-                🍽️ Premium Thai Kitchen
+                {selectedShop?.name}
               </h1>
               <p className="text-white/90 text-sm">
-                ร้านอาหารไทยต้นตำรับ •{selectedShop?.name}
+                🍽️ Premium Thai Kitchen ร้านอาหารไทยต้นตำรับ
               </p>
             </div>
 

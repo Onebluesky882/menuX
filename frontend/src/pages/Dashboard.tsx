@@ -27,7 +27,7 @@ const Dashboard = () => {
           <FeatureGrid />
         </div>
       ) : (
-        <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-purple-50">
+        <div className="flex flex-col min-h-screen  ">
           <div className="container flex flex-col flex-1 py-8 max-w-4xl mx-auto w-full">
             <h1 className="text-3xl md:text-4xl font-playfair font-bold text-primary mb-6">
               Dashboard

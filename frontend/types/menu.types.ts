@@ -11,3 +11,5 @@ export type PartialCreateMenu = Pick<
   | "shopId"
   | "available"
 >;
+
+export type MenuImage = { id: string; url: string; menuId: string };

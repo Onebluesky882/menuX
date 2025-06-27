@@ -93,7 +93,7 @@ export class ImagesService {
   async getMenuImages(shopId: string, type: string) {
     try {
       const result = await this.db
-        .select({ id: images.id, url: images.imageUrl })
+        .select({ id: images.id, url: images.imageUrl, menuId: images.menuId })
         .from(images)
         .where(
           and(eq(images.shopId, shopId), eq(images.type, (type = 'menu'))),
