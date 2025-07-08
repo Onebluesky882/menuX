@@ -2,7 +2,7 @@ import AccountSettingsCard from "@/components/profile/AccountSettingsCard";
 import DangerZoneCard from "@/components/profile/DangerZoneCard";
 import PreferencesCard from "@/components/profile/PreferencesCard";
 import ProfileForm from "@/components/profile/ProfileForm";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/useUser";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

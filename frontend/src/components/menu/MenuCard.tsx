@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Flame, Star } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 import { shopAPI } from "@/Api/shop.api";
 import type { NewShopFormField } from "@/schema/newShopForm";
-import { useShopStore } from "@/stores/shopStore";
+import { useShopStore } from "@/stores/useShop";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 

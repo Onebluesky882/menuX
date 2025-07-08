@@ -1,5 +1,5 @@
 import { userApi } from "@/Api/user.api";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/useUser";
 import { useEffect } from "react";
 
 const useUsers = () => {
