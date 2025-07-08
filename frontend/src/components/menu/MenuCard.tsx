@@ -13,7 +13,7 @@ export type ItemCardProps = {
   id: string;
   available: boolean;
   name: string;
-  price: string;
+  price: number;
   image: string[];
   amount: number;
   description?: string;
@@ -51,7 +51,6 @@ export default function ItemCard({
   useEffect(() => {
     setAmount(propAmount);
   }, [propAmount]);
-  const [cart, setCart] = useState<ItemCardComponentProps[]>();
   const update = async (newAmount: number) => {
     if (newAmount < 0) return;
     setAmount(newAmount);
@@ -61,8 +60,8 @@ export default function ItemCard({
       const res = await orderApi.create({
         menuId: id,
         quantity: newAmount,
-        priceEach: parseFloat(price),
-        totalPrice: parseFloat(price) * newAmount,
+        priceEach: price,
+        totalPrice: price * newAmount,
         status: "pending",
         shopId: "shopId",
         customerId: "",

@@ -16,9 +16,9 @@ export type MenuImage = { id: string; url: string; menuId: string };
 
 export type Menu = {
   id: string;
+  price: number;
   available: boolean;
   name: string;
-  price: string;
   image: string[];
   amount: number;
   description?: string;

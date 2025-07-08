@@ -218,7 +218,7 @@ export default function MenuManagement() {
                     </p>
                   )}
                 </div>
-
+                {/* todo add input select option later */}
                 <div>
                   <Label>Price (฿)</Label>
                   <Input
@@ -232,7 +232,6 @@ export default function MenuManagement() {
                     </p>
                   )}
                 </div>
-
                 <div className="flex items-end">
                   <Button
                     disabled={!selectedShop}
