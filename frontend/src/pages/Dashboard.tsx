@@ -6,12 +6,10 @@ import useShop from "@/hooks/useShop";
 import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
 const Dashboard = () => {
   const { setAllShops, shops } = useShop();
-
   useEffect(() => {
     setAllShops();
   }, []);
 
-  console.log("shops", shops);
   const handleShopId = async (id: string) => {
     const shop = shops.find((shop) => shop.id === id);
     if (!shop) return;

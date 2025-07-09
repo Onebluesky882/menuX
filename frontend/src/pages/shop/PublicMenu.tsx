@@ -24,7 +24,7 @@ const PublicMenu = () => {
     list.push(img.url);
     imageMap.set(img.menuId, list);
   });
-
+  console.log("menuItems : ", menuItems);
   const menuWithImage: Menu[] = (menuItems ?? []).map((menu) => ({
     ...menu,
     price: Number(menu.price),

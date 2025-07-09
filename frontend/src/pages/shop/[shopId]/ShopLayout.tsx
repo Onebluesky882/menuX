@@ -19,17 +19,9 @@ const ShopLayout = () => {
   const [menus, setMenus] = useState([]);
 
   const { selectedShop } = useShop();
+  console.log("selectedShop :", selectedShop);
 
-  useEffect(() => {
-    const getShopMenu = async () => {
-      const res = await menuApi.getAll(selectedShop?.id!);
-      console.log(res.data);
-      const items = res.data;
-      setMenus(items);
-    };
-    getShopMenu();
-  }, []);
-  console.log("menus : ", menus);
+  useEffect(() => {}, []);
   return (
     <div>
       <Outlet />

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,23 +20,20 @@ import UploadImage from "@/components/uploadImage";
 import { cn } from "@/lib/utils";
 import { compressAndUpload } from "@/utils/imageCompression";
 import { v4 as uuidv4 } from "uuid";
-type Draft = {
-  menu: QuickAddMenu;
-  imageFiles?: File[];
-};
+import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
 
 export default function MenuManagement() {
   const menuId = uuidv4();
   /* ---------------- state --------------- */
 
-  const [drafts, setDrafts] = useState<Draft[]>([]);
+  const [drafts, setDrafts] = useState<
+    { menu: QuickAddMenu; imageFiles?: File[] }[]
+  >([]);
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   const { selectedShop } = useShop();
   const { addImage } = useImages();
-
-  const [addOptions, setAddOptions] = useState();
 
   /* ------------ react-hook-form ---------- */
   const {
@@ -122,7 +118,7 @@ export default function MenuManagement() {
   const handleRemoveDraft = (idx: number) => {
     setDrafts((prev) => prev.filter((_, i) => i !== idx));
   };
-
+  console.log("selectedShop ,", selectedShop);
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-2">Menu &amp; Promotions</h1>
@@ -211,9 +207,15 @@ export default function MenuManagement() {
               <CardTitle>Add New Menu Item</CardTitle>
             </CardHeader>
             <CardContent>
-              <form
+              {/* <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 md:grid-cols-4 gap-4"
+              > */}
+
+              <form
+                onSubmit={handleSubmit(onSubmit, (errors) => {
+                  console.log("❌ Form validation errors", errors);
+                })}
               >
                 <div className="md:col-span-2">
                   <Label>Item Name</Label>
@@ -240,7 +242,7 @@ export default function MenuManagement() {
                 </div>
                 <div className="flex items-end">
                   <Button
-                    disabled={!selectedShop}
+                    // disabled={!selectedShop}
                     type="submit"
                     className={cn(
                       "bg-blue-600 text-white hover:bg-blue-700",
@@ -250,9 +252,6 @@ export default function MenuManagement() {
                     Add Menu
                   </Button>
                 </div>
-
-                {/* Add New Option */}
-                {<button onClick={() => {}}>add option</button>}
               </form>
             </CardContent>
           </Card>
@@ -261,24 +260,3 @@ export default function MenuManagement() {
     </div>
   );
 }
-
-export type AddMenuOptionProps = {
-  value: any;
-  onChange: (e: any) => void;
-};
-
-export const AddOptions = ({ value, onChange }: AddMenuOptionProps) => {
-  return (
-    <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-        <Label className="text-xs text-gray-600">Quantity</Label>
-        <Input
-          type="number"
-          placeholder="3"
-          value={value}
-          onChange={(e: any) => onChange(e)}
-        />
-      </div>
-    </div>
-  );
-};

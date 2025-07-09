@@ -28,6 +28,13 @@ export class ShopsController {
     return this.ShopsService.getAll(userId);
   }
   @UseGuards(AuthGuard('jwt'))
+  @Get(':shopId/menu')
+  getMenuPage(@Req() req: AuthRequest) {
+    const userId = req.user.id;
+    return this.ShopsService.getAll(userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   // @Roles('owner')
   create(@Body() body: CreateShopDto, @Req() req: AuthRequest) {
@@ -35,21 +42,7 @@ export class ShopsController {
     return this.ShopsService.create(body, userId);
   }
   @Get(':id')
-  getById(@Param('id') id: string, @Req() req: AuthRequest) {
+  getById(@Param('id') id: string) {
     return this.ShopsService.getById(id);
-  }
-  // update
-  @UseGuards(AuthGuard('jwt'))
-  @Patch(':id')
-  @Roles('manager', 'owner')
-  update(@Param('id') id: string, @Body() body: UpdateShopDto) {
-    return this.ShopsService.update(id, body);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
-  @Roles('manager', 'owner')
-  delete(@Param('id') id: string) {
-    return this.ShopsService.delete(id);
   }
 }

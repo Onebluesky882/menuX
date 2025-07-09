@@ -8,3 +8,7 @@ export const menuApi = {
   update: (id: string, data: any) => api.put(`/menus/${id}`, data),
   delete: (id: string) => api.delete(`/menus/${id}`),
 };
+
+export const menuOptionApi = {
+  create: (data: any) => api.post("/menu-option", data),
+};
