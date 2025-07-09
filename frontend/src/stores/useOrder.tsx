@@ -1,4 +1,3 @@
-import { el } from "date-fns/locale";
 import type { Order } from "frontend/types/order.type";
 import { create } from "zustand";
 
@@ -69,7 +68,6 @@ const useOrder = create<OrderStore>((set, get) => ({
               amount: item.price * newQuantity,
             });
           }
-          // ถ้า newQuantity <= 0 ไม่เพิ่มเข้า acc (ลบออก)
         } else {
           acc.push(item);
         }

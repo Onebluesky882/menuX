@@ -41,9 +41,7 @@ const Dashboard = () => {
                 </div>
                 <div className="w-[70%]">
                   <h2 className="text-xl text-center md:text-2xl font-semibold font-playfair ">
-                    {shops.length
-                      ? "ร้านอาหารของคุณ"
-                      : "เริ่มต้นสร้างร้านอาหารของคุณ"}
+                    {shops.length > 0 && "ร้านอาหารของคุณ"}
                   </h2>
 
                   <div className="flex">

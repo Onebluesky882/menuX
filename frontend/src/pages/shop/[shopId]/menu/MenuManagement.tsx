@@ -23,7 +23,7 @@ import { compressAndUpload } from "@/utils/imageCompression";
 import { v4 as uuidv4 } from "uuid";
 type Draft = {
   menu: QuickAddMenu;
-  imageFiles: File[];
+  imageFiles?: File[];
 };
 
 export default function MenuManagement() {
@@ -36,6 +36,8 @@ export default function MenuManagement() {
 
   const { selectedShop } = useShop();
   const { addImage } = useImages();
+
+  const [addOptions, setAddOptions] = useState();
 
   /* ------------ react-hook-form ---------- */
   const {
@@ -116,7 +118,11 @@ export default function MenuManagement() {
       setLoading(false);
     }
   };
-  /* -------------- jsx ------------------- */
+
+  const handleRemoveDraft = (idx: number) => {
+    setDrafts((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-2">Menu &amp; Promotions</h1>
@@ -142,12 +148,13 @@ export default function MenuManagement() {
                   className="relative flex flex-col p-4 rounded-2xl shadow-md border bg-white"
                 >
                   <button className="absolute top-2 right-2 text-gray-400 hover:text-red-500">
-                    <RiCloseCircleFill size={20} />
+                    <RiCloseCircleFill
+                      size={20}
+                      onClick={() => handleRemoveDraft(idx)}
+                    />
                   </button>
-
                   <p className="text-lg font-semibold">{menu.name}</p>
                   <p className="text-sm text-gray-500">{menu.price} ฿</p>
-
                   <button
                     onClick={() => setUploadingIndex(idx)}
                     className="mt-4 flex items-center gap-1 text-blue-600"
@@ -155,7 +162,6 @@ export default function MenuManagement() {
                     <FaCloudArrowUp size={18} />
                     <span className="text-sm">Upload</span>
                   </button>
-
                   <UploadImage
                     trigger={uploadingIndex === idx}
                     onDialogClosed={() => setUploadingIndex(null)}
@@ -244,6 +250,9 @@ export default function MenuManagement() {
                     Add Menu
                   </Button>
                 </div>
+
+                {/* Add New Option */}
+                {<button onClick={() => {}}>add option</button>}
               </form>
             </CardContent>
           </Card>
@@ -252,3 +261,24 @@ export default function MenuManagement() {
     </div>
   );
 }
+
+export type AddMenuOptionProps = {
+  value: any;
+  onChange: (e: any) => void;
+};
+
+export const AddOptions = ({ value, onChange }: AddMenuOptionProps) => {
+  return (
+    <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <Label className="text-xs text-gray-600">Quantity</Label>
+        <Input
+          type="number"
+          placeholder="3"
+          value={value}
+          onChange={(e: any) => onChange(e)}
+        />
+      </div>
+    </div>
+  );
+};

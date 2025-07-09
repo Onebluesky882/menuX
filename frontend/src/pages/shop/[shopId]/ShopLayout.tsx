@@ -1,14 +1,11 @@
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import useShop from "@/hooks/useShop";
 import MenuManagement from "./menu/MenuManagement";
-import KitchenOrderPanel, {
-  type Order,
-} from "@/components/menu/KitchenOrderPanel";
+
 import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
 import { menuApi } from "@/Api/menu.api";
-import { se } from "date-fns/locale";
 
 type MenuProps = {
   available: boolean;
@@ -17,16 +14,6 @@ type MenuProps = {
   image: string[];
   amount: number;
 };
-
-type OrdersProps = {
-  mockOrders?: Order[];
-};
-
-type Shop = {
-  name: string;
-  id: string;
-};
-// get image url belong with menu Id
 
 const ShopLayout = () => {
   const [menus, setMenus] = useState([]);
@@ -42,30 +29,7 @@ const ShopLayout = () => {
     };
     getShopMenu();
   }, []);
-
-  const mockOrders = [
-    {
-      available: true,
-      name: "กะเพราไก่ไข่ดาว",
-      price: "45",
-      image: ["https://example.com/img1.jpg"],
-      amount: 2,
-      category: "อาหารจานเดียว",
-      description: "เผ็ดนิดๆ ใส่ใบกะเพราแท้",
-      isSpicy: true,
-      isPopular: true,
-    },
-    {
-      available: true,
-      name: "ต้มยำกุ้ง",
-      price: "60",
-      image: ["https://example.com/img2.jpg"],
-      amount: 1,
-      category: "ซุป",
-      prepTime: "10 นาที",
-    },
-  ];
-
+  console.log("menus : ", menus);
   return (
     <div>
       <Outlet />
@@ -90,7 +54,6 @@ const ShopLayout = () => {
                     amount={0}
                     shopId={selectedShop?.id ?? ""}
                   />
-                  <Orders mockOrders={mockOrders} />
                 </Tabs>
               </div>
             </div>
@@ -120,15 +83,6 @@ const Menus = ({
       <Link to={`/menu/${shopId}`}>
         <u>live menu</u>
       </Link>
-    </TabsContent>
-  );
-};
-
-const Orders = ({ mockOrders }: OrdersProps) => {
-  return (
-    <TabsContent value="orders">
-      {mockOrders &&
-        mockOrders.map((item) => <KitchenOrderPanel order={item} />)}
     </TabsContent>
   );
 };
