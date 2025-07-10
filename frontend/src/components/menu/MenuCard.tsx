@@ -1,38 +1,55 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
+import type { MenuOption } from "frontend/types/menu.types";
+import {
+  useMenuOptions,
+  type SelectedOptionWithQuantity,
+} from "@/hooks/useMenuOptions";
 
 export type ItemCardProps = {
   id: string;
   name: string;
-  price: number;
+  price?: number;
   amount: number;
   available: boolean;
-  image: string[];
+  images: string[];
+  menuOptions: MenuOption[];
   prepTime?: string;
 };
 
 export type ItemCardComponentProps = {
   item: ItemCardProps;
-  onAmountChange?: (itemId: string, amount: number) => void;
+  onAmountChange?: (
+    itemId: string,
+    selectedOptions: SelectedOptionWithQuantity[]
+  ) => void;
 };
 
 export default function ItemCard({
   item,
   onAmountChange,
 }: ItemCardComponentProps) {
-  const { id, name, price, amount, available, image, prepTime } = item;
+  const { id, name, available, images, menuOptions, prepTime } = item;
+  const {
+    selectedOptions,
+    handleOptionSelect,
+    handleDecrement,
+    handleIncrement,
+    handleRemoveOption,
+    getTotalPrice,
+    getTotalItems,
+    resetOptions,
+  } = useMenuOptions();
+
   const isSoldOut = !available;
 
-  const handleIncrement = () => {
-    onAmountChange?.(id, amount + 1);
-  };
-
-  const handleDecrement = () => {
-    if (amount > 0) {
-      onAmountChange?.(id, amount - 1);
+  const handleAddToCart = () => {
+    if (selectedOptions.length > 0) {
+      onAmountChange?.(id, selectedOptions);
+      resetOptions(); // Reset after adding to cart
     }
   };
 
@@ -55,7 +72,7 @@ export default function ItemCard({
 
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
-            src={image[0]}
+            src={images[0]}
             alt={name}
             className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 33vw"
@@ -75,51 +92,141 @@ export default function ItemCard({
             <h3 className="font-semibold text-lg md:text-xl text-gray-900 line-clamp-1 tracking-tight">
               {name}
             </h3>
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                ฿{Number(price) * amount}
-              </span>
-            </div>
+
+            {/* Option Selection - Touch/Click Cards */}
+            {menuOptions && menuOptions.length > 0 && (
+              <div className="space-y-3">
+                <span className="text-sm font-medium text-gray-700">
+                  เลือกตัวเลือก:
+                </span>
+                <div className="grid grid-cols-2 gap-2">
+                  {menuOptions.map((option) => (
+                    <motion.button
+                      key={option.id}
+                      onClick={() => handleOptionSelect(option)}
+                      disabled={!option.available || isSoldOut}
+                      whileTap={{ scale: 0.95 }}
+                      className={clsx(
+                        "p-3 rounded-xl border-2 transition-all duration-200",
+                        "flex flex-col items-center gap-1",
+                        "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50",
+                        "disabled:opacity-50 disabled:cursor-not-allowed"
+                      )}
+                    >
+                      <span className="text-sm font-medium">
+                        {option.label}
+                      </span>
+                      <span className="text-xs font-semibold text-green-600">
+                        ฿{option.price}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Selected Options Preview */}
+            {selectedOptions.length > 0 && (
+              <div className="space-y-2 pt-2">
+                <div className="text-sm font-medium text-gray-700">
+                  รายการที่เลือก:
+                </div>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {selectedOptions.map((item) => (
+                    <div
+                      key={item.option.id}
+                      className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-blue-900">
+                          {item.option.label}
+                        </span>
+                        <span className="text-xs text-blue-700">
+                          ฿{item.option.price}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDecrement(item.option.id);
+                            }}
+                            className="w-6 h-6 bg-blue-200 hover:bg-blue-300 rounded-full flex items-center justify-center"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="text-sm font-semibold text-blue-900 min-w-[20px] text-center">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleIncrement(item.option.id);
+                            }}
+                            className="w-6 h-6 bg-blue-200 hover:bg-blue-300 rounded-full flex items-center justify-center"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveOption(item.option.id);
+                          }}
+                          className="w-6 h-6 bg-red-200 hover:bg-red-300 rounded-full flex items-center justify-center"
+                        >
+                          <X size={12} />
+                        </button>
+
+                        <div className="text-sm font-bold text-green-600 min-w-[40px] text-right">
+                          ฿
+                          {(
+                            Number(item.option.price) * item.quantity
+                          ).toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Total Summary */}
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                  <span className="font-semibold text-green-900">
+                    รวมทั้งหมด:
+                  </span>
+                  <div className="text-right">
+                    <div className="text-sm text-green-700">
+                      {getTotalItems()} รายการ
+                    </div>
+                    <div className="text-lg font-bold text-green-800">
+                      ฿{getTotalPrice().toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
+          {/* Add to Cart Button */}
           <div className="flex items-center justify-center">
-            <div className="flex items-center gap-3 bg-gray-50/80 backdrop-blur-sm rounded-full p-2 border border-gray-200/50">
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={handleDecrement}
-                disabled={amount === 0 || isSoldOut}
-                className={clsx(
-                  "w-10 h-10 rounded-full transition-all duration-200",
-                  "hover:bg-red-50 hover:text-red-600 hover:scale-105",
-                  "active:scale-95",
-                  "disabled:opacity-40 disabled:hover:scale-100"
-                )}
-              >
-                <Minus size={18} strokeWidth={2.5} />
-              </Button>
-
-              <div className="min-w-[3rem] text-center">
-                <span className="text-lg md:text-xl font-semibold text-gray-900 tabular-nums">
-                  {amount}
-                </span>
-              </div>
-
-              <Button
-                size="icon"
-                onClick={handleIncrement}
-                disabled={isSoldOut}
-                className={clsx(
-                  "w-10 h-10 rounded-full transition-all duration-200",
-                  "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600",
-                  "text-white shadow-lg hover:shadow-xl hover:shadow-green-200/50",
-                  "hover:scale-105 active:scale-95",
-                  "disabled:opacity-40 disabled:hover:scale-100"
-                )}
-              >
-                <Plus size={18} strokeWidth={2.5} />
-              </Button>
-            </div>
+            <Button
+              onClick={handleAddToCart}
+              disabled={isSoldOut || selectedOptions.length === 0}
+              className={clsx(
+                "px-8 py-3 rounded-2xl transition-all duration-200",
+                "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600",
+                "text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-green-200/50",
+                "hover:scale-105 active:scale-95",
+                "disabled:opacity-40 disabled:hover:scale-100"
+              )}
+            >
+              {selectedOptions.length === 0
+                ? "เลือกตัวเลือกก่อน"
+                : `เพิ่มลงตะกร้า (${getTotalItems()} รายการ)`}
+            </Button>
           </div>
 
           {prepTime && (

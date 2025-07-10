@@ -1,9 +1,38 @@
-import type { Order } from "frontend/types/order.type";
 import { create } from "zustand";
+
+// types/order.type.ts (อัพเดท Order type)
+export type MenuOption = {
+  id: string;
+  label: string;
+  price: string;
+  available: boolean;
+};
+
+export type Order = {
+  id: string;
+  name: string;
+  amount: number;
+  price: number;
+  shopId: string;
+  staffId: string;
+  quantity: number;
+  selectedOption?: MenuOption; // เพิ่มใหม่
+  menuId?: string; // เพิ่มใหม่
+  createdAt?: string;
+  updatedAt?: string;
+};
 
 export type OrderInput = Pick<
   Order,
-  "id" | "name" | "amount" | "price" | "shopId" | "staffId" | "quantity"
+  | "id"
+  | "name"
+  | "amount"
+  | "price"
+  | "shopId"
+  | "staffId"
+  | "quantity"
+  | "selectedOption"
+  | "menuId"
 >;
 
 type OrderStore = {
@@ -15,7 +44,9 @@ type OrderStore = {
   clearOrders: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  getOrdersByMenuId: (menuId: string) => Order[]; // เพิ่มใหม่
 };
+
 const useOrder = create<OrderStore>((set, get) => ({
   orders: [],
   setOrders: (orders) => set({ orders }),
@@ -24,20 +55,36 @@ const useOrder = create<OrderStore>((set, get) => ({
     set((state) => {
       const existing = state.orders.find((order) => order.id === menu.id);
       if (existing) {
+        const newQuantity = existing.quantity + menu.quantity;
+        const newAmount = existing.price * newQuantity;
+
         return {
           orders: state.orders.map((order) =>
             order.id === menu.id
-              ? { ...order, amount: menu.amount, quantity: menu.quantity }
+              ? {
+                  ...order,
+                  amount: newAmount,
+                  quantity: newQuantity,
+                  selectedOption: menu.selectedOption,
+                  menuId: menu.menuId,
+                }
               : order
           ),
         };
       } else {
+        // เพิ่ม order ใหม่
+        const newOrder: Order = {
+          ...menu,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
         return {
-          orders: [...state.orders, menu],
+          orders: [...state.orders, newOrder],
         };
       }
     });
   },
+
   updateQuantity: (id: string, newQuantity: number) => {
     set((state) => {
       if (newQuantity <= 0) {
@@ -50,12 +97,14 @@ const useOrder = create<OrderStore>((set, get) => ({
                 ...item,
                 quantity: newQuantity,
                 amount: item.price * newQuantity,
+                updatedAt: new Date().toISOString(),
               }
             : item
         ),
       };
     });
   },
+
   removeItem: (id: string) => {
     set((state) => {
       const updatedOrders = state.orders.reduce((acc, item) => {
@@ -66,6 +115,7 @@ const useOrder = create<OrderStore>((set, get) => ({
               ...item,
               quantity: newQuantity,
               amount: item.price * newQuantity,
+              updatedAt: new Date().toISOString(),
             });
           }
         } else {
@@ -77,17 +127,58 @@ const useOrder = create<OrderStore>((set, get) => ({
       return { orders: updatedOrders };
     });
   },
+
   clearOrders: () => {
     set({ orders: [] });
   },
+
   getTotalItems: () => {
     const state = get();
     return state.orders.reduce((total, item) => total + item.quantity, 0);
   },
+
   getTotalPrice: () => {
     const state = get();
     return state.orders.reduce((total, item) => total + item.amount, 0);
   },
+
+  // เพิ่มฟังก์ชันเพื่อหา orders ของเมนูเดียวกัน
+  getOrdersByMenuId: (menuId: string) => {
+    const state = get();
+    return state.orders.filter((order) => order.menuId === menuId);
+  },
 }));
 
 export default useOrder;
+
+export const orderHelpers = {
+  getTotalQuantityByMenuId: (orders: Order[], menuId: string): number => {
+    return orders
+      .filter((order) => order.menuId === menuId)
+      .reduce((total, order) => total + order.quantity, 0);
+  },
+
+  getTotalAmountByMenuId: (orders: Order[], menuId: string): number => {
+    return orders
+      .filter((order) => order.menuId === menuId)
+      .reduce((total, order) => total + order.amount, 0);
+  },
+
+  getUniqueMenuIds: (orders: Order[]): string[] => {
+    const menuIds = orders
+      .map((order) => order.menuId)
+      .filter(Boolean) as string[];
+    return [...new Set(menuIds)];
+  },
+
+  groupOrdersByMenuId: (orders: Order[]): Record<string, Order[]> => {
+    return orders.reduce((groups, order) => {
+      const menuId = order.menuId || "unknown";
+      if (!groups[menuId]) {
+        groups[menuId] = [];
+      }
+      groups[menuId].push(order);
+      return groups;
+    }, {} as Record<string, Order[]>);
+  },
+};

@@ -12,20 +12,29 @@ export type PartialCreateMenu = Pick<
   | "available"
 >;
 
-export type MenuImage = { id: string; url: string; menuId: string };
-
 export type Menu = {
   id: string;
-  price: number;
-  available: boolean;
   name: string;
-  image: string[];
+  available: boolean;
+  images: string[];
+  menuOptions: MenuOption[];
   amount: number;
-  description?: string;
-  category?: string;
-  rating?: number;
-  prepTime?: string;
-  isSpicy?: boolean;
-  isPopular?: boolean;
-  discount?: number;
+};
+
+export type Images = {
+  id: string;
+  imageUrl: string;
+  createdAt: string;
+  type: string;
+  shopId: string;
+  menuId: string;
+  userId: string;
+};
+export type MenuOption = {
+  id: string;
+  menuId: string;
+  label: string;
+  price: string;
+  available: boolean;
+  createdAt: string;
 };
