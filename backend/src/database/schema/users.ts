@@ -8,7 +8,6 @@ import {
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { roles } from './roles';
-import { lineUser } from './lineUser';
 export const users = pgTable('users', {
   id: uuid('id')
     .primaryKey()

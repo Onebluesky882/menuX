@@ -36,12 +36,6 @@ const feedbackSchema = z.object({
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 
-const feedbackTypeLabels: Record<FeedbackFormValues["type"], string> = {
-  bug: "รายงานบั๊ก",
-  feature: "ขอฟีเจอร์",
-  general: "ความคิดเห็นทั่วไป",
-};
-
 const FeedbackForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState<string>("");
