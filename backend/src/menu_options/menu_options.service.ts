@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { MenuOption } from './menu_options.dto';
 import { menus, schema, shops } from 'src/database';
 import { menuOptions } from 'src/database/schema/menu_options';
 import { eq } from 'drizzle-orm';
+import { MenuOption } from '../../dist/src/menu_options/menu_options.dto';
 
 @Injectable()
 export class MenuOptionsService {
@@ -54,5 +54,18 @@ export class MenuOptionsService {
     } catch (error) {
       this.logger.error('Failed to create menu option:', error);
     }
+  }
+
+  async getMenuById(id: string) {
+    try {
+      const result = await this.db.query.menuOptions.findFirst({
+        where: eq(menuOptions.menuId, id),
+      });
+
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {}
   }
 }
