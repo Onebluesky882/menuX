@@ -14,7 +14,7 @@ import { menus } from './schema/menus';
 import { employers } from './schema/employers';
 import { orderItems } from './schema/orderItems';
 import { lineUser } from './schema/lineUser';
-import { menuOptions } from './schema/menu_options';
+import { menuOptions } from './schema/menuOptions';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -32,11 +32,13 @@ export * from './schema/menus';
 export * from './schema/employers';
 export * from './schema/orderItems';
 export * from './schema/lineUser';
-export * from './schema/menu_options';
+export * from './schema/menuOptions';
 
 export * from './relations/orders.relation';
+export * from './relations/image.relation';
 export * from './relations/owner.relation';
 export * from './relations/menu.relation';
+export * from './relations/menuOptions.relation';
 export * from './relations/menuPhotos.relation';
 
 export const schema = {

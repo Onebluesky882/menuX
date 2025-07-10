@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { MenuOptionsService } from './menu_options.service';
 import { MenuOption } from './menu_options.dto';
 import { AuthRequest } from 'types/auth';
@@ -13,5 +21,10 @@ export class MenuOptionsController {
   create(@Body() createMenuOptionDto: MenuOption, @Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.menuOptionsService.create(createMenuOptionDto, userId);
+  }
+
+  @Get('/:menuId')
+  getMenu(@Param('shopId') menuId: string) {
+    return this.menuOptionsService.getMenuOptionId(menuId);
   }
 }

@@ -112,6 +112,22 @@ export class MenusService {
     }
   }
 
+  async getMenusWithDetailsByShopId(shopId: string) {
+    try {
+      const menuWithRelations = await this.db.query.menus.findMany({
+        where: eq(menus.shopId, shopId),
+        with: {
+          images: true,
+          menuOptions: true,
+        },
+      });
+      console.log('🍜 menuWithRelations', menuWithRelations);
+      return menuWithRelations;
+    } catch (error) {
+      console.error('❌ Failed to get menus with relations', error);
+    }
+  }
+
   async update(id: string, body: MenuDto, shopId: string) {
     try {
       const updated = await this.db

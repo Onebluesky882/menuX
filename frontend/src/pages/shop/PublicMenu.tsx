@@ -16,8 +16,14 @@ const PublicMenu = () => {
   const { orders, addOrUpdateItem, updateQuantity, removeItem, getTotalPrice } =
     useOrder();
   const { selectedShop, setShopById } = useShop();
-  const { getAllMenu, menus: menuItems } = useMenu();
+  const {
+    getAllMenu,
+    menus: menuItems,
+    getMenusWithShopId,
+    menuPreview,
+  } = useMenu();
   const { menuImage, getMenuImage } = useImages();
+
   const [preload, setPreload] = useState(false);
 
   const imageMap = new Map<string, string[]>();
@@ -36,6 +42,9 @@ const PublicMenu = () => {
       amount: existingOrder?.quantity ?? 0,
     };
   });
+  console.log("menuPreview :", menuPreview);
+
+  console.log("menuItems :", menuItems);
 
   const popupCart = () => {
     setShowCart((prev) => !prev);
@@ -65,6 +74,7 @@ const PublicMenu = () => {
         await setShopById(shopId ?? "");
         await getAllMenu(shopId!);
         await getMenuImage(shopId!, "menu");
+        await getMenusWithShopId(shopId as string);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -72,15 +82,15 @@ const PublicMenu = () => {
         setPreload(false);
       }
     };
+
     fetchData();
   }, [shopId]);
-
   useEffect(() => {
     if (totalItems === 0 && showCart) {
       setShowCart(false);
     }
   }, [totalItems, showCart]);
-
+  console.log("menuPreview :", menuPreview);
   return (
     <>
       {preload ? (

@@ -20,24 +20,19 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 export class MenusController {
   constructor(private readonly menusService: MenusService) {}
 
-  //create
-  // @UseGuards(ShopAccessGuard)
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  // @Roles('manager', 'owner')
   create(@Body() body: MenuDto, @Req() req: AuthRequest) {
     const userId = req.user.id;
 
     return this.menusService.create(body, userId);
   }
-  //getAll
-  // @UseGuards(ShopAccessGuard)
+
   @Get()
   getAll(@Query('shopId') shopId: string) {
     return this.menusService.getAll(shopId);
   }
   // get by id
-  // @UseGuards(ShopAccessGuard)
   @Get('name')
   getById(@Query('name') name: string, @Query('shopId') shopId: string) {
     console.log('shopId received:', shopId);
@@ -45,7 +40,6 @@ export class MenusController {
   }
 
   // update
-  // @UseGuards(ShopAccessGuard)
   @Patch(':id')
   @Roles('manager', 'owner')
   update(
@@ -57,13 +51,14 @@ export class MenusController {
   }
 
   // delete
-  // @UseGuards(ShopAccessGuard)
   @Delete(':id')
   @Roles('manager', 'owner')
   delete(@Param('id') id: string, @Query('shopId') shopId: string) {
     return this.menusService.delete(id, shopId);
   }
-}
 
-// Search Text sql
-// EXPLAIN SELECT * FROM menu WHERE name LIKE '%กะเพรา'
+  @Get('/:shopId')
+  async getMenuWithDetail(@Param('shopId') shopId: string) {
+    return this.menusService.getMenusWithDetailsByShopId(shopId);
+  }
+}
