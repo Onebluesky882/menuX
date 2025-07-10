@@ -1,6 +1,6 @@
 import type { Order } from "frontend/types/order.type";
 import type { Dispatch } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type CartProps = {
   showCart: boolean;

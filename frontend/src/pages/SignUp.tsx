@@ -19,7 +19,7 @@ const SignUp = () => {
   const [user, setUser] = useState<SignupProps>();
   const [loading, setLoading] = useState(false);
 
-  const { profile, fetchProfile } = useUsers();
+  const { fetchProfile } = useUsers();
 
   const {
     register,
@@ -50,7 +50,6 @@ const SignUp = () => {
         await navigator("/dashboard");
       }
     };
-    console.log("new profile", profile);
     insertNewUser();
   }, [user]);
 

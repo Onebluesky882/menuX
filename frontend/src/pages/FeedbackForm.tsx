@@ -57,9 +57,8 @@ const FeedbackForm: React.FC = () => {
     },
   });
 
-  const onSubmit = async (values: FeedbackFormValues) => {
+  const onSubmit = async () => {
     setLoading(true);
-    // simulate API call
     setTimeout(() => {
       setLoading(false);
       toast(<div> ขอบคุณสำหรับ Feedback</div>);

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 type props = {
   setLang: Dispatch<SetStateAction<"en" | "th">>;

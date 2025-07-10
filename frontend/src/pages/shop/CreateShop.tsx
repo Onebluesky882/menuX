@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const CreateShop = () => {
-  const { createShop, setShopById } = useShop();
+  const { createShop } = useShop();
   const navigate = useNavigate();
   const {
     register,

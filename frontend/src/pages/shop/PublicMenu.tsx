@@ -12,27 +12,18 @@ const PublicMenu = () => {
   const { shopId } = useParams<{ shopId: string }>();
 
   const [preload, setPreload] = useState(false);
-  const { orders, addOrUpdateItem, updateQuantity, removeItem, getTotalPrice } =
-    useOrder();
+  const { orders, addOrUpdateItem, getTotalPrice } = useOrder();
   const { selectedShop, setShopById } = useShop();
-  const {
-    getAllMenu,
-    menus: menuItems,
-    getMenusWithShopId,
-    menuPreview,
-  } = useMenu();
+  const { getAllMenu, getMenusWithShopId, menuPreview } = useMenu();
 
-  // Helper function เพื่อคำนวณ total amount ของแต่ละเมนู
   const getTotalAmountByMenuId = (menuId: string): number => {
     return orders
       .filter((order) => order.menuId === menuId)
       .reduce((total, order) => total + order.quantity, 0);
   };
 
-  // Recalculate menuWithImage when orders change
   const menuWithImage: Menu[] = useMemo(() => {
     return (menuPreview ?? []).map((menu: any) => {
-      // คำนวณ amount จาก orders ที่มี menuId เดียวกัน
       const totalAmount = getTotalAmountByMenuId(menu.id);
 
       return {
@@ -41,24 +32,21 @@ const PublicMenu = () => {
         available: menu.available ?? true,
         images: menu.images?.map((img: any) => img.imageUrl) ?? [],
         menuOptions: menu.menuOptions ?? [],
-        amount: totalAmount, // ใช้ค่าที่คำนวณใหม่
+        amount: totalAmount,
       };
     });
-  }, [menuPreview, orders]); // dependency ทั้ง menuPreview และ orders
+  }, [menuPreview, orders]);
 
   const handleOrder = (
     itemId: string,
     selectedOptions: SelectedOptionWithQuantity[]
   ) => {
-    // หาเมนูที่เลือก
     const selectedMenu = menuWithImage.find((menu) => menu.id === itemId);
     if (!selectedMenu) return;
 
-    // สร้าง order สำหรับแต่ละ option ที่เลือก
     selectedOptions.forEach((optionWithQty) => {
       const { option, quantity } = optionWithQty;
 
-      // สร้าง unique ID สำหรับแต่ละ option
       const orderItemId = `${itemId}-${option.id}`;
 
       const orderInput: OrderInput = {
@@ -70,7 +58,7 @@ const PublicMenu = () => {
         shopId: shopId!,
         staffId: "",
         selectedOption: option,
-        menuId: itemId, // เก็บ original menu ID
+        menuId: itemId,
       };
 
       addOrUpdateItem(orderInput);

@@ -5,7 +5,6 @@ import useShop from "@/hooks/useShop";
 import MenuManagement from "./menu/MenuManagement";
 
 import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
-import { menuApi } from "@/Api/menu.api";
 
 type MenuProps = {
   available: boolean;
@@ -16,8 +15,6 @@ type MenuProps = {
 };
 
 const ShopLayout = () => {
-  const [menus, setMenus] = useState([]);
-
   const { selectedShop } = useShop();
   console.log("selectedShop :", selectedShop);
 
@@ -64,12 +61,7 @@ const AddMenu = () => {
   );
 };
 
-const Menus = ({
-  image,
-  name,
-  price,
-  shopId,
-}: MenuProps & { shopId: string }) => {
+const Menus = ({ shopId }: MenuProps & { shopId: string }) => {
   return (
     <TabsContent value="shop-menu">
       <Link to={`/menu/${shopId}`}>
