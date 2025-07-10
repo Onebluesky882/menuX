@@ -93,7 +93,7 @@ const Header = () => {
                   className="outline-none text-gray-600 "
                   size={35}
                 />
-                <span className="text-[12px]">Login</span>
+                <span className="text-[12px]">For Staff</span>
               </span>
             </div>
           )}

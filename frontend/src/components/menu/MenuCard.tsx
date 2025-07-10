@@ -3,26 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { orderApi } from "@/Api/orders.api";
 
-// ---------------------------------------------
-// Type declarations
-// ---------------------------------------------
 export type ItemCardProps = {
   id: string;
-  available: boolean;
   name: string;
   price: number;
-  image: string[];
   amount: number;
-  description?: string;
-  category?: string;
-  rating?: number; // 0 – 5
+  available: boolean;
+  image: string[];
   prepTime?: string;
-  isSpicy?: boolean;
-  isPopular?: boolean;
-  discount?: number; // percentage, e.g. 15 means 15% off
 };
 
 export type ItemCardComponentProps = {
@@ -34,49 +23,18 @@ export default function ItemCard({
   item,
   onAmountChange,
 }: ItemCardComponentProps) {
-  const {
-    id,
-    available,
-    name,
-    price,
-    image,
-    amount: propAmount,
-    prepTime,
-  } = item;
+  const { id, name, price, amount, available, image, prepTime } = item;
+  const isSoldOut = !available;
 
-  // send to db with status pending
-
-  const [amount, setAmount] = useState(propAmount);
-
-  useEffect(() => {
-    setAmount(propAmount);
-  }, [propAmount]);
-  const update = async (newAmount: number) => {
-    if (newAmount < 0) return;
-    setAmount(newAmount);
-    onAmountChange?.(id, newAmount);
-    // update to cart and send object to db
-    try {
-      const res = await orderApi.create({
-        menuId: id,
-        quantity: newAmount,
-        priceEach: price,
-        totalPrice: price * newAmount,
-        status: "pending",
-        shopId: "shopId",
-        customerId: "",
-        orderType: "dine-in",
-      });
-      console.log("store order success ", res);
-    } catch (error) {
-      console.log("store order failed ");
-    }
+  const handleIncrement = () => {
+    onAmountChange?.(id, amount + 1);
   };
 
-  const handleIncrement = () => update(amount + 1);
-  const handleDecrement = () => update(amount - 1);
-
-  const isSoldOut = !available;
+  const handleDecrement = () => {
+    if (amount > 0) {
+      onAmountChange?.(id, amount - 1);
+    }
+  };
 
   return (
     <motion.div
@@ -93,10 +51,8 @@ export default function ItemCard({
           isSoldOut && "opacity-60 grayscale"
         )}
       >
-        {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-gray-100/30 pointer-events-none" />
 
-        {/* Image */}
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
             src={image[0]}
@@ -105,8 +61,6 @@ export default function ItemCard({
             sizes="(max-width: 768px) 100vw, 33vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
-
-          {/* Sold out overlay */}
           {isSoldOut && (
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
               <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium">
@@ -116,9 +70,7 @@ export default function ItemCard({
           )}
         </div>
 
-        {/* Content */}
         <CardContent className="relative p-4 md:p-6 space-y-4">
-          {/* Title and Price */}
           <div className="text-center space-y-2">
             <h3 className="font-semibold text-lg md:text-xl text-gray-900 line-clamp-1 tracking-tight">
               {name}
@@ -130,7 +82,6 @@ export default function ItemCard({
             </div>
           </div>
 
-          {/* Amount controls */}
           <div className="flex items-center justify-center">
             <div className="flex items-center gap-3 bg-gray-50/80 backdrop-blur-sm rounded-full p-2 border border-gray-200/50">
               <Button
@@ -171,7 +122,6 @@ export default function ItemCard({
             </div>
           </div>
 
-          {/* Prep time */}
           {prepTime && (
             <div className="flex items-center justify-center pt-2">
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">

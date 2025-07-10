@@ -12,11 +12,13 @@ import { useEffect, useMemo, useState } from "react";
 const PublicMenu = () => {
   const [loading, setLoading] = useState(false);
   const { shopId } = useParams<{ shopId: string }>();
-
+  const [showCart, setShowCart] = useState(false);
+  const { orders, addOrUpdateItem, updateQuantity, removeItem, getTotalPrice } =
+    useOrder();
   const { selectedShop, setShopById } = useShop();
-
   const { getAllMenu, menus: menuItems } = useMenu();
   const { menuImage, getMenuImage } = useImages();
+  const [preload, setPreload] = useState(false);
 
   const imageMap = new Map<string, string[]>();
   menuImage.forEach((img) => {
@@ -24,17 +26,16 @@ const PublicMenu = () => {
     list.push(img.url);
     imageMap.set(img.menuId, list);
   });
-  console.log("menuItems : ", menuItems);
-  const menuWithImage: Menu[] = (menuItems ?? []).map((menu) => ({
-    ...menu,
-    price: Number(menu.price),
-    image: imageMap.get(menu.id) ?? [],
-    amount: 0,
-  }));
 
-  const { orders, addOrUpdateItem, updateQuantity, removeItem, getTotalPrice } =
-    useOrder();
-  const [showCart, setShowCart] = useState(false);
+  const menuWithImage: Menu[] = (menuItems ?? []).map((menu) => {
+    const existingOrder = orders.find((order) => order.id === menu.id);
+    return {
+      ...menu,
+      price: Number(menu.price),
+      image: imageMap.get(menu.id) ?? [],
+      amount: existingOrder?.quantity ?? 0,
+    };
+  });
 
   const popupCart = () => {
     setShowCart((prev) => !prev);
@@ -79,8 +80,6 @@ const PublicMenu = () => {
       setShowCart(false);
     }
   }, [totalItems, showCart]);
-
-  const [preload, setPreload] = useState(false);
 
   return (
     <>

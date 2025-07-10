@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, type SetStateAction } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -37,16 +37,27 @@ export default function MenuManagement() {
 
   /* ------------ react-hook-form ---------- */
   const {
+    control,
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<QuickAddMenu>({ resolver: zodResolver(schema) });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "options",
+  });
+
   /* ---------- form handlers -------------- */
   const onSubmit = (data: QuickAddMenu) => {
     setDrafts((prev) => [...prev, { menu: data, imageFiles: [] }]);
     toast.success("Draft menu added");
+
+    console.log(
+      "data option",
+      data.options.map((item) => item)
+    );
     reset();
   };
 
@@ -69,7 +80,6 @@ export default function MenuManagement() {
       /* 1️⃣  create menus in parallel */
       const createResults = await Promise.allSettled(
         drafts.map(({ menu }) => {
-          const menuId = uuidv4(); // ⚠️ make sure this is scoped correctly per draft
           return menuApi
             .create({
               id: menuId,
@@ -118,7 +128,7 @@ export default function MenuManagement() {
   const handleRemoveDraft = (idx: number) => {
     setDrafts((prev) => prev.filter((_, i) => i !== idx));
   };
-  console.log("selectedShop ,", selectedShop);
+
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-2">Menu &amp; Promotions</h1>
@@ -150,7 +160,13 @@ export default function MenuManagement() {
                     />
                   </button>
                   <p className="text-lg font-semibold">{menu.name}</p>
-                  <p className="text-sm text-gray-500">{menu.price} ฿</p>
+                  {menu.options.map((item, index) => (
+                    <div key={index} className="">
+                      <p>
+                        {item.label} - {item.price}
+                      </p>
+                    </div>
+                  ))}
                   <button
                     onClick={() => setUploadingIndex(idx)}
                     className="mt-4 flex items-center gap-1 text-blue-600"
@@ -207,50 +223,81 @@ export default function MenuManagement() {
               <CardTitle>Add New Menu Item</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="grid grid-cols-1 md:grid-cols-4 gap-4"
-              > */}
-
               <form
-                onSubmit={handleSubmit(onSubmit, (errors) => {
-                  console.log("❌ Form validation errors", errors);
-                })}
+                onSubmit={handleSubmit(onSubmit, (errors) =>
+                  console.log("here", errors)
+                )}
+                className="flex flex-col"
               >
-                <div className="md:col-span-2">
-                  <Label>Item Name</Label>
-                  <Input {...register("name")} placeholder="Enter menu name" />
+                <div className="md:col-span-2 space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Item Name
+                  </Label>
+                  <Input
+                    {...register("name")}
+                    placeholder="Enter menu name"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                  />
                   {errors.name && (
-                    <p className="text-sm text-red-500">
+                    <p className="text-sm text-red-500 mt-1">
                       {errors.name.message}
                     </p>
                   )}
                 </div>
-                {/* todo add input select option later */}
-                <div>
-                  <Label>Price (฿)</Label>
-                  <Input
-                    type="number"
-                    {...register("price", { valueAsNumber: true })}
-                    placeholder="0"
-                  />
-                  {errors.price && (
-                    <p className="text-sm text-red-500">
-                      {errors.price.message}
-                    </p>
+
+                <div className="flex-col border-5  border-dotted border-gray-200 justify-center rounded-2xl mx-30 my-4 p-5  flex gap-5 ">
+                  <h3>Options</h3>
+                  {fields.length > 0 && (
+                    <div className="space-y-4 ">
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex gap-3">
+                          <Input
+                            {...register(`options.${index}.label`)}
+                            placeholder="Option name"
+                            className="flex-1 border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-lg"
+                          />
+                          <Input
+                            {...register(`options.${index}.price`)}
+                            placeholder="Price"
+                            type="number"
+                            className="w-24 border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-lg"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => remove(index)}
+                          >
+                            ลบ
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
-                <div className="flex items-end">
+                <div className="flex justify-center gap-4">
                   <Button
-                    // disabled={!selectedShop}
+                    type="button"
+                    onClick={() => append({ label: "", price: 0 })}
+                    className="  hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+                  >
+                    Add Option
+                  </Button>
+                  <Button
                     type="submit"
                     className={cn(
-                      "bg-blue-600 text-white hover:bg-blue-700",
-                      !selectedShop && "bg-blue-300 cursor-not-allowed"
+                      "  bg-blue-600  text-white hover:bg-blue-700 transition-colors duration-200 rounded-lg shadow-sm ",
+                      !selectedShop &&
+                        "bg-blue-300 cursor-not-allowed hover:bg-blue-300"
                     )}
+                    disabled={!selectedShop}
                   >
                     Add Menu
                   </Button>
+                  <div className="hidden">
+                    {errors &&
+                      errors.options &&
+                      toast.error(`${errors.options.message}}`)}
+                  </div>
                 </div>
               </form>
             </CardContent>

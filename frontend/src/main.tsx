@@ -12,6 +12,7 @@ import SignUp from "./pages/SignUp.tsx";
 import { MenuRoute, ShopRoute } from "./route/Shop.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Payment from "./pages/payment/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="payment" element={<Payment />} />
           <Route path="feedback" element={<FeedbackForm />} />
           {ShopRoute}
           {MenuRoute}

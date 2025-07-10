@@ -10,36 +10,31 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@nestjs/passport';
-
 import { AuthRequest } from 'types/auth';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { UseGuards } from '@nestjs/common';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  //@UseGuards(ShopAccessGuard)
   // @UseGuards(AuthGuard('jwt'))
-  @Post()
-  create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-    const { shopId, customerId } = body;
+  // @Post()
+  // create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
+  //   const userId = req.user.id;
+  //   const { shopId, customerId } = body;
 
-    return this.ordersService.create(
-      body,
-      userId,
-      shopId,
-      customerId as string,
-    );
-  }
+  //   return this.ordersService.create(
+  //     body,
+  //     userId,
+  //     shopId,
+  //     customerId as string,
+  //   );
+  // }
   //getAll
   //@UseGuards(ShopAccessGuard)
   @Get()
-  @Roles('customer', 'manager', 'owner')
   getAll(@Query('shopId') shopId: string) {
     return this.ordersService.getAll(shopId);
   }

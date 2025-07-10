@@ -1,5 +1,6 @@
 import type { Order } from "frontend/types/order.type";
 import type { Dispatch } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 
 type CartProps = {
   showCart: boolean;
@@ -21,7 +22,7 @@ export const CartPreview = ({
   totalPrice,
 }: CartProps) => {
   if (!showCart) return null;
-
+  const navigate = useNavigate();
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
@@ -77,7 +78,10 @@ export const CartPreview = ({
               ฿{totalPrice}
             </span>
           </div>
-          <button className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-medium">
+          <button
+            onClick={() => navigate("/payment")}
+            className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-medium"
+          >
             สั่งซื้อ
           </button>
         </div>
