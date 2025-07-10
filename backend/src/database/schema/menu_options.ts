@@ -1,7 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
   boolean,
-  integer,
   numeric,
   pgTable,
   text,
@@ -15,8 +14,7 @@ export const menuOptions = pgTable('menu_options', {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   menuId: uuid('menu_id').references(() => menus.id, { onDelete: 'cascade' }),
-  name: text('name').notNull(),
-  quantity: integer('quantity').notNull(),
+  label: text('label').notNull(),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   available: boolean('available').default(true).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),

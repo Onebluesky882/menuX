@@ -10,5 +10,5 @@ export const menuApi = {
 };
 
 export const menuOptionApi = {
-  create: (data: any) => api.post("/menu-option", data),
+  create: (data: any) => api.post("/menu-options", data),
 };

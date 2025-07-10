@@ -11,7 +11,7 @@ import { RiCloseCircleFill } from "react-icons/ri";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { toast } from "sonner";
 
-import { menuApi } from "@/Api/menu.api";
+import { menuApi, menuOptionApi } from "@/Api/menu.api";
 import { uploadImageApi } from "@/Api/uploadImage.api";
 import useShop from "@/hooks/useShop";
 import useImages from "@/hooks/useImage";
@@ -54,10 +54,6 @@ export default function MenuManagement() {
     setDrafts((prev) => [...prev, { menu: data, imageFiles: [] }]);
     toast.success("Draft menu added");
 
-    console.log(
-      "data option",
-      data.options.map((item) => item)
-    );
     reset();
   };
 
@@ -86,9 +82,30 @@ export default function MenuManagement() {
               ...transformKeysToSnakeCase(menu),
               shopId,
             })
-            .then((res) => ({ id: menuId, result: res }));
+            .then((res) => ({ id: menuId, result: res, menu }));
         })
       );
+
+      /*  send data menu option */
+
+      for (let i = 0; i < drafts.length; i++) {
+        const createResult = createResults[i];
+        if (createResult.status !== "fulfilled") continue;
+
+        const { menu } = drafts[i];
+        const menuId = createResult.value.id;
+
+        if (menu.options && menu.options.length > 0) {
+          await Promise.allSettled(
+            menu.options.map((option) => {
+              menuOptionApi.create({
+                ...transformKeysToSnakeCase(option),
+                menuId,
+              });
+            })
+          );
+        }
+      }
 
       /* 2️⃣  for each draft: fetch menuId then upload ALL image files */
       for (let i = 0; i < drafts.length; i++) {

@@ -18,7 +18,7 @@ export const menus = pgTable('menus', {
   name: text('name').notNull().unique(),
   description: text('description'),
   categoryId: uuid('category_id').references(() => categories.id),
-  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+  price: numeric('price', { precision: 10, scale: 2 }),
   available: boolean('available').default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   pageId: uuid('page_id').references(() => pages.id),

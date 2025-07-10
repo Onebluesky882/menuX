@@ -7,7 +7,7 @@ import {
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { MenuOption } from './menu_options.dto';
-import { menus, schema } from 'src/database';
+import { menus, schema, shops } from 'src/database';
 import { menuOptions } from 'src/database/schema/menu_options';
 import { eq } from 'drizzle-orm';
 
@@ -19,10 +19,18 @@ export class MenuOptionsService {
     private readonly db: NodePgDatabase<typeof schema>,
   ) {}
 
-  async create(dto: MenuOption) {
+  async create(data: MenuOption, userId: string) {
     try {
+      const shopOwner = await this.db.query.shops.findFirst({
+        where: eq(shops.ownerId, userId),
+      });
+      if (!shopOwner) {
+        throw new BadRequestException(
+          "You don't have permission to add options.",
+        );
+      }
       const menuExists = await this.db.query.menus.findFirst({
-        where: eq(menuOptions.id, menus.id),
+        where: eq(menus.id, data.menuId!),
       });
 
       if (!menuExists) {
@@ -32,11 +40,10 @@ export class MenuOptionsService {
       const result = await this.db
         .insert(menuOptions)
         .values({
-          menuId: dto.menuId,
-          name: dto.name,
-          quantity: dto.quantity,
-          price: dto.price.toString(),
-          available: dto.available ?? true,
+          menuId: data.menuId,
+          label: data.label,
+          price: data.price,
+          available: data.available ?? true,
         })
         .returning();
 
