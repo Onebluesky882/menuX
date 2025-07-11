@@ -1,8 +1,8 @@
 import { Route } from "react-router-dom";
-import CreateNewShop from "@/pages/shop/CreateShop";
-import Dashboard from "@/pages/Dashboard";
-import ShopLayout from "@/pages/shop/[shopId]/ShopLayout";
-import PublicMenu from "@/pages/shop/PublicMenu";
+import CreateNewShop from "../pages/shop/CreateShop";
+import Dashboard from "../pages/Dashboard";
+import ShopLayout from "../pages/shop/[shopId]/ShopLayout";
+import PublicMenu from "../pages/shop/PublicMenu";
 
 export const ShopRoute = (
   <>
