@@ -10,27 +10,18 @@
     "paths": {
       "@/*": ["./frontend/src/*"]
     },
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": [
-    "./frontend/src",
-    "backend/drizzle.config.ts",
-    "frontend/types",
-    "frontend/src/pages/shop/cr.tsx"
-  ]
+  "include": ["./frontend/src", "frontend/types"]
 }

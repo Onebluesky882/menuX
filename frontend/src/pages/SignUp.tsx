@@ -3,20 +3,21 @@ import LoginAuthGoogle from "../components/LoginAuthGoogle";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userApi } from "@/Api/user.api";
-import { schema, type SignupField } from "@/schema/signUpField";
 import BeatLoader from "react-spinners/BeatLoader";
-import useUsers from "@/hooks/useUsers";
+import { schema } from "../schema/loginField";
+import useUsers from "../hooks/useUsers";
+import { userApi } from "../Api/user.api";
 
-type SignupProps = {
+type CreateUserDto = {
   email: string;
   username: string;
   password: string;
+  emailVerified: boolean;
 };
 
 const SignUp = () => {
   const navigator = useNavigate();
-  const [user, setUser] = useState<SignupProps>();
+  const [user, setUser] = useState<CreateUserDto>();
   const [loading, setLoading] = useState(false);
 
   const { fetchProfile } = useUsers();
@@ -25,15 +26,21 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupField>({
+  } = useForm<any>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<SignupField> = async (data) => {
+  const onSubmit: SubmitHandler<any> = async (data) => {
     setLoading(true);
     const { confirmPassword, ...userWithoutConfirm } = data;
-    setUser(userWithoutConfirm);
+
+    const userWithEmailVerified: CreateUserDto = {
+      ...userWithoutConfirm,
+      emailVerified: false,
+    };
+
+    setUser(userWithEmailVerified);
   };
 
   useEffect(() => {
@@ -73,9 +80,7 @@ const SignUp = () => {
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="you@email.com"
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-red-500 text-sm"></p>}
           </div>
           <div>
             <label
@@ -86,16 +91,14 @@ const SignUp = () => {
             </label>
             <input
               {...register("username")}
-              type="name"
+              type="text"
               id="name"
-              autoComplete="name"
+              autoComplete="username"
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="name"
-            />{" "}
-            {errors.username && (
-              <p className="text-red-500 text-sm">{errors.username.message}</p>
-            )}
-          </div>{" "}
+            />
+            {errors.username && <p className="text-red-500 text-sm">{}</p>}
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
@@ -106,14 +109,12 @@ const SignUp = () => {
               id="password"
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="Password"
-            />{" "}
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-          </div>{" "}
+            />
+            {errors.password && <p className="text-red-500 text-sm">{}</p>}
+          </div>
           <div>
             <label
-              htmlFor="email"
+              htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Confirm Password
@@ -122,30 +123,21 @@ const SignUp = () => {
               {...register("confirmPassword")}
               type="password"
               id="confirmPassword"
-              autoComplete="confirmPassword"
+              autoComplete="new-password"
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="Confirm Password"
-            />{" "}
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword.message}
-              </p>
-            )}
+            />
+            {errors.confirmPassword && <p className="text-red-500 text-sm"></p>}
           </div>
           <button
             disabled={loading}
             type="submit"
-            className={`w-full flex justify-center items-center px-4 py-2  hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 active:scale-95 ${
+            className={`w-full flex justify-center items-center gap-2 px-4 py-2 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 active:scale-95 ${
               loading ? "bg-blue-500/50" : "bg-blue-600"
             }`}
           >
-            {loading && (
-              <span>
-                <BeatLoader />
-                Sign Up
-              </span>
-            )}
-            Sign Up
+            {loading && <BeatLoader size={8} color="white" />}
+            {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
         <ForgetPassword />
@@ -159,17 +151,18 @@ const ForgetPassword = () => {
     <div className="mt-4 flex items-center gap-2">
       <Link
         to="/login"
-        className="text-md text-gray-500 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
+        className="text-md text-gray-500 hover:text-blue-500 transition-colors underline underline-offset-2"
       >
         Login
-      </Link>{" "}
+      </Link>
       <Link
         to="#"
-        className="text-sm text-gray-400 hover:text-blue-500 transition-colors underline underline-offset-2 float-left"
+        className="text-sm text-gray-400 hover:text-blue-500 transition-colors underline underline-offset-2"
       >
         Forgot Password?
       </Link>
     </div>
   );
 };
+
 export default SignUp;

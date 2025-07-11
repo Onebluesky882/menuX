@@ -1,10 +1,9 @@
 import { Link, Outlet } from "react-router-dom";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
-import { useEffect, useState } from "react";
-import useShop from "@/hooks/useShop";
+import { useEffect } from "react";
 import MenuManagement from "./menu/MenuManagement";
-
-import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
+import useShop from "../../../hooks/useShop";
+import { ShopTabsLayout } from "../../../components/shops/ShopTabLayout";
 
 type MenuProps = {
   available: boolean;
