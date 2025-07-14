@@ -67,7 +67,7 @@ export class LineUsersService {
       //get jwt using Auth sevice
       return userRecord.lineUserId;
     } catch (error) {
-      this.logger.error('Failed to create line user', error.stack || error);
+      this.logger.error('Failed to create line user', error);
 
       throw new HttpException(
         {

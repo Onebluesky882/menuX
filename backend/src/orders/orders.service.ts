@@ -44,8 +44,8 @@ export class OrdersService {
         data: createdOrder,
       };
     } catch (error) {
-      this.logger.error('Failed to create ', error.stack);
-      if (error.code === '23505') {
+      this.logger.error('Failed to create ', error);
+      if (error === '23505') {
         throw new HttpException(
           { success: false, message: 'order already exists.' },
           HttpStatus.CONFLICT,

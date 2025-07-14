@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -11,7 +11,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3001'], // Update Prod Origin
+    origin: ['http://localhost:5173', 'https://menu-x-five.vercel.app/'], // Update Prod Origin
     credentials: true,
   });
   Logger.log('Application started...');

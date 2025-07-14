@@ -30,10 +30,10 @@ export class MenusService {
         data: newMenu,
       };
     } catch (error) {
-      this.logger.error('Failed to create menu', error.stack);
+      this.logger.error('Failed to create menu', error);
 
       // 23505 = unique_violation in Postgres
-      if (error.code === '23505') {
+      if (error === '23505') {
         throw new HttpException(
           {
             success: false,

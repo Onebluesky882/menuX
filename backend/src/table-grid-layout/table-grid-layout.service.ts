@@ -13,7 +13,6 @@ import {
   InsertTableGridLayout,
   UpdateTableGridLayout,
 } from './table-grid-layout.dto';
-import { ValidateService } from 'src/common/validate/validate.service';
 
 @Injectable()
 export class TableGridLayoutService {
@@ -21,7 +20,6 @@ export class TableGridLayoutService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
-    private readonly shopAccess: ValidateService,
   ) {}
 
   async create(newTableLayout: InsertTableGridLayout, shopId: string) {
@@ -36,8 +34,8 @@ export class TableGridLayoutService {
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create table', error.stack);
-      if (error.code === '23505') {
+      this.logger.error('Failed to create table', error);
+      if (error === '23505') {
         throw new HttpException(
           { success: false, message: ' Table GridLayout already exists.' },
           HttpStatus.CONFLICT,
@@ -99,7 +97,7 @@ export class TableGridLayoutService {
         message: 'Fetched Table GridLayout by ID successfully',
       };
     } catch (error) {
-      this.logger.error('Failed to fetch table layout by ID', error.stack);
+      this.logger.error('Failed to fetch table layout by ID', error);
       throw new HttpException(
         {
           success: false,

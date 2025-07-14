@@ -104,7 +104,7 @@ export class RolesService {
         data: updated[0],
       };
     } catch (error) {
-      this.logger.error('updated failed ', error.message);
+      this.logger.error('updated failed ', error);
 
       throw new HttpException(
         {
@@ -128,7 +128,7 @@ export class RolesService {
         message: 'Roles deleted successfully.',
       };
     } catch (error) {
-      this.logger.error('❌ Delete failed', error.stack || error.message);
+      this.logger.error('❌ Delete failed', error || error);
       throw new HttpException(
         {
           success: false,

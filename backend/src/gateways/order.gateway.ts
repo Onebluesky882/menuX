@@ -13,7 +13,7 @@ import { Server, Socket } from 'socket.io';
 })
 export class OrderGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   handleConnection(client: Socket) {
     const { shopId } = client.handshake.query;

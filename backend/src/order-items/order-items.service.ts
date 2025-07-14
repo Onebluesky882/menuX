@@ -29,12 +29,16 @@ export class OrderItemsService {
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create ', error.stack);
-      if (error.code === '23505') {
-        throw new HttpException(
-          { success: false, message: 'order already exists.' },
-          HttpStatus.CONFLICT,
-        );
+      this.logger.error('Failed to create ', error);
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        const err = error as { code: string };
+
+        if (err.code === '23505') {
+          throw new HttpException(
+            { success: false, message: 'order already exists.' },
+            HttpStatus.CONFLICT,
+          );
+        }
       }
 
       throw new HttpException(

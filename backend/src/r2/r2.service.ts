@@ -4,8 +4,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class R2Service {
-  private s3: S3Client;
-  private bucket: string;
+  private s3!: S3Client;
+  private bucket!: string;
   constructor(private configService: ConfigService) {
     if (
       !process.env.R2_ENDPOINT &&

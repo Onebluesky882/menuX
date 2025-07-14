@@ -31,8 +31,8 @@ export class ShopsService {
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create shop', error.stack);
-      if (error.code === '23505') {
+      this.logger.error('Failed to create shop', error);
+      if (error === '23505') {
         throw new HttpException(
           { success: false, message: 'shop already exists.' },
           HttpStatus.CONFLICT,

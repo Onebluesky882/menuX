@@ -33,8 +33,8 @@ export class TablesService {
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create table', error.stack);
-      if (error.code === '23505') {
+      this.logger.error('Failed to create table', error);
+      if (error === '23505') {
         throw new HttpException(
           { success: false, message: 'Table already exists.' },
           HttpStatus.CONFLICT,

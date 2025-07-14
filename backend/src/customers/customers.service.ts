@@ -32,8 +32,8 @@ export class CustomerService {
         data: inserted,
       };
     } catch (error) {
-      this.logger.error('Failed to create customer', error.stack);
-      if (error.code === '23505') {
+      this.logger.error('Failed to create customer', error);
+      if (error === '23505') {
         throw new HttpException(
           { success: false, message: 'customer already exists.' },
           HttpStatus.CONFLICT,

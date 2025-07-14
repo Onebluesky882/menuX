@@ -5,7 +5,7 @@ export type InsertImage = InferInsertModel<typeof images>;
 export type SelectImage = InferSelectModel<typeof images>;
 
 export class ImageDto {
-  type: string;
+  type: string = '';
   shopId?: string;
   menuId?: string;
   imageUrl?: string | null | undefined;
