@@ -13,5 +13,10 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": [
+    "../backend", // exclude backend folder explicitly
+    "node_modules",
+    "dist"
+  ]
 }
