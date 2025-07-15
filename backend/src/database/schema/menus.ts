@@ -1,4 +1,3 @@
-import { sql } from 'drizzle-orm';
 import {
   boolean,
   numeric,
@@ -18,7 +17,7 @@ export const menus = pgTable('menus', {
   name: text('name').notNull().unique(),
   description: text('description'),
   categoryId: uuid('category_id').references(() => categories.id),
-  price: numeric('price', { precision: 10, scale: 2 }),
+  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   available: boolean('available').default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   pageId: uuid('page_id').references(() => pages.id),

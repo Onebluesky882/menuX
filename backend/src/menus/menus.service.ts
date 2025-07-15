@@ -8,7 +8,7 @@ import {
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { and, eq } from 'drizzle-orm';
-import { menus, schema } from 'src/database';
+import { menus, schema, shops } from 'src/database';
 import { MenuDto } from './menus.dto';
 
 @Injectable()

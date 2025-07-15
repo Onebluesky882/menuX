@@ -2,6 +2,7 @@ import React from "react";
 import { User, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ModeToggle } from "./ToggleMode";
 
 export const Header = () => {
   return (
@@ -29,6 +30,9 @@ export const Header = () => {
           <Button variant="ghost" size="icon">
             <User className="h-5 w-5 text-gray-600" />
           </Button>
+          <div className="bg-black rounded-2xl">
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </header>

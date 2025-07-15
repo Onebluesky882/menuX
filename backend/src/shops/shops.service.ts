@@ -78,6 +78,32 @@ export class ShopsService {
     }
   }
 
+  async getAllShopNoJWT() {
+    try {
+      const result = await this.db
+        .select({
+          id: shops.id,
+          name: shops.name,
+          active: shops.active,
+        })
+        .from(shops)
+        .where(eq(shops.active, true));
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          success: false,
+          message: 'failed fetch shop',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async getById(id: string) {
     try {
       const result = await this.db

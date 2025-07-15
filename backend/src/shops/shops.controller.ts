@@ -21,12 +21,20 @@ export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
   //getAll
   // @UseGuards(ShopAccessGuard)
+
+  @Get('consumer')
+  getAllShopCLient() {
+    return this.ShopsService.getAllShopNoJWT();
+  }
+
   @UseGuards(AuthGuard('jwt'))
+  //todo change Get('customer')
   @Get()
   getAll(@Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.ShopsService.getAll(userId);
   }
+
   @UseGuards(AuthGuard('jwt'))
   @Get(':shopId/menu')
   getMenuPage(@Req() req: AuthRequest) {

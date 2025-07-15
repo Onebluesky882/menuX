@@ -35,7 +35,6 @@ export class MenusController {
   // get by id
   @Get('name')
   getById(@Query('name') name: string, @Query('shopId') shopId: string) {
-    console.log('shopId received:', shopId);
     return this.menusService.getByName(name, shopId);
   }
 
@@ -57,7 +56,7 @@ export class MenusController {
     return this.menusService.delete(id, shopId);
   }
 
-  @Get('/:shopId')
+  @Get('options/:shopId')
   async getMenuWithDetail(@Param('shopId') shopId: string) {
     return this.menusService.getMenusWithDetailsByShopId(shopId);
   }

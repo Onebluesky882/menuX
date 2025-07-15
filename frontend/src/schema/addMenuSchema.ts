@@ -5,7 +5,7 @@ export const schema = z.object({
     .string()
     .min(1, "require")
     .transform((val) => val.trim()),
-
+  price: z.coerce.number().positive("price") as z.ZodNumber,
   options: z
     .array(
       z.object({
