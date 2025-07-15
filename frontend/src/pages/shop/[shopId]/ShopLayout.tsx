@@ -15,7 +15,6 @@ type MenuProps = {
 
 const ShopLayout = () => {
   const { selectedShop } = useShop();
-  console.log("selectedShop :", selectedShop);
 
   useEffect(() => {}, []);
   return (

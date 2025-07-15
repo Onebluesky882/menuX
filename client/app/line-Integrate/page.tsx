@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { LineUser } from "../types/lineUser";
 import { useUserStore } from "@/app/stores/userStore";
-import { api } from "@/app/api/lineUsers";
+import { api } from "@/app/api/lineUsers.api";
 
 const page = () => {
   const [user, setUser] = useState<LineUser | null>(null);

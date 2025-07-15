@@ -6,7 +6,7 @@ export const menuApi = {
   getByName: (name: string, shopId: string) =>
     api.get(`/menus/?name=${encodeURIComponent(name)}&shopId=${shopId}`),
 
-  getMenuPreviews: (shopId: string) => api.get(`/menus/${shopId}`),
+  getMenuPreviews: (shopId: string) => api.get(`/menus/options/${shopId}`),
   update: (id: string, data: any) => api.put(`/menus/${id}`, data),
   delete: (id: string) => api.delete(`/menus/${id}`),
 };

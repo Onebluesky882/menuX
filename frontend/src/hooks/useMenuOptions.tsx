@@ -10,7 +10,6 @@ export const useMenuOptions = () => {
     setSelectedOptions((prev) => {
       const existing = prev.find((item) => item.option.id === option.id);
       if (existing) {
-        // เพิ่มจำนวน
         return prev.map((item) =>
           item.option.id === option.id
             ? { ...item, quantity: item.quantity + 1 }

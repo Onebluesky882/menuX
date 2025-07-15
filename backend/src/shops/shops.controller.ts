@@ -10,9 +10,8 @@ import {
   Delete,
 } from '@nestjs/common';
 
-import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthRequest } from 'types/auth';
-import { CreateShopDto, UpdateShopDto } from './shops.dto';
+import { CreateShopDto } from './shops.dto';
 import { ShopsService } from './shops.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -49,6 +48,7 @@ export class ShopsController {
     const userId = req.user.id;
     return this.ShopsService.create(body, userId);
   }
+
   @Get(':id')
   getById(@Param('id') id: string) {
     return this.ShopsService.getById(id);

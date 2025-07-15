@@ -95,15 +95,6 @@ const PublicMenu = () => {
     console.log("Total items updated:", totalItems);
   }, [totalItems]);
 
-  console.log("menuPreview:", menuPreview);
-  console.log("orders:", orders);
-  console.log(
-    "menuWithImage amounts:",
-    menuWithImage.map((m) => ({ name: m.name, amount: m.amount }))
-  );
-
-  // Debug total price calculation
-  console.log("💰 Price Calculation Debug:");
   orders.forEach((order, index) => {
     console.log(
       `Order ${index + 1}: ${order.name} - Price: ฿${order.price} × Qty: ${
@@ -111,19 +102,6 @@ const PublicMenu = () => {
       } = ฿${order.amount}`
     );
   });
-  console.log(`📊 Total Items: ${totalItems}`);
-  console.log(`💵 Total Price: ฿${getTotalPrice().toLocaleString()}`);
-
-  // Verify calculation manually
-  const manualTotal = orders.reduce((sum, order) => {
-    const orderTotal = order.price * order.quantity;
-    console.log(
-      `${order.name}: ฿${order.price} × ${order.quantity} = ฿${orderTotal}`
-    );
-    return sum + orderTotal;
-  }, 0);
-  console.log(`🔍 Manual Calculation: ฿${manualTotal}`);
-  console.log(`⚖️ Store vs Manual: ฿${getTotalPrice()} vs ฿${manualTotal}`);
 
   return (
     <>
