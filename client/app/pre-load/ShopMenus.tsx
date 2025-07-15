@@ -69,6 +69,8 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     shop();
   }, [shopId]);
 
+  console.log("cart", cart);
+
   const handleCart = (optionId: string) => {
     const menu = menusOption.find((menu) =>
       menu.menuOptions.some((option) => option.id === optionId)
@@ -114,6 +116,14 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     }, 0);
   };
 
+  const getTotalOrderItems = () => {
+    return cart.reduce((total, item) => {
+      return total + Number(item.quantity);
+    }, 0);
+  };
+
+  // send data to store db
+  const orderPayload = cart.map((item) => ({}));
   return (
     <>
       {loading ? (
@@ -162,7 +172,11 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
             </div>
           </div>
           <div>
-            <TotalCard cart={cart} getTotalOrderPrice={getTotalOrderPrice} />
+            <TotalCard
+              cart={cart}
+              getTotalOrderPrice={getTotalOrderPrice}
+              getTotalOrderItems={getTotalOrderItems}
+            />
           </div>
         </div>
       )}
@@ -173,11 +187,21 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
 type TotalCardProps = {
   cart: CartItem[];
   getTotalOrderPrice: () => number;
+  getTotalOrderItems: () => number;
 };
-const TotalCard = ({ cart, getTotalOrderPrice }: TotalCardProps) => {
+const TotalCard = ({
+  cart,
+  getTotalOrderPrice,
+  getTotalOrderItems,
+}: TotalCardProps) => {
   return (
     <div className="p-4 bg-white rounded-xl shadow-md text-lg font-semibold">
-      {cart && <div>รวมทั้งหมด: {getTotalOrderPrice()} บาท</div>}
+      {cart && (
+        <div>
+          รวมรายการ {getTotalOrderItems()} รวมทั้งหมด: {getTotalOrderPrice()}{" "}
+          บาท
+        </div>
+      )}
     </div>
   );
 };

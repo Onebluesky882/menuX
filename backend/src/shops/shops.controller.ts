@@ -6,8 +6,6 @@ import {
   Body,
   Get,
   Param,
-  Patch,
-  Delete,
 } from '@nestjs/common';
 
 import { AuthRequest } from 'types/auth';

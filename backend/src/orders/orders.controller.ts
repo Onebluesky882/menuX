@@ -1,6 +1,5 @@
 import {
   Controller,
-  Req,
   Post,
   Body,
   Get,
@@ -8,30 +7,26 @@ import {
   Patch,
   Delete,
   Query,
+  ParseArrayPipe,
 } from '@nestjs/common';
 
-import { AuthRequest } from 'types/auth';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { InsertOrders } from './orders.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  // @UseGuards(AuthGuard('jwt'))
-  // @Post()
-  // create(@Body() body: CreateOrderDto, @Req() req: AuthRequest) {
-  //   const userId = req.user.id;
-  //   const { shopId, customerId } = body;
+  @Post()
+  create(@Body() cartItems: InsertOrders[]) {
+    const ordersToInsert = cartItems.map((item) => ({
+      ...item,
+    }));
+    console.log('📦 ordersToInsert:', ordersToInsert);
+    return this.ordersService.create(ordersToInsert);
+  }
 
-  //   return this.ordersService.create(
-  //     body,
-  //     userId,
-  //     shopId,
-  //     customerId as string,
-  //   );
-  // }
   //getAll
   //@UseGuards(ShopAccessGuard)
   @Get()
@@ -52,7 +47,7 @@ export class OrdersController {
   @Roles('manager', 'staff', 'owner')
   update(
     @Param('id') id: string,
-    @Body() body: UpdateOrderDto,
+    @Body() body: InsertOrders,
     @Query('shopId') shopId: string,
   ) {
     return this.ordersService.update(id, body, shopId);

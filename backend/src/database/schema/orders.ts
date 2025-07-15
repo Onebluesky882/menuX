@@ -7,9 +7,8 @@ import { users } from './users';
 import { menus } from './menus';
 
 export const orders = pgTable('orders', {
-  id: uuid('id')
-    .primaryKey()
-    .default(sql`gen_random_uuid()`),
+  id: uuid('id').primaryKey(),
+
   shopId: uuid('shop_id')
     .notNull()
     .references(() => shops.id),
@@ -20,9 +19,7 @@ export const orders = pgTable('orders', {
   menuId: uuid('menu_id').references(() => menus.id),
   status: text('status').default('pending'),
   customerId: uuid('customer_id').references(() => customers.id),
-  createdById: uuid('create_by_id')
-    .notNull()
-    .references(() => users.id),
+  createdById: uuid('create_by_id').references(() => users.id),
   quantity: numeric('quantity', { precision: 10, scale: 2 }),
   totalPrice: numeric('total_price', { precision: 10, scale: 2 }),
   priceEach: numeric('price_each', { precision: 10, scale: 2 }),

@@ -34,7 +34,14 @@
       "idx": 4,
       "version": "7",
       "when": 1752135242142,
-      "tag": "0004_menu_price_null",
+      "tag": "0004_fixed_menu_options",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1752597299639,
+      "tag": "0005_fixed_orders",
       "breakpoints": true
     }
   ]

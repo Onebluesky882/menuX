@@ -9,8 +9,8 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { shops, orders } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
-import { CreateOrderDto, UpdateOrderDto } from './orders.dto';
 import { OrderGateway } from 'src/gateways/order.gateway';
+import { InsertOrders } from './orders.dto';
 
 @Injectable()
 export class OrdersService {
@@ -21,24 +21,10 @@ export class OrdersService {
     private readonly orderGateway: OrderGateway,
   ) {}
 
-  async create(
-    newOrder: CreateOrderDto,
-    shopId: string,
-    userId: string,
-    customerId: string,
-  ) {
+  async create(data: InsertOrders[]) {
     try {
-      const inserted = await this.db
-        .insert(orders)
-        .values({
-          ...newOrder,
-          shopId: shopId,
-          createdById: userId,
-          customerId: customerId,
-        })
-        .returning();
+      const inserted = await this.db.insert(orders).values(data).returning();
       const createdOrder = inserted[0];
-      this.orderGateway.notifyNewOrder(createdOrder, shopId);
       return {
         success: true,
         data: createdOrder,
@@ -138,7 +124,7 @@ export class OrdersService {
     }
   }
 
-  async update(id: string, body: UpdateOrderDto, shopId: string) {
+  async update(id: string, body: InsertOrders, shopId: string) {
     try {
       const updated = await this.db
         .update(orders)
