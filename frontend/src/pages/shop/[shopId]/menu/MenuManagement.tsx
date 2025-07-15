@@ -260,6 +260,16 @@ export default function MenuManagement() {
                       {errors.name.message}
                     </p>
                   )}
+                  <Input
+                    {...register("price")}
+                    placeholder="Enter price"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                  />
+                  {errors.price && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.price.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex-col border-5  border-dotted border-gray-200 justify-center rounded-2xl mx-30 my-4 p-5  flex gap-5 ">
