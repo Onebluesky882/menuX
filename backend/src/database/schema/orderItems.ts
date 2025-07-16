@@ -16,5 +16,5 @@ export const orderItems = pgTable('order_items', {
   totalPrice: numeric('total_price', { precision: 10, scale: 2 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at'),
-  status: text('status'),
+  status: text('status').default('pending'),
 });
