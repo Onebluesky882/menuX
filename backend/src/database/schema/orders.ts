@@ -5,9 +5,12 @@ import { shops } from './shops';
 import { customers } from './customers';
 import { users } from './users';
 import { menus } from './menus';
+import { randomUUID } from 'crypto';
 
 export const orders = pgTable('orders', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id')
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
 
   shopId: uuid('shop_id')
     .notNull()

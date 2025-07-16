@@ -7,7 +7,6 @@ import {
   Patch,
   Delete,
   Query,
-  ParseArrayPipe,
 } from '@nestjs/common';
 
 import { OrdersService } from './orders.service';
