@@ -12,6 +12,7 @@ import { CartItem, MenuItem, OrderPayload } from "../types/menuOrder.type";
 import { CartIconPreview, CartPreview } from "@/components/menu/CartPreview";
 import { TotalCard } from "@/components/menu/TotalCard";
 import { ordersApi } from "../api/orders.api";
+import { useRouter } from "next/navigation";
 
 const ShopMenus = ({ shopId }: { shopId: string }) => {
   const [shop, setShop] = useState<any>();
@@ -19,6 +20,8 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [previewCart, setPreviewCart] = useState(false);
+
+  const router = useRouter();
   useEffect(() => {
     setLoading(true);
     const shop = async () => {
@@ -98,21 +101,24 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
       return total + Number(item.selectedOption.price) * item.quantity;
     }, 0);
   };
-  // send data to store db
-  const ordersPayload: OrderPayload[] = cart.map((menu) => ({
-    ...menu,
-
-    priceEach: menu.basePrice.toString(),
-    shopId: shop.id,
-    quantity: menu.quantity.toString(),
-    totalPrice: menu.totalPrice.toString(),
-  }));
 
   const handleStoreOrders = async () => {
+    if (!shop) return;
+    const payload: OrderPayload = {
+      shopId: shop.id,
+      items: cart.map((menu) => ({
+        menuId: menu.menuId,
+        quantity: menu.quantity,
+        priceEach: menu.basePrice,
+        totalPrice: menu.totalPrice,
+      })),
+    };
+
     try {
-      const result = await ordersApi.create(ordersPayload);
+      await ordersApi.create(payload);
       setPreviewCart(false);
       setCart([]);
+      router.push("/payment");
     } catch (error) {
       console.log("fail", error);
     }

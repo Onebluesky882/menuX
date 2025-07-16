@@ -1,4 +1,4 @@
-const useOrders = () => {
+const useStoreOrders = () => {
   return {};
 };
-export default useOrders;
+export default useStoreOrders;

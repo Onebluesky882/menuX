@@ -14,7 +14,7 @@ type CartPreviewProps = {
   onOpenChange: (open: boolean) => void;
   cart: CartItem[];
   totalOrdersPrice: () => number;
-  handleStoreOrders: (orders: OrderPayload[]) => void;
+  handleStoreOrders: (orders: OrderPayload) => void;
   shopId: string;
 };
 
@@ -77,17 +77,18 @@ export const CartPreview = ({
         <Button
           className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white text-lg py-5 rounded-xl transition-all"
           disabled={cart.length === 0}
-          onClick={() =>
-            handleStoreOrders(
-              cart.map((item) => ({
-                menuId: item.menuId,
-                quantity: item.quantity.toString(),
-                priceEach: item.basePrice.toString(),
-                totalPrice: item.totalPrice.toString(),
-                shopId: shopId,
-              }))
-            )
-          }
+          onClick={() => {
+            const payload = {
+              shopId: shopId,
+              items: cart.map((menu) => ({
+                menuId: menu.menuId,
+                quantity: menu.quantity,
+                priceEach: menu.basePrice,
+                totalPrice: menu.totalPrice,
+              })),
+            };
+            handleStoreOrders(payload);
+          }}
         >
           ดำเนินการสั่งซื้อ
         </Button>

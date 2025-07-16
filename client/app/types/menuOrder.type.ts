@@ -42,9 +42,11 @@ export type CartItem = {
 };
 
 export type OrderPayload = {
-  menuId: string;
-  quantity: string;
-  priceEach: string;
-  totalPrice: string;
   shopId: string;
+  items: {
+    menuId: string;
+    quantity: number;
+    priceEach: number;
+    totalPrice: number;
+  }[];
 };
