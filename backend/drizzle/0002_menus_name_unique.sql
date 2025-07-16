@@ -1,1 +1,0 @@
-ALTER TABLE "menus" ADD CONSTRAINT "menus_name_unique" UNIQUE("name");

@@ -28,7 +28,6 @@ CREATE TABLE "employees" (
 --> statement-breakpoint
 CREATE TABLE "images" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"image_name" text,
 	"image_url" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"type" text NOT NULL,
@@ -46,8 +45,17 @@ CREATE TABLE "line_users" (
 	CONSTRAINT "line_users_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
-CREATE TABLE "menus" (
+CREATE TABLE "menu_options" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"menu_id" uuid,
+	"label" text NOT NULL,
+	"price" numeric(10, 2) NOT NULL,
+	"available" boolean DEFAULT true NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "menus" (
+	"id" uuid PRIMARY KEY NOT NULL,
 	"created_by" uuid,
 	"name" text NOT NULL,
 	"description" text,
@@ -56,8 +64,9 @@ CREATE TABLE "menus" (
 	"available" boolean DEFAULT true,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"page_id" uuid,
-	"image_id" uuid,
-	"shop_id" uuid NOT NULL
+	"shop_id" uuid NOT NULL,
+	CONSTRAINT "menus_id_unique" UNIQUE("id"),
+	CONSTRAINT "menus_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE "order_items" (
@@ -66,7 +75,10 @@ CREATE TABLE "order_items" (
 	"menu_id" uuid,
 	"quantity" numeric(10, 2),
 	"price_each" numeric(10, 2),
-	"total_price" numeric(10, 2)
+	"total_price" numeric(10, 2),
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp,
+	"status" text DEFAULT 'pending'
 );
 --> statement-breakpoint
 CREATE TABLE "order_table" (
@@ -89,9 +101,10 @@ CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"shop_id" uuid NOT NULL,
 	"order_table_id" uuid,
+	"menu_id" uuid,
 	"status" text DEFAULT 'pending',
 	"customer_id" uuid,
-	"create_by_id" uuid NOT NULL,
+	"create_by_id" uuid,
 	"quantity" numeric(10, 2),
 	"total_price" numeric(10, 2),
 	"price_each" numeric(10, 2),
@@ -168,6 +181,11 @@ CREATE TABLE "users" (
 	"line_user_id" text,
 	"line_picture_url" text,
 	"line_display_name" text,
+	"reset_token" varchar(255),
+	"reset_token_expiry" timestamp,
+	"last_login_at" timestamp,
+	"email_verified" boolean DEFAULT false,
+	"provider" varchar(50),
 	CONSTRAINT "users_email_unique" UNIQUE("email"),
 	CONSTRAINT "users_line_user_id_unique" UNIQUE("line_user_id")
 );
@@ -179,12 +197,12 @@ ALTER TABLE "employees" ADD CONSTRAINT "employees_shop_id_shops_id_fk" FOREIGN K
 ALTER TABLE "employees" ADD CONSTRAINT "employees_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "employees" ADD CONSTRAINT "employees_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."roles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "images" ADD CONSTRAINT "images_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "images" ADD CONSTRAINT "images_menu_id_menus_id_fk" FOREIGN KEY ("menu_id") REFERENCES "public"."menus"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "images" ADD CONSTRAINT "images_menu_id_menus_id_fk" FOREIGN KEY ("menu_id") REFERENCES "public"."menus"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "images" ADD CONSTRAINT "images_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "menu_options" ADD CONSTRAINT "menu_options_menu_id_menus_id_fk" FOREIGN KEY ("menu_id") REFERENCES "public"."menus"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menus" ADD CONSTRAINT "menus_created_by_users_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menus" ADD CONSTRAINT "menus_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menus" ADD CONSTRAINT "menus_page_id_pages_id_fk" FOREIGN KEY ("page_id") REFERENCES "public"."pages"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "menus" ADD CONSTRAINT "menus_image_id_images_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."images"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menus" ADD CONSTRAINT "menus_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_menu_id_menus_id_fk" FOREIGN KEY ("menu_id") REFERENCES "public"."menus"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -194,6 +212,7 @@ ALTER TABLE "order_table" ADD CONSTRAINT "order_table_customer_id_customers_id_f
 ALTER TABLE "order_table" ADD CONSTRAINT "order_table_create_by_id_users_id_fk" FOREIGN KEY ("create_by_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_order_table_id_order_table_id_fk" FOREIGN KEY ("order_table_id") REFERENCES "public"."order_table"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_menu_id_menus_id_fk" FOREIGN KEY ("menu_id") REFERENCES "public"."menus"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_customer_id_customers_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_create_by_id_users_id_fk" FOREIGN KEY ("create_by_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "pages" ADD CONSTRAINT "pages_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1749439795802,
-      "tag": "0000_create_tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1749619924084,
-      "tag": "0001_alter_table_users",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1749989009598,
-      "tag": "0002_menus_name_unique",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1752065148980,
-      "tag": "0003_menu_options",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1752135242142,
-      "tag": "0004_fixed_menu_options",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1752597299639,
-      "tag": "0005_fixed_orders",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1752635472716,
-      "tag": "0006_fixed_orders_id",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1752656174152,
-      "tag": "0007_add_order_item",
+      "when": 1752683117545,
+      "tag": "0000_setup_table",
       "breakpoints": true
     }
   ]
