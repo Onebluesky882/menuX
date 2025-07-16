@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { numeric, pgTable, uuid } from 'drizzle-orm/pg-core';
+import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { orders } from './orders';
 import { menus } from './menus';
 
@@ -14,4 +14,7 @@ export const orderItems = pgTable('order_items', {
   quantity: numeric('quantity', { precision: 10, scale: 2 }),
   priceEach: numeric('price_each', { precision: 10, scale: 2 }),
   totalPrice: numeric('total_price', { precision: 10, scale: 2 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at'),
+  status: text('status'),
 });

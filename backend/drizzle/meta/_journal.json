@@ -50,6 +50,13 @@
       "when": 1752635472716,
       "tag": "0006_fixed_orders_id",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1752656174152,
+      "tag": "0007_add_order_item",
+      "breakpoints": true
     }
   ]
 }

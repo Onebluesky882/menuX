@@ -11,19 +11,16 @@ import {
 
 import { OrdersService } from './orders.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { InsertOrders } from './orders.dto';
+import { CreateOrderDto, InsertOrders } from './orders.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@Body() cartItems: InsertOrders[]) {
-    const ordersToInsert = cartItems.map((item) => ({
-      ...item,
-    }));
-    console.log('📦 ordersToInsert:', ordersToInsert);
-    return this.ordersService.create(ordersToInsert);
+  create(@Body() cartItems: CreateOrderDto) {
+    console.log('Received createOrderDto:', cartItems);
+    return this.ordersService.create(cartItems);
   }
 
   //getAll

@@ -6,11 +6,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { shops, orders } from 'src/database';
+import { shops, orders, orderItems } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
 import { eq, and } from 'drizzle-orm';
 import { OrderGateway } from 'src/gateways/order.gateway';
-import { InsertOrders } from './orders.dto';
+import type { CreateOrderDto, InsertOrders } from './orders.dto';
 
 @Injectable()
 export class OrdersService {
@@ -21,31 +21,28 @@ export class OrdersService {
     private readonly orderGateway: OrderGateway,
   ) {}
 
-  async create(data: InsertOrders[]) {
-    try {
-      const inserted = await this.db.insert(orders).values(data).returning();
-      const createdOrder = inserted[0];
-      return {
-        success: true,
-        data: createdOrder,
-      };
-    } catch (error) {
-      this.logger.error('Failed to create ', error);
-      if (error === '23505') {
-        throw new HttpException(
-          { success: false, message: 'order already exists.' },
-          HttpStatus.CONFLICT,
-        );
-      }
+  async create(data: CreateOrderDto) {
+    const { shopId, items } = data;
 
-      throw new HttpException(
-        {
-          success: false,
-          message: 'An error occurred while creating the order.',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const order = await this.db
+      .insert(orders)
+      .values({ shopId })
+      .returning()
+      .then((val) => val[0]);
+
+    const orderItemsToInsert = items.map((item) => ({
+      orderId: order.id,
+      menuId: item.menuId,
+      quantity: item.quantity,
+      priceEach: item.priceEach,
+      totalPrice: item.totalPrice,
+      status: item.status || null,
+    }));
+    await this.db.insert(orderItems).values(orderItemsToInsert);
+    return {
+      success: true,
+      data: order,
+    };
   }
 
   async getAll(shopId: string) {

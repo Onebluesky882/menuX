@@ -23,10 +23,7 @@ export class OrderItemsController {
 
   // @UseGuards(ShopAccessGuard)
   @Post()
-  @Roles('manager', 'staff', 'owner', 'customer')
-  create(@Body() body: OrderDtoItems, @Req() req: AuthRequest) {
-    const userId = req.user.id;
-
+  create(@Body() body: OrderDtoItems) {
     return this.orderItemsService.create(body);
   }
   //getAll

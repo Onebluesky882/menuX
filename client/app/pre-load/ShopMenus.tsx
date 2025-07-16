@@ -1,57 +1,5 @@
 "use client";
 
-export type MenuOption = {
-  id: string;
-  menuId: string;
-  label: string;
-  price: string;
-  available: boolean;
-  createdAt: string;
-};
-
-export type MenuImage = {
-  id: string;
-  imageUrl: string;
-  createdAt: string;
-  type: string;
-  shopId: string;
-  menuId: string;
-  userId: string;
-};
-
-export type MenuItem = {
-  id: string;
-  createdBy: string;
-  name: string;
-  description: string | null;
-  categoryId: string | null;
-  price: string;
-  available: boolean;
-  createdAt: string;
-  pageId: string | null;
-  shopId: string;
-  images: MenuImage[];
-  menuOptions: MenuOption[];
-};
-
-type CartItem = {
-  menuId: string;
-  menuName: string;
-  basePrice: number;
-  selectedOption: MenuOption;
-  quantity: number;
-  totalPrice: number;
-};
-
-export type OrderPayload = {
-  menuId: string;
-  quantity: string;
-  priceEach: string;
-  totalPrice: string;
-  shopId: string;
-};
-
-import { FaCartShopping } from "react-icons/fa6";
 // payload map data to db
 // redirect to payment  page
 // receipt queue with id tack 01 -> 999 with static page [id : 8 number]
@@ -60,9 +8,10 @@ import { useEffect, useState } from "react";
 import { shopApi } from "../api/shop.api";
 import Image from "next/image";
 import { menuApi } from "../api/menu.api";
-import { IoCloseCircle } from "react-icons/io5";
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
+import { CartItem, MenuItem, OrderPayload } from "../types/menuOrder.type";
+import { CartIconPreview, CartPreview } from "@/components/menu/CartPreview";
+import { TotalCard } from "@/components/menu/TotalCard";
+import { ordersApi } from "../api/orders.api";
 
 const ShopMenus = ({ shopId }: { shopId: string }) => {
   const [shop, setShop] = useState<any>();
@@ -152,17 +101,22 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
   // send data to store db
   const ordersPayload: OrderPayload[] = cart.map((menu) => ({
     ...menu,
-    menuId: menu.menuId,
+
     priceEach: menu.basePrice.toString(),
     shopId: shop.id,
     quantity: menu.quantity.toString(),
     totalPrice: menu.totalPrice.toString(),
   }));
 
-  console.log("preview card ,", previewCart);
-  console.log("ordersPayload ", ordersPayload);
-
-  console.log("cart :", cart);
+  const handleStoreOrders = async () => {
+    try {
+      const result = await ordersApi.create(ordersPayload);
+      setPreviewCart(false);
+      setCart([]);
+    } catch (error) {
+      console.log("fail", error);
+    }
+  };
   return (
     <>
       {loading ? (
@@ -245,129 +199,13 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
               onOpenChange={setPreviewCart}
               cart={cart}
               totalOrdersPrice={handleTotalOrderPrice}
+              handleStoreOrders={handleStoreOrders}
+              shopId={""}
             />
           </div>
         )}
       </div>
     </>
-  );
-};
-
-type TotalCardProps = {
-  cart: CartItem[];
-  getTotalOrderPrice: () => number;
-  getTotalOrderItems: () => number;
-};
-const TotalCard = ({
-  cart,
-  getTotalOrderPrice,
-  getTotalOrderItems,
-}: TotalCardProps) => {
-  return (
-    <div className="p-4 bg-white  stick bottom-0 rounded-xl shadow-md text-lg font-semibold">
-      {cart && (
-        <div className="">
-          รวมรายการ {getTotalOrderItems()} รวมทั้งหมด: {getTotalOrderPrice()}{" "}
-          บาท
-        </div>
-      )}
-    </div>
-  );
-};
-
-type CartIconPreviewProps = {
-  getTotalOrderItems: () => number;
-  setPreviewCart: () => void;
-};
-
-const CartIconPreview = ({
-  getTotalOrderItems,
-  setPreviewCart,
-}: CartIconPreviewProps) => {
-  return (
-    <div className="relative flex justify-end p-2  ">
-      <div
-        onClick={() => setPreviewCart()}
-        className="   bg-amber-200   flex justify-center flex-col px-10 py-6 rounded-full "
-      >
-        <span className="font-extrabold text-2xl  text-center ">
-          {getTotalOrderItems()}
-        </span>
-        <FaCartShopping size={32} />
-      </div>
-    </div>
-  );
-};
-
-type CartPreviewProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  cart: CartItem[];
-  totalOrdersPrice: () => number;
-};
-
-const CartPreview = ({
-  cart,
-  open,
-  onOpenChange,
-  totalOrdersPrice,
-}: CartPreviewProps) => {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="z-50 fixed bottom-0 left-0 right-0 max-h-[70vh] w-full rounded-t-2xl bg-white p-6 shadow-xl border-none">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <DialogTitle className="text-xl font-bold text-gray-800">
-            🛒 ตะกร้าสินค้า
-          </DialogTitle>
-          <button
-            onClick={() => onOpenChange(false)}
-            className="text-gray-400 hover:text-red-500 transition-colors"
-          >
-            <IoCloseCircle size={36} />
-          </button>
-        </div>
-
-        {/* Cart Items */}
-        <div className="space-y-3 overflow-y-auto max-h-[40vh] pr-2">
-          {cart.length === 0 ? (
-            <p className="text-center text-gray-500">ไม่มีสินค้าในตะกร้า</p>
-          ) : (
-            cart.map((menu, index) => (
-              <div
-                key={`${menu.menuId}-${menu.selectedOption.id}`}
-                className="bg-gray-50 border rounded-xl p-4 shadow-sm"
-              >
-                <div className="text-base font-medium text-gray-700">
-                  {index + 1}. {menu.menuName}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {menu.selectedOption.label} x {menu.quantity}
-                </div>
-                <div className="text-sm text-green-600 font-semibold">
-                  {menu.totalPrice.toLocaleString()} บาท
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Summary & Action */}
-        <div className="flex justify-between items-center mt-6 text-lg font-semibold">
-          <span className="text-gray-700">รวมทั้งหมด:</span>
-          <span className="text-green-600">
-            {totalOrdersPrice().toLocaleString()} บาท
-          </span>
-        </div>
-
-        <Button
-          className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white text-lg py-5 rounded-xl transition-all"
-          disabled={cart.length === 0}
-        >
-          ดำเนินการสั่งซื้อ
-        </Button>
-      </DialogContent>
-    </Dialog>
   );
 };
 export default ShopMenus;

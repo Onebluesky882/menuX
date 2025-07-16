@@ -1,24 +1,16 @@
 import { relations } from 'drizzle-orm';
 import { orders } from '../schema/orders';
-import { shops } from '../schema/shops';
-import { customers } from '../schema/customers';
-import { orderTable } from '..';
+import { orderItems } from '..';
 
-// defined order column relation shop_id and customer_id
+// 1. order → orderItems
+export const ordersRelations = relations(orders, ({ many }) => ({
+  items: many(orderItems),
+}));
 
-//  .onDelete('cascade')  // ถ้าโต๊ะถูกลบ ออร์เดอร์ในโต๊ะนี้ก็ลบตาม
-// .onUpdate('cascade')  // ถ้า orderTable.id ถูกเปลี่ยน จะอัปเดต orderTableId ใน orders ให้อัตโนมัติ
-export const ordersRelation = relations(orders, ({ one }) => ({
-  orderTable: one(orderTable, {
-    fields: [orders.orderTableId],
-    references: [orderTable.id],
-  }),
-  shop: one(shops, {
-    fields: [orders.shopId],
-    references: [shops.id],
-  }),
-  customer: one(customers, {
-    fields: [orders.customerId],
-    references: [customers.id],
+// 2. orderItem → order
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
   }),
 }));
