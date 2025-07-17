@@ -4,7 +4,6 @@ export type MenuOption = {
   label: string;
   price: string;
   available: boolean;
-  createdAt: string;
 };
 
 export type MenuImage = {
@@ -37,6 +36,7 @@ export type CartItem = {
   selectedOption: MenuOption;
   quantity: number;
   totalPrice: number;
+  optionId: string;
 };
 
 export type OrderPayload = {
@@ -47,4 +47,34 @@ export type OrderPayload = {
     priceEach: number;
     totalPrice: number;
   }[];
+};
+
+export type OrderOption = {
+  id: string;
+  menuName: string;
+  orderId: string;
+  menuId: string;
+  quantity: string;
+  priceEach: string;
+  totalPrice: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+};
+
+export type RawOrderItem = {
+  menuName: string;
+  quantity: string;
+  priceEach: string;
+  optionLabel: string;
+};
+
+export type GroupedData = {
+  [menuName: string]: {
+    [price: string]: {
+      totalQuantity: number;
+      totalPrice: number;
+      optionLabel: string;
+    };
+  };
 };

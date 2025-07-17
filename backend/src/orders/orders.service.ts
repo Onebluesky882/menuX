@@ -48,7 +48,8 @@ export class OrdersService {
       quantity: item.quantity,
       priceEach: item.priceEach,
       totalPrice: item.totalPrice,
-      status: item.status || null,
+      updatedAt: new Date(),
+      optionId: item.optionId,
     }));
     await this.db.insert(orderItems).values(orderItemsToInsert);
     return {
@@ -56,40 +57,6 @@ export class OrdersService {
       data: order,
     };
   }
-
-  // async getAll(shopId: string) {
-  //   try {
-  //     const result = await this.db
-  //       .select({
-  //         status: orders.status,
-  //         orderTableId: orders.orderTableId,
-  //         createdAt: orders.createdAt,
-  //         createdById: orders.createdById,
-  //         updatedAt: orders.updatedAt,
-  //         shopId: orders.shopId,
-  //         customerId: orders.customerId,
-  //         quantity: orders.quantity,
-  //         priceEach: orders.priceEach,
-  //         totalPrice: orders.totalPrice,
-  //       })
-  //       .from(orders)
-  //       .where(eq(orders.shopId, shopId));
-
-  //     return {
-  //       success: true,
-  //       data: result,
-  //     };
-  //   } catch (error) {
-  //     this.logger.error(error);
-  //     throw new HttpException(
-  //       {
-  //         success: false,
-  //         message: 'failed fetch order',
-  //       },
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-  // }
 
   async getOrderById(id: string) {
     try {
@@ -159,4 +126,7 @@ export class OrdersService {
       );
     }
   }
+}
+function convertThaiTime() {
+  throw new Error('Function not implemented.');
 }

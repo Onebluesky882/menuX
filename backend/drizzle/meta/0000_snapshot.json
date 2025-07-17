@@ -1,5 +1,5 @@
 {
-  "id": "15b829a6-ea25-4207-a93a-6d7393b5241c",
+  "id": "5536964c-c513-443e-89f0-7f2bb0f7ab3f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -438,6 +438,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
         }
       },
       "indexes": {},
@@ -622,6 +635,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "option_id": {
+          "name": "option_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "menu_id": {
           "name": "menu_id",
           "type": "uuid",
@@ -680,6 +699,19 @@
             "id"
           ],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "order_items_option_id_menu_options_id_fk": {
+          "name": "order_items_option_id_menu_options_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "menu_options",
+          "columnsFrom": [
+            "option_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "order_items_menu_id_menus_id_fk": {
@@ -876,9 +908,9 @@
           "primaryKey": false,
           "notNull": false
         },
-        "menu_id": {
-          "name": "menu_id",
-          "type": "uuid",
+        "queue_number": {
+          "name": "queue_number",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -913,31 +945,19 @@
           "primaryKey": false,
           "notNull": false
         },
-        "price_each": {
-          "name": "price_each",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
-        },
-        "order_type": {
-          "name": "order_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -966,19 +986,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "orders_menu_id_menus_id_fk": {
-          "name": "orders_menu_id_menus_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "menus",
-          "columnsFrom": [
-            "menu_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "orders_customer_id_customers_id_fk": {

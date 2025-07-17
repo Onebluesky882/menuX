@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { orders } from './orders';
 import { menus } from './menus';
+import { menuOptions } from './menuOptions';
 
 export const orderItems = pgTable('order_items', {
   id: uuid('id')
@@ -10,6 +11,7 @@ export const orderItems = pgTable('order_items', {
   orderId: uuid('order_id').references(() => orders.id, {
     onDelete: 'cascade',
   }),
+  optionId: uuid('option_id').references(() => menuOptions.id),
   menuId: uuid('menu_id').references(() => menus.id),
   quantity: numeric('quantity', { precision: 10, scale: 2 }),
   priceEach: numeric('price_each', { precision: 10, scale: 2 }),

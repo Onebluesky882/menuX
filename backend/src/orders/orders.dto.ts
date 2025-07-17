@@ -12,5 +12,6 @@ export type CreateOrderDto = {
     priceEach: string;
     totalPrice: string;
     status?: string;
+    optionId?: string;
   }[];
 };

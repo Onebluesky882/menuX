@@ -18,4 +18,6 @@ export const menuOptions = pgTable('menu_options', {
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   available: boolean('available').default(true).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  updateAt: timestamp('updated_at'),
+  status: text('status').default('pending'),
 });

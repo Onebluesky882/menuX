@@ -49,6 +49,7 @@ export const useCart = create<CartStore>((set, get) => ({
         quantity: menu.quantity,
         priceEach: menu.basePrice,
         totalPrice: menu.totalPrice,
+        optionId: menu.optionId,
       })),
     };
     try {
@@ -95,6 +96,7 @@ export const useCart = create<CartStore>((set, get) => ({
         selectedOption,
         quantity: 1,
         totalPrice: price,
+        optionId,
       };
       addCart(newItem);
     }

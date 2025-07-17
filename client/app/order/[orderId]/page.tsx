@@ -6,7 +6,7 @@ type PageProps = {
 
 export default async function Page({ params }: PageProps) {
   const { orderId } = params;
-  console.log("id Order", orderId);
+
   return (
     <div>
       <Order orderId={orderId} />
