@@ -8,18 +8,26 @@ import { useEffect, useState } from "react";
 import { shopApi } from "../api/shop.api";
 import Image from "next/image";
 import { menuApi } from "../api/menu.api";
-import { CartItem, MenuItem, OrderPayload } from "../types/menuOrder.type";
+import { MenuItem } from "../types/menuOrder.type";
 import { CartIconPreview, CartPreview } from "@/components/menu/CartPreview";
 import { TotalCard } from "@/components/menu/TotalCard";
-import { ordersApi } from "../api/orders.api";
 import { useRouter } from "next/navigation";
+import { useCart } from "../hooks/useCart";
 
 const ShopMenus = ({ shopId }: { shopId: string }) => {
   const [shop, setShop] = useState<any>();
   const [menusOption, setMenusOption] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [previewCart, setPreviewCart] = useState(false);
+
+  const {
+    cartItems,
+    submitCart,
+    clearCart,
+    getTotalOrderPrice,
+    getTotalOrderItems,
+    addMenuOptionToCart,
+  } = useCart();
 
   const router = useRouter();
   useEffect(() => {
@@ -38,91 +46,19 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     shop();
   }, [shopId]);
 
-  const handleCart = (optionId: string) => {
-    const menu = menusOption.find((menu) =>
-      menu.menuOptions.some((option) => option.id === optionId)
-    );
-    if (!menu) return;
-
-    const selectedOption = menu.menuOptions.find(
-      (option) => option.id === optionId
-    );
-    if (!selectedOption) return;
-    const price = Number(selectedOption.price);
-    const existing = cart.find(
-      (item) =>
-        item.menuId === menu.id && item.selectedOption.id === selectedOption.id
-    );
-    if (existing) {
-      const updateCart = cart.map((item) =>
-        item.menuId === menu.id && item.selectedOption.id === selectedOption.id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-              totalPrice: price * (item.quantity + 1),
-            }
-          : item
-      );
-      setCart(updateCart);
-    } else {
-      const newItem: CartItem = {
-        menuId: menu.id,
-        basePrice: price,
-        menuName: menu.name,
-        selectedOption,
-        quantity: 1,
-        totalPrice: price,
-      };
-
-      setCart([...cart, newItem]);
-    }
-  };
-
-  const getTotalOrderPrice = () => {
-    return cart.reduce((total, item) => {
-      return total + Number(item.selectedOption.price) * item.quantity;
-    }, 0);
-  };
-
-  const getTotalOrderItems = () => {
-    return cart.reduce((total, item) => {
-      return total + Number(item.quantity);
-    }, 0);
-  };
-
   const handlePreviewCart = () => {
     try {
       setPreviewCart((prev) => !prev);
     } catch (error) {}
   };
 
-  const handleTotalOrderPrice = () => {
-    return cart.reduce((total, item) => {
-      return total + Number(item.selectedOption.price) * item.quantity;
-    }, 0);
-  };
-
   const handleStoreOrders = async () => {
     if (!shop) return;
-    const payload: OrderPayload = {
-      shopId: shop.id,
-      items: cart.map((menu) => ({
-        menuId: menu.menuId,
-        quantity: menu.quantity,
-        priceEach: menu.basePrice,
-        totalPrice: menu.totalPrice,
-      })),
-    };
-
-    try {
-      await ordersApi.create(payload);
-      setPreviewCart(false);
-      setCart([]);
-      router.push("/payment");
-    } catch (error) {
-      console.log("fail", error);
-    }
+    const orderId = await submitCart(shop.id);
+    router.push(`/order/${orderId}`);
+    clearCart();
   };
+
   return (
     <>
       {loading ? (
@@ -156,7 +92,9 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
                     <div className="mt-2 space-y-1">
                       {menu.menuOptions.map((option) => (
                         <button
-                          onClick={() => handleCart(option.id)}
+                          onClick={() =>
+                            addMenuOptionToCart(option.id, menusOption)
+                          }
                           key={option.id}
                           className="w-full flex justify-between items-center bg-green-50 hover:bg-green-200 active:bg-green-300 rounded-xl px-4 py-4 text-xl font-medium text-gray-800 shadow-md transition-all duration-150"
                         >
@@ -174,7 +112,7 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
           </div>
           <div>
             <TotalCard
-              cart={cart}
+              cart={cartItems}
               getTotalOrderPrice={getTotalOrderPrice}
               getTotalOrderItems={getTotalOrderItems}
             />
@@ -182,7 +120,7 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
         </div>
       )}
       <div className=" sticky   bottom-0 ">
-        {cart.length > 0 && !previewCart && (
+        {cartItems.length > 0 && !previewCart && (
           <CartIconPreview
             getTotalOrderItems={getTotalOrderItems}
             setPreviewCart={handlePreviewCart}
@@ -203,8 +141,8 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
             <CartPreview
               open={previewCart}
               onOpenChange={setPreviewCart}
-              cart={cart}
-              totalOrdersPrice={handleTotalOrderPrice}
+              cart={cartItems}
+              totalOrdersPrice={getTotalOrderPrice}
               handleStoreOrders={handleStoreOrders}
               shopId={""}
             />

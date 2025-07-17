@@ -4,7 +4,7 @@ import liff from "@line/liff";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { LineUser } from "../types/lineUser";
-import { useUserStore } from "@/app/stores/userStore";
+import { useUserStore } from "@/app/hooks/useUser";
 import { api } from "@/app/api/lineUsers.api";
 
 const page = () => {

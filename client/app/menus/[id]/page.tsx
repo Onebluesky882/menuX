@@ -3,13 +3,12 @@ import ShopMenus from "@/app/pre-load/ShopMenus";
 type PageProps = {
   params: { id: string };
 };
-
-const page = ({ params }: PageProps) => {
-  const { id } = params;
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+  console.log("id ", id);
   return (
     <div>
       <ShopMenus shopId={id} />
     </div>
   );
-};
-export default page;
+}

@@ -21,8 +21,6 @@ export type MenuItem = {
   id: string;
   createdBy: string;
   name: string;
-  description: string | null;
-  categoryId: string | null;
   price: string;
   available: boolean;
   createdAt: string;

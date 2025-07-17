@@ -23,18 +23,10 @@ export class OrdersController {
     return this.ordersService.create(cartItems);
   }
 
-  //getAll
-  //@UseGuards(ShopAccessGuard)
-  @Get()
-  getAll(@Query('shopId') shopId: string) {
-    return this.ordersService.getAll(shopId);
-  }
-  // get by id
-  //@UseGuards(ShopAccessGuard)
-  @Roles()
   @Get(':id')
-  getById(@Param('id') id: string, @Query('shopId') shopId: string) {
-    return this.ordersService.getById(id, shopId);
+  getById(@Param('id') id: string) {
+    console.log('id ', id);
+    return this.ordersService.getOrderById(id);
   }
 
   // update
