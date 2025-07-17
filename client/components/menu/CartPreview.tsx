@@ -49,7 +49,7 @@ export const CartPreview = ({
           ) : (
             cart.map((menu, index) => (
               <div
-                key={`${menu.menuId}-${menu.selectedOption.id}`}
+                key={index}
                 className="bg-gray-50 border rounded-xl p-4 shadow-sm"
               >
                 <div className="text-base font-medium text-gray-700">
