@@ -11,11 +11,12 @@ type CartStore = {
   cartItems: CartItem[];
   addCart: (item: CartItem) => void;
   clearCart: () => void;
-
   getTotalOrderPrice: () => number;
   getTotalOrderItems: () => number;
   addMenuOptionToCart: (optionId: string, menusOption: MenuItem[]) => void;
   submitCart: (shopId: string) => Promise<void>;
+  increaseQuantity: (optionId: string) => void;
+  decreaseQuantity: (optionId: string) => void;
 };
 
 export const useCart = create<CartStore>((set, get) => ({
@@ -100,5 +101,56 @@ export const useCart = create<CartStore>((set, get) => ({
       };
       addCart(newItem);
     }
+  },
+
+  increaseQuantity: (optionId) => {
+    const updatedCart = get().cartItems.reduce<Record<string, number>>(
+      (acc, item) => {
+        acc[item.optionId] = Number(item.selectedOption.price);
+        return acc;
+      },
+      {}
+    );
+
+    set((state) => ({
+      cartItems: state.cartItems.map((item) => {
+        if (item.optionId === optionId) {
+          const newQuantity = item.quantity + 1;
+          const newTotalPrice = newQuantity * updatedCart[optionId];
+          return { ...item, quantity: newQuantity, totalPrice: newTotalPrice };
+        }
+        return item;
+      }),
+    }));
+    return { cartItems: updatedCart };
+  },
+
+  decreaseQuantity: (optionId) => {
+    const updatedCart = get().cartItems.reduce<Record<string, number>>(
+      (acc, item) => {
+        acc[item.optionId] = Number(item.selectedOption.price);
+        return acc;
+      },
+      {}
+    );
+
+    set((state) => ({
+      cartItems: state.cartItems
+        .map((item) => {
+          if (item.optionId === optionId) {
+            const quantity = item.quantity - 1;
+            if (quantity <= 0) return null;
+            const newTotalPrice = quantity * updatedCart[optionId];
+            return {
+              ...item,
+              quantity: quantity,
+              totalPrice: newTotalPrice,
+            };
+          }
+          return item;
+        })
+        .filter(Boolean) as CartItem[],
+    }));
+    return { cartItems: updatedCart };
   },
 }));

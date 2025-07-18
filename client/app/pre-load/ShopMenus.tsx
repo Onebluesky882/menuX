@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { shopApi } from "../api/shop.api";
 import Image from "next/image";
 import { menuApi } from "../api/menu.api";
-import { MenuItem } from "../types/menuOrder.type";
+import { CartItem, MenuItem } from "../types/menuOrder.type";
 import { CartIconPreview, CartPreview } from "@/components/menu/CartPreview";
 import { TotalCard } from "@/components/menu/TotalCard";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,8 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     getTotalOrderPrice,
     getTotalOrderItems,
     addMenuOptionToCart,
+    increaseQuantity,
+    decreaseQuantity,
   } = useCart();
 
   const router = useRouter();
@@ -58,6 +60,14 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     router.push(`/order/${orderId}`);
     clearCart();
   };
+
+  const handleIncrease = (optionId: string) => {
+    increaseQuantity(optionId);
+  };
+  const handleDecrease = (optionId: string) => {
+    decreaseQuantity(optionId);
+  };
+  console.log("cart", cartItems);
 
   return (
     <>
@@ -145,6 +155,8 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
               totalOrdersPrice={getTotalOrderPrice}
               handleStoreOrders={handleStoreOrders}
               shopId={""}
+              increaseQuantity={handleIncrease}
+              decreaseQuantity={handleDecrease}
             />
           </div>
         )}

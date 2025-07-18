@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoCloseCircle } from "react-icons/io5";
 import { Button } from "../ui/button";
-
+import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 type CartIconPreviewProps = {
   getTotalOrderItems: () => number;
   setPreviewCart: () => void;
@@ -15,6 +15,8 @@ type CartPreviewProps = {
   cart: CartItem[];
   totalOrdersPrice: () => number;
   handleStoreOrders: (orders: OrderPayload) => void;
+  increaseQuantity: (option: string) => void;
+  decreaseQuantity: (option: string) => void;
   shopId: string;
 };
 
@@ -24,8 +26,36 @@ export const CartPreview = ({
   onOpenChange,
   totalOrdersPrice,
   handleStoreOrders,
+  increaseQuantity,
+  decreaseQuantity,
   shopId,
 }: CartPreviewProps) => {
+  // Step 1: Group by menuName
+  const groupedByMenuName = cart.reduce<
+    Record<
+      string,
+      {
+        menuName: string;
+        menuId: string;
+        options: CartItem[];
+      }
+    >
+  >((acc, item) => {
+    if (!acc[item.menuId]) {
+      acc[item.menuId] = {
+        menuId: item.menuId,
+        menuName: item.menuName,
+        options: [item],
+      };
+    } else {
+      acc[item.menuId].options.push(item);
+    }
+
+    return acc;
+  }, {});
+
+  const groupedCartArray = Object.values(groupedByMenuName);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="z-50 fixed bottom-0 left-0 right-0 max-h-[70vh] w-full rounded-t-2xl bg-white p-6 shadow-xl border-none">
@@ -44,38 +74,60 @@ export const CartPreview = ({
 
         {/* Cart Items */}
         <div className="space-y-3 overflow-y-auto max-h-[40vh] pr-2">
-          {cart.length === 0 ? (
+          {groupedCartArray.length === 0 ? (
             <p className="text-center text-gray-500">ไม่มีสินค้าในตะกร้า</p>
           ) : (
-            cart.map((menu, index) => (
+            groupedCartArray.map((group, index) => (
               <div
-                key={index}
-                className="bg-gray-50 border rounded-xl p-4 shadow-sm"
+                key={group.menuId}
+                className="bg-white border rounded-xl p-4 shadow-sm"
               >
-                <div className="text-base font-medium text-gray-700">
-                  {index + 1}. {menu.menuName}
+                <div className="text-xl font-bold text-gray-700 mb-2">
+                  {index + 1}. {group.menuName}
                 </div>
-                <div className="text-sm text-gray-600">
-                  {menu.selectedOption.label} x {menu.quantity}
-                </div>
-                <div className="text-sm text-green-600 font-semibold">
-                  {menu.totalPrice.toLocaleString()} บาท
-                </div>
+
+                {group.options.map((option) => (
+                  <div
+                    key={option.optionId}
+                    className="flex mt-2 justify-between text-md text-gray-600 pl-4"
+                  >
+                    {" "}
+                    <div>
+                      • {option.selectedOption.label} x {option.quantity}
+                    </div>
+                    <div className=" flex gap-2 items-center  font-semibold">
+                      <FaCirclePlus
+                        onClick={() => increaseQuantity(option.optionId)}
+                        size={24}
+                        className="text-[#9a9a9a] active:text-[#6bab5b] transition-colors  duration-75"
+                      />
+                      <span className="text-green-600 text-xl ">
+                        {option.totalPrice.toLocaleString()} บาท
+                      </span>
+                      <FaCircleMinus
+                        onClick={() => decreaseQuantity(option.optionId)}
+                        size={24}
+                        className="text-[#9a9a9a]  active:text-[#ea3456] transition-colors  duration-75"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             ))
           )}
         </div>
 
         {/* Summary & Action */}
-        <div className="flex justify-between items-center mt-6 text-lg font-semibold">
-          <span className="text-gray-700">รวมทั้งหมด:</span>
-          <span className="text-green-600">
+        <div className="    flex justify-between items-center mt-6 text-lg font-semibold">
+          <span className="text-gray-700 text-xl">รวมทั้งหมด:</span>
+
+          <span className="text-green-600 mr-5">
             {totalOrdersPrice().toLocaleString()} บาท
           </span>
         </div>
 
         <Button
-          className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white text-lg py-5 rounded-xl transition-all"
+          className="w-full   mt-4 bg-green-500 hover:bg-green-600 text-white text-lg py-5 rounded-xl transition-all"
           disabled={cart.length === 0}
           onClick={() => {
             const payload = {
