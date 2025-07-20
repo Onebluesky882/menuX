@@ -1,8 +1,8 @@
 "use client";
 
 import { decodeQR } from "@/lib/scanQrcode";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
+import { BsFillImageFill } from "react-icons/bs";
 const QrCodeRender = () => {
   const [numQrCode, setNumQrCode] = useState<string | null>(null);
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,11 +12,25 @@ const QrCodeRender = () => {
     const code = await decodeQR(file);
     setNumQrCode(code);
   };
-  //   decodeQR();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleClick = () => {
+    fileInputRef.current?.files?.[0];
+  };
   return (
     <div>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+      <input
+        hidden
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
       {numQrCode && <p>decode qr code : {numQrCode}</p>}
+      <BsFillImageFill
+        onClick={handleClick}
+        size={40}
+        className="text-gray-400"
+      />
     </div>
   );
 };

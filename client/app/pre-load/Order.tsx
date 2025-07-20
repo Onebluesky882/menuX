@@ -8,7 +8,13 @@ import { GroupedData, RawOrderItem } from "../types/menuOrder.type";
 import { checkSlipApi, SlipVerify } from "../api/slip-verifications.api";
 import CameraCapture from "@/components/CameraCapture";
 import { Button } from "@/components/ui/button";
-
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import * as z from "zod";
+type SlipInform = {
+  qrcode_data: string;
+  amount: number;
+  orderId: string;
+};
 const OrderSummary = ({ orderId }: { orderId: string }) => {
   const [orders, setOrders] = useState<RawOrderItem[]>([]);
 
@@ -22,6 +28,12 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
     );
   }, [orders]);
 
+  const schema = z.object({
+    qrcode_data: z.string(),
+    amount: z.string(),
+    orderId: z.string(),
+  });
+
   useEffect(() => {
     const verifySlip = async () => {
       if (qrcode.length === 0) return;
@@ -30,12 +42,15 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
         qrcode_data: qrcode[0].qrcode_data,
         orderId: orderId,
       };
+      const parsed = schema.safeParse(prepareData);
 
-      console.log("prepareData", prepareData);
-      const res = await checkSlipApi.postSlip(prepareData);
-      console.log("res", res);
-      console.log("res.data", res.data);
+      if (!parsed.success) {
+        console.error("❌ Schema validation failed:", parsed.error);
+        return;
+      }
 
+      const validData = parsed.data;
+      const res = await checkSlipApi.postSlip(validData);
       setSlipValidate(res.data);
     };
     verifySlip();
@@ -83,8 +98,6 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
     setQrcode([data]);
     setOpenCamera(false);
   };
-
-  console.log("slipValidate ", slipValidate);
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg border text-gray-800 space-y-6 text-xl font-medium leading-relaxed">
@@ -142,29 +155,73 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
         </div>
       )}
 
-      <div className="bg-gray-50 p-5 rounded-xl border">
-        <h2 className="text-2xl font-semibold mb-2 text-gray-800">
-          แนบสลิปโอนเงิน
-        </h2>
-        <div className="outline-1">
-          <QrCodeRender />
+      <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 max-w-xl mx-auto">
+        {!openCamera && (
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              แนบสลิปโอนเงิน
+            </h2>
+            <div className="border border-dashed gap-2  border-gray-300 rounded-xl p-4 flex justify-center items-center mb-4 bg-gray-50">
+              <QrCodeRender />
+              <span className="text-[14px] text-gray-500">อัพโหลดสลิป</span>
+            </div>
+            <div className="flex items-center justify-center mb-4 text-sm text-gray-500">
+              <span className="px-2">หรือ</span>
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col items-center gap-3 mb-4">
+          <div className="relative">
+            <Button
+              onClick={handleCamera}
+              className="z-100 bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {openCamera ? "ปิดกล้อง" : "แสกนอัตโนมัติ"}
+            </Button>
+            {!openCamera && <TouchClick />}
+          </div>
+          {!openCamera && <QrcodeLiveScan />}
+          {openCamera && (
+            <div className="w-full max-w-sm border rounded-lg overflow-hidden">
+              <CameraCapture onScan={handleScan} />
+            </div>
+          )}
         </div>
-        หรือ
-        <div>
-          <Button onClick={handleCamera}>แสกนอัตโนมัติ</Button>
-
-          {openCamera && <CameraCapture onScan={handleScan} />}
-        </div>
-        <div className="wrap-break-word">
-          {qrcode.length > 0 &&
-            qrcode.map((item) => (
-              <span key={item.qrcode_data}> {item.qrcode_data}</span>
-            ))}
-        </div>
-        <pre>{JSON.stringify(slipValidate, null, 2)}</pre>
+        {qrcode.some((item) => item.qrcode_data?.trim()) && (
+          <div className="bg-gray-100 p-3 rounded-lg text-sm text-gray-800 break-words">
+            <h3 className="font-medium mb-1">QR Code slip:</h3>
+            <span className="list-disc pl-5">
+              {qrcode.map((item) => (
+                <span key={item.qrcode_data}>{item.qrcode_data}</span>
+              ))}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
+const QrcodeLiveScan = () => {
+  return (
+    <DotLottieReact
+      src="https://lottie.host/76c4f205-5ae1-48fd-a504-d51f110592cc/GzxFhOpzz0.lottie"
+      loop
+      autoplay
+    />
+  );
+};
+
+const TouchClick = () => {
+  return (
+    <div className="absolute top-1  pointer-events-none">
+      <DotLottieReact
+        src="https://lottie.host/8dd2e49c-dd12-474d-bd58-3f7cc5f543a6/bXV1RnSf8W.lottie"
+        loop
+        autoplay
+        color="white"
+      />
+    </div>
+  );
+};
 export default OrderSummary;
