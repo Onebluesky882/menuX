@@ -5,17 +5,47 @@ import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { ordersApi } from "../api/orders.api";
 import { GroupedData, RawOrderItem } from "../types/menuOrder.type";
+import { checkSlipApi, SlipVerify } from "../api/checkSlip.api";
+import CameraCapture from "@/components/CameraCapture";
+import { Button } from "@/components/ui/button";
 
 const OrderSummary = ({ orderId }: { orderId: string }) => {
   const [orders, setOrders] = useState<RawOrderItem[]>([]);
 
+  const [qrcode, setQrcode] = useState<SlipVerify[]>([]);
+  const [slipValidate, setSlipValidate] = useState<SlipVerify | null>(null);
+
+  const totalPrice = useMemo(() => {
+    return orders?.reduce(
+      (sum, i) => sum + Number(i.quantity) * Number(i.priceEach),
+      0
+    );
+  }, [orders]);
+
   useEffect(() => {
+    const verifySlip = async () => {
+      if (qrcode.length === 0) return;
+      const prepareData: SlipVerify = {
+        amount: String(totalPrice),
+        qrcode_data: qrcode[0].qrcode_data,
+        orderId: orderId,
+      };
+
+      console.log("prepareData", prepareData);
+      const res = await checkSlipApi.postSlip(prepareData);
+      console.log("res", res);
+      console.log("res.data", res.data);
+
+      setSlipValidate(res.data);
+    };
+    verifySlip();
+    // -------------
     const handleGetOrder = async () => {
       const res = await ordersApi.getOrderById(orderId);
       setOrders(res.data.data);
     };
     handleGetOrder();
-  }, [orderId]);
+  }, [orderId, qrcode, totalPrice]);
 
   const grouped = useMemo(() => {
     const result: GroupedData = {};
@@ -39,15 +69,22 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
     });
     return result;
   }, [orders]);
+  const [openCamera, setOpenCamera] = useState(false);
+  const handleCamera = () => {
+    setOpenCamera((prev) => !prev);
+  };
 
-  const totalPrice = useMemo(() => {
-    return orders
-      ?.reduce(
-        (sum, i) => sum + parseFloat(i.quantity) * parseFloat(i.priceEach),
-        0
-      )
-      .toFixed(2);
-  }, [orders]);
+  const handleScan = (qrcode_data: string) => {
+    const data: SlipVerify = {
+      amount: totalPrice.toString(),
+      qrcode_data,
+      orderId,
+    };
+    setQrcode([data]);
+    setOpenCamera(false);
+  };
+
+  console.log("slipValidate ", slipValidate);
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg border text-gray-800 space-y-6 text-xl font-medium leading-relaxed">
@@ -86,29 +123,45 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
       </div>
 
       {/* Qr Code */}
-      <div className="text-center bg-gray-50 rounded-xl p-5 border">
-        <h2 className="text-2xl font-semibold mb-2 text-gray-800">
-          แสกนเพื่อชำระเงิน
-        </h2>
-        <p className="text-xl text-gray-700 mb-2">
-          บัญชี: <strong>mademyday วันของฉัน</strong>
-        </p>
-        <Image
-          src="/IMG_2043.PNG"
-          alt="QR Code"
-          width={200}
-          height={200}
-          className="mx-auto rounded-md border"
-        />
-      </div>
+      {!openCamera && (
+        <div className="text-center bg-gray-50 rounded-xl p-5 border">
+          <h2 className="text-2xl font-semibold mb-2 text-gray-800">
+            แสกนเพื่อชำระเงิน
+          </h2>
 
-      {/* แนบสลิป */}
+          <p className="text-xl text-gray-700 mb-2">
+            บัญชี: <strong>mademyday วันของฉัน</strong>
+          </p>
+          <Image
+            src="/IMG_2043.PNG"
+            alt="QR Code"
+            width={200}
+            height={200}
+            className="mx-auto rounded-md border"
+          />
+        </div>
+      )}
+
       <div className="bg-gray-50 p-5 rounded-xl border">
         <h2 className="text-2xl font-semibold mb-2 text-gray-800">
           แนบสลิปโอนเงิน
         </h2>
-        <p className="text-base text-gray-600 mb-4">กรุณาแนบสลิปที่นี่</p>
-        <QrCodeRender />
+        <div className="outline-1">
+          <QrCodeRender />
+        </div>
+        หรือ
+        <div>
+          <Button onClick={handleCamera}>แสกนอัตโนมัติ</Button>
+
+          {openCamera && <CameraCapture onScan={handleScan} />}
+        </div>
+        <div className="wrap-break-word">
+          {qrcode.length > 0 &&
+            qrcode.map((item) => (
+              <span key={item.qrcode_data}> {item.qrcode_data}</span>
+            ))}
+        </div>
+        <pre>{JSON.stringify(slipValidate, null, 2)}</pre>
       </div>
     </div>
   );

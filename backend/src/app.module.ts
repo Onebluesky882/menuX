@@ -23,9 +23,7 @@ import { LineUsersModule } from './line_users/line_users.module';
 import { ShopsModule } from './shops/shops.module';
 import { R2Module } from './r2/r2.module';
 import { MenuOptionsModule } from './menu_options/menu_options.module';
-import { PaymentsController } from './payments/payments.controller';
-import { PaymentsService } from './payments/payments.service';
-import { PaymentsModule } from './payments/payments.module';
+import { SlipVerifyModule } from './slip-verify/slip-verify.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -52,10 +50,9 @@ import { PaymentsModule } from './payments/payments.module';
     ShopsModule,
     R2Module,
     MenuOptionsModule,
-    PaymentsModule,
+    SlipVerifyModule,
   ],
-  controllers: [AppController, PaymentsController],
-  providers: [PaymentsService],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}

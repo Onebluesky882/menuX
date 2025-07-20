@@ -15,6 +15,7 @@ import { employers } from './schema/employers';
 import { orderItems } from './schema/orderItems';
 import { lineUser } from './schema/lineUser';
 import { menuOptions } from './schema/menuOptions';
+import { slipVerify } from './schema/slipVerify';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -33,6 +34,7 @@ export * from './schema/employers';
 export * from './schema/orderItems';
 export * from './schema/lineUser';
 export * from './schema/menuOptions';
+export * from './schema/slipVerify';
 
 export * from './relations/orders.relation';
 export * from './relations/image.relation';
@@ -59,4 +61,5 @@ export const schema = {
   orderItems,
   lineUser,
   menuOptions,
+  slipVerify,
 };

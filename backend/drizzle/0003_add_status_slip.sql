@@ -1,0 +1,1 @@
+ALTER TABLE "slip-verify" ADD COLUMN "verify" boolean NOT NULL;
