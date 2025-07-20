@@ -154,6 +154,23 @@ CREATE TABLE "shops" (
 	"active" boolean DEFAULT true
 );
 --> statement-breakpoint
+CREATE TABLE "slip-verify" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"slip_code" text NOT NULL,
+	"orderId" uuid,
+	"ref" text NOT NULL,
+	"create_at" timestamp DEFAULT now(),
+	"sender_bank" text NOT NULL,
+	"sender_name" text NOT NULL,
+	"sender_id" text NOT NULL,
+	"receiver_bank" text NOT NULL,
+	"receiver_name" text NOT NULL,
+	"receiver_id" text NOT NULL,
+	"amount" numeric NOT NULL,
+	"status" boolean NOT NULL,
+	CONSTRAINT "slip-verify_slip_code_unique" UNIQUE("slip_code")
+);
+--> statement-breakpoint
 CREATE TABLE "table_grids_layout" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"rows" numeric,
@@ -222,5 +239,6 @@ ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_layout_id_table_grids_layo
 ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_created_by_id_users_id_fk" FOREIGN KEY ("created_by_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "shops" ADD CONSTRAINT "shops_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "slip-verify" ADD CONSTRAINT "slip-verify_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "table_grids_layout" ADD CONSTRAINT "table_grids_layout_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users" ADD CONSTRAINT "users_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."roles"("id") ON DELETE no action ON UPDATE no action;

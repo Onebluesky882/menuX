@@ -23,7 +23,7 @@ import { LineUsersModule } from './line_users/line_users.module';
 import { ShopsModule } from './shops/shops.module';
 import { R2Module } from './r2/r2.module';
 import { MenuOptionsModule } from './menu_options/menu_options.module';
-import { SlipVerifyModule } from './slip-verify/slip-verify.module';
+import { SlipVerificationsModule } from './slip-verifications/slip-verifications.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -50,7 +50,7 @@ import { SlipVerifyModule } from './slip-verify/slip-verify.module';
     ShopsModule,
     R2Module,
     MenuOptionsModule,
-    SlipVerifyModule,
+    SlipVerificationsModule,
   ],
   controllers: [AppController],
 })

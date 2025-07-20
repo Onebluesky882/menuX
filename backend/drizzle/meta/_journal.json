@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1752774931977,
-      "tag": "0000_setup_db",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752860542459,
-      "tag": "0001_new_table_slip_verify",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1752866622548,
-      "tag": "0002_UNIQUE_slip_code",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1752984777715,
-      "tag": "0003_sleepy_human_fly",
+      "when": 1752986496343,
+      "tag": "0000_startup",
       "breakpoints": true
     }
   ]

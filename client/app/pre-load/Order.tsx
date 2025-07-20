@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { ordersApi } from "../api/orders.api";
 import { GroupedData, RawOrderItem } from "../types/menuOrder.type";
-import { checkSlipApi, SlipVerify } from "../api/checkSlip.api";
+import { checkSlipApi, SlipVerify } from "../api/slip-verifications.api";
 import CameraCapture from "@/components/CameraCapture";
 import { Button } from "@/components/ui/button";
 

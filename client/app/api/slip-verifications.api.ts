@@ -6,5 +6,6 @@ export type SlipVerify = {
   orderId: string;
 };
 export const checkSlipApi = {
-  postSlip: (data: SlipVerify) => axiosInstance.post("slip-verify", data),
+  postSlip: (data: SlipVerify) =>
+    axiosInstance.post("slip-verifications", data),
 };

@@ -1,1 +1,0 @@
-ALTER TABLE "slip-verify" ADD CONSTRAINT "slip-verify_slip_code_unique" UNIQUE("slip_code");

@@ -1,13 +1,13 @@
 import { DATABASE_CONNECTION } from '@/database/database-connection';
+import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { PaymentRecode, PostSlipDto } from './slipVerify.dto';
-import { slipVerify } from '@/database';
+import { PostSlipDto } from './slip-verifications.dto';
+import { slipVerifications } from '@/database';
 
 @Injectable()
-export class SlipVerifyService {
+export class SlipVerificationsService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: NodePgDatabase,
@@ -21,7 +21,7 @@ export class SlipVerifyService {
       const res = await firstValueFrom(this.http.post(url, { qrcode_data }));
       const slipData = res.data.data;
 
-      const insertData = await this.db.insert(slipVerify).values({
+      const insertData = await this.db.insert(slipVerifications).values({
         slipCode: qrcode_data,
         ref: slipData.ref,
         senderBank: slipData.sender_bank,
@@ -53,10 +53,3 @@ export class SlipVerifyService {
     }
   }
 }
-
-// 3 party https://ucwgwgkko4wk408ggsk0cosw.oiio.download/api/slip/:amount/no_slip
-
-/* 
-{
-  "qrcode_data": "0045000600000101030300224519913739581I000002B97905102TH91041628"
-} */
