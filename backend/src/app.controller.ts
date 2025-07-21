@@ -1,18 +1,12 @@
-import { Controller, Get, Req } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  @Get()
-  getRoot(@Req() res: Response) {
-    return { message: 'Welcome MenuX' };
-  }
+  constructor(private readonly appService: AppService) {}
 
-  @Get('protected')
-  getProtected(@Req() req) {
-    return {
-      message: 'Access granted',
-      user: req.user,
-    };
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
   }
 }

@@ -1,40 +1,21 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "ES2023",
-    "lib": ["ES2023"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-
-    // Decorators for NestJS
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
-    // Module resolution
-    "moduleResolution": "node",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-
-    // Build behavior
-    "incremental": true,
     "declaration": true,
-    "sourceMap": true,
     "removeComments": true,
-
-    // Type safety
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
     "skipLibCheck": true,
-    "strict": true,
-    "noImplicitAny": false,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "strictBindCallApply": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }
