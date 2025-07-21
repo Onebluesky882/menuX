@@ -5,7 +5,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { firstValueFrom } from 'rxjs';
 import { PostSlipDto } from './slip-verifications.dto';
 import { slipVerifications } from '@/database';
-
+import { DatabaseError } from 'pg';
 @Injectable()
 export class SlipVerificationsService {
   constructor(
@@ -40,13 +40,10 @@ export class SlipVerificationsService {
         data: insertData,
       };
     } catch (error: any) {
-      console.error(
-        '❌ External API Error:',
-        error.response?.data || error.message,
-      );
       throw new HttpException(
         {
-          message: 'ตรวจสอบ slip ล้มเหลว',
+          success: false,
+          message: 'transaction unsuccess!',
         },
         HttpStatus.BAD_REQUEST,
       );
