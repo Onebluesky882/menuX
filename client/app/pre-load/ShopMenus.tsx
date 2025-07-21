@@ -1,21 +1,18 @@
 "use client";
 
-// payload map data to db
-// redirect to payment  page
-// receipt queue with id tack 01 -> 999 with static page [id : 8 number]
-
 import { useEffect, useState } from "react";
 import { shopApi } from "../api/shop.api";
 import Image from "next/image";
 import { menuApi } from "../api/menu.api";
-import { CartItem, MenuItem } from "../types/menuOrder.type";
+import { MenuItem } from "../types/menuOrder.type";
 import { CartIconPreview, CartPreview } from "@/components/menu/CartPreview";
 import { TotalCard } from "@/components/menu/TotalCard";
 import { useRouter } from "next/navigation";
 import { useCart } from "../hooks/useCart";
+import { Shop } from "../types/shop.type";
 
 const ShopMenus = ({ shopId }: { shopId: string }) => {
-  const [shop, setShop] = useState<any>();
+  const [shop, setShop] = useState<Shop>();
   const [menusOption, setMenusOption] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [previewCart, setPreviewCart] = useState(false);
@@ -48,10 +45,14 @@ const ShopMenus = ({ shopId }: { shopId: string }) => {
     shop();
   }, [shopId]);
 
+  console.log("shop", shop);
+
   const handlePreviewCart = () => {
     try {
       setPreviewCart((prev) => !prev);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleStoreOrders = async () => {

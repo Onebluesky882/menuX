@@ -1,14 +1,15 @@
 import ShopMenus from "@/app/pre-load/ShopMenus";
 
-type PageProps = {
-  params: { id: string };
-};
-export default async function Page({ params }: PageProps) {
+export default async function MenuPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-  console.log("id ", id);
+
   return (
     <div>
-      <ShopMenus shopId={id} />
+      <ShopMenus shopId={id} />;
     </div>
   );
 }

@@ -1,10 +1,5 @@
 import { create } from "zustand";
-import {
-  CartItem,
-  MenuItem,
-  MenuOption,
-  OrderPayload,
-} from "../types/menuOrder.type";
+import { CartItem, MenuItem, OrderPayload } from "../types/menuOrder.type";
 import { ordersApi } from "../api/orders.api";
 
 type CartStore = {

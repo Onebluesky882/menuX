@@ -4,12 +4,10 @@ import liff from "@line/liff";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { LineUser } from "../types/lineUser";
-import { useUserStore } from "@/app/hooks/useUser";
 import { api } from "@/app/api/lineUsers.api";
 
-const page = () => {
+const Page = () => {
   const [user, setUser] = useState<LineUser | null>(null);
-  const { user: lineUserId, fetchProfile } = useUserStore();
   useEffect(() => {
     const initLiff = async () => {
       try {
@@ -32,7 +30,7 @@ const page = () => {
         // api store user to db and  jwt
         await api.getLineUserById(user.userId);
         // keep user state global
-        await fetchProfile(user.userId);
+        // await fetchProfile(user.userId);
       } catch (error) {
         console.error("LIFF init error", error);
       }
@@ -64,6 +62,8 @@ const page = () => {
   );
 };
 
+export default Page;
+
 // ref https://developers.line.biz/en/reference/messaging-api
 
 // .....................
@@ -73,7 +73,3 @@ const page = () => {
 // upload image r3
 // shop create menu
 // scan qr code to shop
-export default page;
-function getUserById() {
-  throw new Error("Function not implemented.");
-}

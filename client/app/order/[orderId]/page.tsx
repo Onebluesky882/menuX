@@ -1,11 +1,11 @@
 import Order from "@/app/pre-load/Order";
 
 type PageProps = {
-  params: { orderId: string };
+  params: Promise<{ orderId: string }>;
 };
 
 export default async function Page({ params }: PageProps) {
-  const { orderId } = params;
+  const { orderId } = await params;
 
   return (
     <div>

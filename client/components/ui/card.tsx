@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/tailwind-merge";
+import { cn } from "@/lib/utils";
 import * as React from "react";
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {

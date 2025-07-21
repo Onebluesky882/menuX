@@ -14,7 +14,7 @@ const QrCodeRender = () => {
   };
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {
-    fileInputRef.current?.files?.[0];
+    fileInputRef.current?.click();
   };
   return (
     <div>
