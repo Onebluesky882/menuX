@@ -9,7 +9,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { orders } from './orders';
 
-export const slipVerifications = pgTable('slip-verify', {
+export const slipVerifications = pgTable('slip-verifications', {
   id: uuid('id')
     .primaryKey()
     .default(sql`gen_random_uuid()`),

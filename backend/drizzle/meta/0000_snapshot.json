@@ -1,5 +1,5 @@
 {
-  "id": "8113834d-b519-48c0-af6c-417e7a81adde",
+  "id": "cf8d70d4-5bc3-4d4e-ac29-1fe089a247df",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1334,8 +1334,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.slip-verify": {
-      "name": "slip-verify",
+    "public.slip-verifications": {
+      "name": "slip-verifications",
       "schema": "",
       "columns": {
         "id": {
@@ -1421,9 +1421,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "slip-verify_orderId_orders_id_fk": {
-          "name": "slip-verify_orderId_orders_id_fk",
-          "tableFrom": "slip-verify",
+        "slip-verifications_orderId_orders_id_fk": {
+          "name": "slip-verifications_orderId_orders_id_fk",
+          "tableFrom": "slip-verifications",
           "tableTo": "orders",
           "columnsFrom": [
             "orderId"
@@ -1437,8 +1437,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "slip-verify_slip_code_unique": {
-          "name": "slip-verify_slip_code_unique",
+        "slip-verifications_slip_code_unique": {
+          "name": "slip-verifications_slip_code_unique",
           "nullsNotDistinct": false,
           "columns": [
             "slip_code"

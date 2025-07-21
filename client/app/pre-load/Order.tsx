@@ -19,7 +19,6 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
   const [orders, setOrders] = useState<RawOrderItem[]>([]);
 
   const [qrcode, setQrcode] = useState<SlipVerify[]>([]);
-  const [slipValidate, setSlipValidate] = useState<SlipVerify | null>(null);
 
   const totalPrice = useMemo(() => {
     return orders?.reduce(
@@ -50,8 +49,7 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
       }
 
       const validData = parsed.data;
-      const res = await checkSlipApi.postSlip(validData);
-      setSlipValidate(res.data);
+      await checkSlipApi.postSlip(validData);
     };
     verifySlip();
     // -------------
@@ -119,7 +117,7 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
           <div key={index} className="mb-4">
             <h3 className="font-bold text-xl text-gray-700 mb-1">{menuName}</h3>
             <ul className="ml-4 space-y-1 text-lg">
-              {Object.entries(prices).map(([price, summary], i) => (
+              {Object.entries(prices).map(([_price, summary], i) => (
                 <li key={i} className="flex justify-between py-1">
                   <span>
                     {summary.optionLabel} × {summary.totalQuantity}
