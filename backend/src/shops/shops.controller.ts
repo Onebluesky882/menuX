@@ -47,6 +47,14 @@ export class ShopsController {
     return this.ShopsService.create(body, userId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('getOwnerShop')
+  getOwner(@Req() req: AuthRequest) {
+    const userId = req.user.id;
+    console.log('userId', userId);
+    return this.ShopsService.getOwnerShop(userId);
+  }
+
   @Get(':id')
   getById(@Param('id') id: string) {
     return this.ShopsService.getById(id);

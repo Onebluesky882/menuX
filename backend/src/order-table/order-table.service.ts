@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { orderTable, shops } from 'src/database';
+import { orderTable } from 'src/database';
 import { eq, and } from 'drizzle-orm';
 import { OrderTableDto } from './order-table.dto';
 import { nanoid } from 'nanoid';

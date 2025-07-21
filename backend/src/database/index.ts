@@ -15,6 +15,7 @@ import { employers } from './schema/employers';
 import { orderItems } from './schema/orderItems';
 import { lineUser } from './schema/lineUser';
 import { menuOptions } from './schema/menuOptions';
+import { slipVerifications } from './schema/slipVerifications';
 
 export * from './schema/orders';
 export * from './schema/shops';
@@ -60,4 +61,5 @@ export const schema = {
   orderItems,
   lineUser,
   menuOptions,
+  slipVerifications,
 };

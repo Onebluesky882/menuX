@@ -3,7 +3,7 @@ import { InferInsertModel } from 'drizzle-orm';
 export type PostSlipDto = {
   amount: string;
   qrcode_data: string;
-  orderId: string;
+  orderId?: string;
 };
 
 export type PaymentRecode = InferInsertModel<typeof slipVerifications>;

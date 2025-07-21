@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import { useEffect } from "react";
-import MenuManagement from "./menu/MenuManagement";
+import MenuManagement from "./dashboard/MenuManagement";
 import useShop from "../../../hooks/useShop";
 import { ShopTabsLayout } from "../../../components/shops/ShopTabLayout";
 
@@ -41,6 +41,7 @@ const ShopLayout = () => {
                     amount={0}
                     shopId={selectedShop?.id ?? ""}
                   />
+                  <Payment />
                 </Tabs>
               </div>
             </div>
@@ -65,6 +66,13 @@ const Menus = ({ shopId }: MenuProps & { shopId: string }) => {
       <Link to={`/menu/${shopId}`}>
         <u>live menu</u>
       </Link>
+    </TabsContent>
+  );
+};
+const Payment = () => {
+  return (
+    <TabsContent value="payment">
+      <h1>hello</h1>
     </TabsContent>
   );
 };

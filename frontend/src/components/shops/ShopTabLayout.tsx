@@ -1,6 +1,21 @@
+import { shopAPI } from "@/Api/shop.api";
 import { TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { useEffect, useState } from "react";
 
 export const ShopTabsLayout = () => {
+  const [owner, setOwner] = useState<string | null>(null);
+
+  /* owner see payment of shop */
+  useEffect(() => {
+    const getOwner = async () => {
+      const res = await shopAPI.getOwnerShop();
+      if (res.data) {
+        setOwner(res.data.ownerId);
+      }
+    };
+    getOwner();
+  }, [shopAPI.getOwnerShop]);
+
   return (
     <TabsList className="flex flex-wrap justify-center  gap-3 mb-6 bg-inherit">
       <TabsTrigger
@@ -15,7 +30,6 @@ export const ShopTabsLayout = () => {
       >
         ShopMenu
       </TabsTrigger>
-
       <TabsTrigger
         value="orders"
         className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
@@ -33,7 +47,15 @@ export const ShopTabsLayout = () => {
         className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
       >
         ⚙️ Settings
-      </TabsTrigger>
+      </TabsTrigger>{" "}
+      {owner && (
+        <TabsTrigger
+          value="payment"
+          className="px-4 py-2 rounded-full bg-white shadow border border-gray-300 text-gray-700 hover:bg-purple-100 transition-all duration-200 data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+        >
+          Payment
+        </TabsTrigger>
+      )}
     </TabsList>
   );
 };
