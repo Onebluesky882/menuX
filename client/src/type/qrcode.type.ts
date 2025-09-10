@@ -1,0 +1,17 @@
+export type Qrcode = {
+  amount: number;
+  date: string;
+  receiver_bank: string;
+  receiver_id: string;
+  receiver_name: string;
+  ref: string;
+  sender_bank: string;
+  sender_id: string;
+  sender_name: string;
+};
+
+export type ReceiveBank = {
+  bankCode?: string | null | undefined;
+  bankAccount?: string | null | undefined;
+  bankId?: string | null | undefined;
+};
