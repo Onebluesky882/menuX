@@ -18,7 +18,7 @@ const CreateShop = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<NewShopFormField> = async (data) => {
+  const onSubmit: SubmitHandler<NewShopFormField> = async data => {
     const newShop = await createShop(data);
 
     if (newShop.data.length > 0) {
@@ -29,22 +29,7 @@ const CreateShop = () => {
       navigate(`/shops/${shopId.id}`);
     }
   };
-  /*   
-  bankCode: text('bank_code').notNull(),
-  bankAccount: text('bank_account').notNull(),
-  bankId: text('bank_id').notNull(),
-  
 
-  try to know there detail first 
-  transfer money to account themself than check with qrcode backend 
-
-  api : http://localhost:3000/slip-verifications/shop
-  return JSON.str{}
-  
-  
-  
-  
-  */
   return (
     <div>
       <RestaurantForm

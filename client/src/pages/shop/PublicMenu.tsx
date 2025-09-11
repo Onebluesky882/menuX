@@ -1,3 +1,4 @@
+import ItemCard from "@/components/menu/MenuCard";
 import useMenu from "@/hooks/useMenu";
 import useShop from "@/hooks/useShop";
 import useOrder from "@/stores/useOrder";
@@ -5,7 +6,6 @@ import type { Menu, SelectedOptionWithQuantity } from "@/type/Menu.type";
 import type { Order } from "@/type/Order.type";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import ItemCard from "@/components/menu/MenuCard";
 
 const PublicMenu = () => {
   const [loading, setLoading] = useState(false);
@@ -17,9 +17,13 @@ const PublicMenu = () => {
   const { getAllMenu, getMenusWithShopId, menuPreview } = useMenu();
 
   const getTotalAmountByMenuId = (menuId: string): number => {
-    return orders
-      .filter((order) => order.menuId === menuId)
-      .reduce((total, order) => total + order.quantity, 0);
+    let total = 0;
+    orders.forEach(order => {
+      if (order.menuId === menuId) {
+        total += order.quantity;
+      }
+    });
+    return total;
   };
 
   const menuWithImage: Menu[] = useMemo(() => {
@@ -42,10 +46,10 @@ const PublicMenu = () => {
     itemId: string,
     selectedOptions: SelectedOptionWithQuantity[]
   ) => {
-    const selectedMenu = menuWithImage.find((menu) => menu.id === itemId);
+    const selectedMenu = menuWithImage.find(menu => menu.id === itemId);
     if (!selectedMenu) return;
 
-    selectedOptions.forEach((optionWithQty) => {
+    selectedOptions.forEach(optionWithQty => {
       const { option, quantity } = optionWithQty;
 
       const orderItemId = `${itemId}-${option.id}`;
@@ -144,8 +148,8 @@ const PublicMenu = () => {
             <div className="max-w-6xl mx-auto px-4 pb-32 pt-8">
               {menuWithImage && menuWithImage.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {menuWithImage.map((menu) => (
-n                    <ItemCard
+                  {menuWithImage.map(menu => (
+                    <ItemCard
                       key={menu.id}
                       onAmountChange={(itemId, selectedOptions) => {
                         handleOrder(itemId, selectedOptions);

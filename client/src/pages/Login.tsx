@@ -1,11 +1,10 @@
-import { useForm } from "react-hook-form";
-import LoginAuthGoogle from "../components/LoginAuthGoogle";
-import { Link, useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schema, type LoginField } from "@/schema/loginField";
-import useUsers from "@/hooks/useUsers";
-import { useState } from "react";
 import Loader from "@/components/spinner/loader";
+import useUsers from "@/hooks/useUsers";
+import { schema, type LoginField } from "@/schema/loginField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 // todo problem not pare password
@@ -51,7 +50,7 @@ const Login = () => {
   return (
     <div className="py-10 flex items-center justify-center bg-gray-100/50   from-white to-gray-100 rounded-sm">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100 p-8 animate-fade-in">
-        <LoginAuthGoogle title="LogIn With" />
+        {/* <LoginAuthGoogle title="LogIn With" /> */}
 
         <h2 className="text-2xl font-bold my-6 text-gray-900 text-center tracking-tight">
           Sign in to your account

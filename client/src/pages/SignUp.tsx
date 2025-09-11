@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import LoginAuthGoogle from "../components/LoginAuthGoogle";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import BeatLoader from "react-spinners/BeatLoader";
 import useUsers from "@/hooks/useUsers";
 import { schema } from "@/schema/signUpField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
 
 type CreateUserDto = {
   email: string;
@@ -30,7 +29,7 @@ const SignUp = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<any> = async (data) => {
+  const onSubmit: SubmitHandler<any> = async data => {
     setLoading(true);
     const { confirmPassword, ...userWithoutConfirm } = data;
 
@@ -62,7 +61,7 @@ const SignUp = () => {
   return (
     <div className="py-10 flex items-center justify-center bg-gradient-to-b from-white to-gray-100 rounded-sm">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100 p-8 animate-fade-in">
-        <LoginAuthGoogle title="Register With" />
+        {/* <LoginAuthGoogle title="Register With" /> */}
 
         <h2 className="text-2xl font-bold my-6 text-gray-900 text-center tracking-tight">
           Register Account

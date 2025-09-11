@@ -1,6 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
+import useShop from "@/hooks/useShop";
+import { useEffect } from "react";
 import { BsShop } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
+import { Link, useNavigate } from "react-router-dom";
+import { authClient } from "../lib/auth-client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,16 +19,11 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
-import useUsers from "@/hooks/useUsers";
-import useShop from "@/hooks/useShop";
-import { useEffect } from "react";
 const pathName = window.location.pathname;
 const Header = () => {
   const navigate = useNavigate();
-  const { profile, logoutUser } = useUsers();
   const { setShopById } = useShop();
-
+  const { data: session } = authClient.useSession();
   useEffect(() => {
     const getShopParam = () => {
       const match = pathName.match(/\/shops\/([0-9a-fA-F-]{36})/);
@@ -42,11 +41,11 @@ const Header = () => {
   };
 
   const logout = () => {
-    logoutUser();
     window.location.pathname = "/";
   };
 
-  console.log("profile", profile);
+  // console.log("session :", session?.user.name);
+
   return (
     <header className="my-2      ">
       <div className="grid grid-cols-3   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
