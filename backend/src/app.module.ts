@@ -21,6 +21,7 @@ import { SlipVerificationsModule } from './slip-verifications/slip-verifications
 import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
 import { TablesModule } from './tables/tables.module';
 import { UsersModule } from './users/users.module';
+import { WebsocketGateway } from './websocket/websocket.gateway';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -58,6 +59,7 @@ import { UsersModule } from './users/users.module';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    WebsocketGateway,
   ],
 })
 export class AppModule {}
