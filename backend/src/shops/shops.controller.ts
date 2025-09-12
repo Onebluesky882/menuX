@@ -9,8 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { AuthGuard } from '@nestjs/passport';
-import { AuthRequest } from 'types/auth';
+import { AuthGuard, UserSession } from '@mguay/nestjs-better-auth';
 import { InsertShop, ReceiveBank } from './shops.dto';
 import { ShopsService } from './shops.service';
 
@@ -25,32 +24,32 @@ export class ShopsController {
     return this.ShopsService.getAllShopNoJWT();
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   //todo change Get('customer')
   @Get()
-  getAll(@Req() req: AuthRequest) {
+  getAll(@Req() req: UserSession) {
     const userId = req.user.id;
     return this.ShopsService.getAll(userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Get(':shopId/menu')
-  getMenuPage(@Req() req: AuthRequest) {
+  getMenuPage(@Req() req: UserSession) {
     const userId = req.user.id;
     return this.ShopsService.getAll(userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Post()
   // @Roles('owner')
-  create(@Body() body: InsertShop, @Req() req: AuthRequest) {
+  create(@Body() body: InsertShop, @Req() req: UserSession) {
     const userId = req.user.id;
     return this.ShopsService.create(body, userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Get('getOwnerShop')
-  getOwner(@Req() req: AuthRequest) {
+  getOwner(@Req() req: UserSession) {
     const userId = req.user.id;
     console.log('userId', userId);
     return this.ShopsService.getOwnerShop(userId);
@@ -62,7 +61,7 @@ export class ShopsController {
   }
 
   // update
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Patch(':shopId')
   async patch(
     @Param('shopId') shopId: string,
