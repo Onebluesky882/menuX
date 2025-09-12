@@ -5,16 +5,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "../../ui/button";
 import { BarChart3, Plus, Store, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/stores/useUser";
+import { authClient } from "../../../lib/auth-client";
+import { Button } from "../../ui/button";
 
 const QuickOpenShop = () => {
+  const { data } = authClient.useSession();
   const navigate = useNavigate();
-  const { user } = useUserStore();
   const handleSubmitNewShop = () => {
-    if (user) {
+    if (data) {
       navigate("/shops/create");
     } else {
       navigate("/login", { state: location.pathname });

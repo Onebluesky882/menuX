@@ -1,4 +1,5 @@
 import { BsShop } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { authClient } from "../lib/auth-client";
@@ -26,16 +27,16 @@ const Header = () => {
 
   const logout = async () => {
     await authClient.signOut();
-    navigate("/login");
+    navigate("/");
   };
-
+  console.log("session", session);
   return (
     <header className="my-2      ">
       <div className="grid grid-cols-3   items-center px-6  py-4 bg-white shadow-md rounded-xl outline-1 outline-gray-100 ">
         <div className=" col-span-1 flex  w-full items-center text-2xl     max-sm:mr-10     ">
           <span className="rounded-full border-2 border-amber-100 p-3">
             <BsShop
-              // onClick={() => navigate("/shops/dashboard")}
+              onClick={() => navigate("/shops/dashboard")}
               className="text-gray-600 "
             />
           </span>
@@ -50,7 +51,7 @@ const Header = () => {
         </div>
         <div className="col-span-1    justify-end flex">
           <div className="flex items-center space-x-4"></div>{" "}
-          {/*           {profile !== null ? (
+          {session ? (
             <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">
                 <span className="text-start text-[12px] font-medium text-gray-500">
@@ -59,7 +60,7 @@ const Header = () => {
                 </span>
                 <span className="text-[15px] font-medium text-gray-700">
                   {" "}
-                  {profile}
+                  {session.user.name}
                 </span>
               </div>
 
@@ -68,7 +69,7 @@ const Header = () => {
           ) : (
             <div className="flex">
               <span
-                // onClick={handleOnclick}
+                onClick={handleOnclick}
                 className="flex items-center flex-col"
               >
                 <FaUserCircle
@@ -78,7 +79,7 @@ const Header = () => {
                 <span className="text-[12px]">For Staff</span>
               </span>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </header>
