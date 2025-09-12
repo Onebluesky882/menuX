@@ -51,7 +51,6 @@ export class ShopsController {
   @Get('getOwnerShop')
   getOwner(@Req() req: UserSession) {
     const userId = req.user.id;
-    console.log('userId', userId);
     return this.ShopsService.getOwnerShop(userId);
   }
 
