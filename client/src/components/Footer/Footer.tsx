@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
-import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
 import { FaHome } from "react-icons/fa";
+import { IoStorefront } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import { authClient } from "../../lib/auth-client";
+import { Button } from "../ui/button";
 import LanguageToggle from "./LanguageToggle";
 import MobileMenu from "./MobileMenu";
-import useUsers from "@/hooks/useUsers";
-import { IoStorefront } from "react-icons/io5";
 const Footer = () => {
   const [lang, setLang] = useState<"en" | "th">("en");
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenuMobile = () => {
-    setMenuOpen((prev) => !prev);
+    setMenuOpen(prev => !prev);
   };
-  const { profile } = useUsers();
+  const { data: profile } = authClient.useSession();
 
   useEffect(() => {}, []);
   const disableFooter = location.pathname.startsWith("/menu/");

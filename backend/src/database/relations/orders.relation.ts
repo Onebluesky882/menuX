@@ -1,9 +1,6 @@
 import { relations } from 'drizzle-orm';
-import { menuOptions } from '../schema/menuOptions';
-import { menus } from '../schema/menus';
-import { orderItems } from '../schema/orderItems';
-import { orders } from '../schema/orders';
-import { shops } from '../schema/shops'; // หรือจาก '..' แล้วแต่ path
+import { menuOptions, menus, orderItems, orders, shops } from '../schema';
+// หรือจาก '..' แล้วแต่ path
 
 export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   menu: one(menus, {

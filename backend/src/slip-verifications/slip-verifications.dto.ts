@@ -1,5 +1,5 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { orders, shops, slipVerifications } from '../../src/database/index';
+import { orders, shops, slipVerifications } from '../database/schema/index';
 
 export type Order = InferInsertModel<typeof orders>;
 export type Shop = InferInsertModel<typeof shops>;

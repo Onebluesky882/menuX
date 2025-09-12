@@ -8,9 +8,13 @@ import {
 import { error } from 'console';
 import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { orderItems, orders, schema } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { slipVerifications } from '../database/schema/slipVerifications';
+import {
+  orderItems,
+  orders,
+  schema,
+  slipVerifications,
+} from 'src/database/schema';
 import type { CreateOrderDto, OrderPurchase } from './orders.dto';
 
 @Injectable()

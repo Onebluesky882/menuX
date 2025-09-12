@@ -4,11 +4,10 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { menus, schema, shops } from 'src/database';
-import { menuOptions } from 'src/database/schema/menuOptions';
-import { eq } from 'drizzle-orm';
+import { menuOptions, menus, schema, shops } from 'src/database/schema';
 import { MenuOption } from './menu_options.dto';
 
 @Injectable()

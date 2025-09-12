@@ -5,10 +5,10 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
+import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { tableGridLayout } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { eq, and } from 'drizzle-orm';
+import { tableGridLayout } from 'src/database/schema';
 import {
   InsertTableGridLayout,
   UpdateTableGridLayout,

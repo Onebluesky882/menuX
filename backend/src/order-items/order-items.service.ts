@@ -5,10 +5,10 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { menuOptions, menus, orderItems } from 'src/database';
-import { eq } from 'drizzle-orm';
+import { menuOptions, menus, orderItems } from 'src/database/schema';
 
 @Injectable()
 export class OrderItemsService {

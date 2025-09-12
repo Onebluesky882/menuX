@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { images } from '../database/schema/images';
+import { images } from '../database/schema';
 
 export type InsertImage = InferInsertModel<typeof images>;
 export type SelectImage = InferSelectModel<typeof images>;

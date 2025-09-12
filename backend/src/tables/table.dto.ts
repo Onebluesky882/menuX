@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { shopTables } from '../database';
+import { shopTables } from '../database/schema';
 
 export type InsertTable = InferInsertModel<typeof shopTables>;
 export type ReadTables = InferSelectModel<typeof shopTables>;

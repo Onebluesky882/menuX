@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { schema } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
+import { schema } from 'src/database/schema';
 
 @Injectable()
 export class LineUsersService {

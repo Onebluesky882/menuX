@@ -1,7 +1,4 @@
-import useShop from "@/hooks/useShop";
-import { useEffect } from "react";
 import { BsShop } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { authClient } from "../lib/auth-client";
@@ -19,32 +16,18 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-const pathName = window.location.pathname;
 const Header = () => {
-  const navigate = useNavigate();
-  const { setShopById } = useShop();
   const { data: session } = authClient.useSession();
-  useEffect(() => {
-    const getShopParam = () => {
-      const match = pathName.match(/\/shops\/([0-9a-fA-F-]{36})/);
-      const shopId = match ? match[1] : null;
-
-      if (shopId) {
-        setShopById(shopId);
-      }
-    };
-    getShopParam();
-  }, [pathName]);
+  const navigate = useNavigate();
 
   const handleOnclick = () => {
     navigate("/login");
   };
 
-  const logout = () => {
-    window.location.pathname = "/";
+  const logout = async () => {
+    await authClient.signOut();
+    navigate("/login");
   };
-
-  // console.log("session :", session?.user.name);
 
   return (
     <header className="my-2      ">
@@ -52,7 +35,7 @@ const Header = () => {
         <div className=" col-span-1 flex  w-full items-center text-2xl     max-sm:mr-10     ">
           <span className="rounded-full border-2 border-amber-100 p-3">
             <BsShop
-              onClick={() => navigate("/shops/dashboard")}
+              // onClick={() => navigate("/shops/dashboard")}
               className="text-gray-600 "
             />
           </span>
@@ -67,7 +50,7 @@ const Header = () => {
         </div>
         <div className="col-span-1    justify-end flex">
           <div className="flex items-center space-x-4"></div>{" "}
-          {profile !== null ? (
+          {/*           {profile !== null ? (
             <div className="flex  items-center gap-2 ">
               <div className="flex-col flex">
                 <span className="text-start text-[12px] font-medium text-gray-500">
@@ -76,7 +59,7 @@ const Header = () => {
                 </span>
                 <span className="text-[15px] font-medium text-gray-700">
                   {" "}
-                  {profile.email}
+                  {profile}
                 </span>
               </div>
 
@@ -85,7 +68,7 @@ const Header = () => {
           ) : (
             <div className="flex">
               <span
-                onClick={handleOnclick}
+                // onClick={handleOnclick}
                 className="flex items-center flex-col"
               >
                 <FaUserCircle
@@ -95,7 +78,7 @@ const Header = () => {
                 <span className="text-[12px]">For Staff</span>
               </span>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </header>
@@ -116,10 +99,7 @@ export function DropdownMenuHeader({ logout }: { logout: () => void }) {
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
+
           <DropdownMenuItem>
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

@@ -1,23 +1,25 @@
+import { AuthService } from '@mguay/nestjs-better-auth';
 import { NestFactory } from '@nestjs/core';
+import { toNodeHandler } from 'better-auth/node';
+import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
+
+dotenv.config();
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
+  // Access Express instance
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  // Access BetterAuth instance from AuthService
+  const authService = app.get<AuthService>(AuthService);
+
+  expressApp.all(
+    /^\/api\/auth\/.*/,
+    toNodeHandler(authService.instance.handler),
+  );
+
+  expressApp.use(require('express').json());
   app.setGlobalPrefix('api');
-  app.enableCors({
-    credentials: true,
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:5173',
-      'https://menux-client.vercel.app',
-
-      /^https:\/\/menu-x-frontend-.*\.vercel\.app$/,
-    ],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    exposedHeaders: ['Set-Cookie'], // ✅ เพิ่มเพื่อให้ frontend เห็น
-  });
-
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

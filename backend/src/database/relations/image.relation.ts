@@ -1,8 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { user } from '..';
-import { images } from '../schema/images';
-import { menus } from '../schema/menus';
-import { shops } from '../schema/shops';
+import { images, menus, shops, user } from '../schema';
 
 // เพิ่ม relation สำหรับ images table
 export const imageRelations = relations(images, ({ one }) => ({

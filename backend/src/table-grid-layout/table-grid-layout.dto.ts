@@ -1,5 +1,5 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { tableGridLayout } from 'src/database';
+import { tableGridLayout } from 'src/database/schema';
 
 export type InsertTableGridLayout = InferInsertModel<typeof tableGridLayout>;
 

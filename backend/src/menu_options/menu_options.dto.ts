@@ -1,4 +1,4 @@
 import { InferInsertModel } from 'drizzle-orm';
-import { menuOptions } from 'src/database/schema/menuOptions';
+import { menuOptions } from '../database/schema';
 
 export type MenuOption = InferInsertModel<typeof menuOptions>;

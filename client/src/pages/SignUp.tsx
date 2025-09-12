@@ -1,62 +1,43 @@
-import useUsers from "@/hooks/useUsers";
-import { schema } from "@/schema/signUpField";
+import { schema, type SignupField } from "@/schema/signUpField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
-
-type CreateUserDto = {
-  email: string;
-  username: string;
-  password: string;
-  emailVerified: boolean;
-};
+import { authClient } from "../lib/auth-client";
 
 const SignUp = () => {
-  const navigator = useNavigate();
-  const [user, setUser] = useState<CreateUserDto>();
   const [loading, setLoading] = useState(false);
-
-  const { register: signUp, fetchProfile, profile } = useUsers();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<any>({
+  } = useForm<SignupField>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<any> = async data => {
-    setLoading(true);
-    const { confirmPassword, ...userWithoutConfirm } = data;
+  const onSubmit = async (field: SignupField) => {
+    try {
+      console.log("field signup", field);
+      // setLoading(true);
+      const data = await authClient.signUp.email({
+        email: field.email,
+        name: field.username,
+        password: field.password,
+      });
 
-    const userWithEmailVerified: CreateUserDto = {
-      ...userWithoutConfirm,
-      emailVerified: false,
-    };
+      console.log("signup data", data);
 
-    setUser(userWithEmailVerified);
+      // const { data: session } = await authClient.getSession();
+      // console.log(" get session success", session);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  useEffect(() => {
-    const insertNewUser = async () => {
-      if (!user) return;
-      try {
-        await signUp(user);
-        await fetchProfile();
-      } catch (error) {
-        console.error("Registration failed:", error);
-      } finally {
-        setLoading(false);
-        console.log("profile", profile);
-        await navigator("/dashboard");
-      }
-    };
-    insertNewUser();
-  }, [user]);
 
   return (
     <div className="py-10 flex items-center justify-center bg-gradient-to-b from-white to-gray-100 rounded-sm">
@@ -125,7 +106,11 @@ const SignUp = () => {
               className="w-full px-4 py-2 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition"
               placeholder="Confirm Password"
             />
-            {errors.confirmPassword && <p className="text-red-500 text-sm"></p>}
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
           <button
             disabled={loading}

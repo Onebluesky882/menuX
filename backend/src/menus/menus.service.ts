@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { menus, schema } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
+import { menus, schema } from 'src/database/schema';
 import { MenuDto } from './menus.dto';
 
 @Injectable()

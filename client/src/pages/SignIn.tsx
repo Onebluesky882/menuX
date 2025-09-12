@@ -1,48 +1,41 @@
 import Loader from "@/components/spinner/loader";
-import useUsers from "@/hooks/useUsers";
 import { schema, type LoginField } from "@/schema/loginField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { authClient } from "../lib/auth-client";
 
 // todo problem not pare password
 
-const Login = () => {
+const SignIn = () => {
   const [loading, setLoading] = useState(false);
-  const { login, fetchProfile } = useUsers();
-  const navigate = useNavigate();
 
   const { register, handleSubmit, reset } = useForm<LoginField>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit = async (data: LoginField) => {
+  const onSubmit = async (field: LoginField) => {
     setLoading(true);
-
+    console.log("field", field);
     try {
-      if (!data.email || !data.password) {
+      if (!field.email || !field.password) {
         toast.error("Please fill in all required fields");
         return;
       }
 
-      const result = await login(data);
-      if (result?.success === true || result?.status === "success") {
-        toast.success(result.message || "Login successful!");
-        reset();
-        await fetchProfile();
-        navigate("/dashboard");
-      } else if (result === false || result?.status === "error") {
-        const errorMessage = result?.message || "Invalid email or password";
-        toast.error(errorMessage);
-      } else {
-        toast.error("Login failed. Please check your credentials.");
-      }
+      const { data } = await authClient.signIn.email({
+        email: field.email,
+        password: field.password,
+      });
+
+      console.log("input login", data);
     } catch (error) {
       console.error(error);
     } finally {
+      reset();
       setLoading(false);
     }
   };
@@ -132,4 +125,4 @@ const FooterForm = () => {
     </div>
   );
 };
-export default Login;
+export default SignIn;

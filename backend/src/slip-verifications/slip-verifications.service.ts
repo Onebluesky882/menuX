@@ -9,10 +9,9 @@ import {
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { firstValueFrom } from 'rxjs';
-import { slipVerifications } from 'src/database';
 import { DATABASE_CONNECTION } from 'src/database/database-connection';
-import { schema, shops } from '../database';
-import { orders } from '../database/schema/orders';
+import { orders, slipVerifications } from 'src/database/schema';
+import { schema, shops } from '../database/schema';
 import { PostSlipDto, Shop } from './slip-verifications.dto';
 @Injectable()
 export class SlipVerificationsService {

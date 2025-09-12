@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { images, menuOptions, menus, shops } from '..';
+import { images, menuOptions, menus, shops } from '../schema';
 
 //  menu reference shop
 export const menuRelationShop = relations(menus, ({ one }) => ({

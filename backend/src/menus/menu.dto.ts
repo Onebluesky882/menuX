@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { menus } from '../database';
+import { menus } from '../database/schema';
 
 export type InsertMenu = InferInsertModel<typeof menus>;
 export type SelectMenu = InferSelectModel<typeof menus>;

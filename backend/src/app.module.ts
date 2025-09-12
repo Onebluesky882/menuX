@@ -4,8 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as dotenv from 'dotenv';
+
+import { authAdapter } from './auth/auth.adapter';
 import { DATABASE_CONNECTION } from './database/database-connection';
 import { DatabaseModule } from './database/database.module';
 import { ImagesModule } from './images/images.module';
@@ -22,6 +23,9 @@ import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.mod
 import { TablesModule } from './tables/tables.module';
 import { UsersModule } from './users/users.module';
 import { WebsocketGateway } from './websocket/websocket.gateway';
+dotenv.config();
+
+console.log(process.env.WEB_SERVICE_01, 'process.env.WEB_SERVICE_01');
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -29,15 +33,21 @@ import { WebsocketGateway } from './websocket/websocket.gateway';
     DatabaseModule,
     AuthModule.forRootAsync({
       imports: [DatabaseModule],
-      useFactory: (database: NodePgDatabase) => {
+      useFactory: () => {
         return {
           auth: betterAuth({
-            database: drizzleAdapter(database, {
-              provider: 'pg',
-            }),
+            database: authAdapter,
+            emailAndPassword: {
+              enabled: true,
+            },
+            trustedOrigins: [
+              process.env.WEB_SERVICE_01!,
+              process.env.WEB_SERVICE_02!,
+            ],
           }),
         };
       },
+
       inject: [DATABASE_CONNECTION],
     }),
     TablesModule,

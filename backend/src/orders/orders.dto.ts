@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import { orders } from 'src/database';
+import { orders } from 'src/database/schema';
 
 export type InsertOrders = InferInsertModel<typeof orders>;
 export type SelectOrders = InferSelectModel<typeof orders>;
