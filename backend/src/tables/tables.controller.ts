@@ -1,22 +1,21 @@
 import {
-  Controller,
-  Req,
-  UseGuards,
-  Post,
   Body,
+  Controller,
+  Delete,
   Get,
-  Query,
   Param,
   Patch,
-  Delete,
+  Post,
+  Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
-import { TablesService } from './tables.service';
+import { AuthGuard, UserSession } from '@mguay/nestjs-better-auth';
 import { TableDto } from './table.dto';
-import { AuthRequest } from 'types/auth';
+import { TablesService } from './tables.service';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard)
 @Controller('tables')
 export class TablesController {
   constructor(private readonly tablesService: TablesService) {}
@@ -26,7 +25,7 @@ export class TablesController {
   @Post()
   create(
     @Body() body: TableDto,
-    @Req() req: AuthRequest,
+    @Req() req: UserSession,
     @Query('shopId') shopId: string,
   ) {
     const userId = req.user.id;

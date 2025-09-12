@@ -66,7 +66,7 @@ export class ShopsController {
   async patch(
     @Param('shopId') shopId: string,
     @Body() data: ReceiveBank,
-    @Req() req: AuthRequest,
+    @Req() req: UserSession,
   ) {
     const userId = req.user.id;
     return this.ShopsService.patch(shopId, data, userId);

@@ -1,3 +1,4 @@
+import { AuthGuard, UserSession } from '@mguay/nestjs-better-auth';
 import {
   Body,
   Controller,
@@ -7,18 +8,16 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { MenuOptionsService } from './menu_options.service';
 import { MenuOption } from './menu_options.dto';
-import { AuthRequest } from 'types/auth';
-import { AuthGuard } from '@nestjs/passport';
+import { MenuOptionsService } from './menu_options.service';
 
 @Controller('menu-options')
 export class MenuOptionsController {
   constructor(private readonly menuOptionsService: MenuOptionsService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createMenuOptionDto: MenuOption, @Req() req: AuthRequest) {
+  create(@Body() createMenuOptionDto: MenuOption, @Req() req: UserSession) {
     const userId = req.user.id;
     return this.menuOptionsService.create(createMenuOptionDto, userId);
   }
