@@ -23,7 +23,7 @@ const UploadImage = ({
     const files = e.target.files;
     if (!files) return;
 
-    const urls = Array.from(files).map((file) => URL.createObjectURL(file));
+    const urls = Array.from(files).map(file => URL.createObjectURL(file));
     setPreviewUrl([...(previewUrl ?? []), ...urls]);
     onImagesSelected?.(files);
     onDialogClosed?.();
@@ -35,7 +35,7 @@ const UploadImage = ({
   }, [trigger]);
 
   const removeImage = (idx: number) => {
-    setPreviewUrl((prev) => prev?.filter((_, i) => i !== idx) || null);
+    setPreviewUrl(prev => prev?.filter((_, i) => i !== idx) || null);
   };
 
   return (

@@ -1,10 +1,11 @@
 import z from "zod";
 
 export const schema = z.object({
+  id: z.uuidv4(),
   name: z
     .string()
     .min(1, "require")
-    .transform((val) => val.trim()),
+    .transform(val => val.trim()),
   price: z.coerce.number().positive("price") as z.ZodNumber,
   options: z
     .array(
