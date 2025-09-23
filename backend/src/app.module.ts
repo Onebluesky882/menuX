@@ -19,9 +19,11 @@ import { ShopsModule } from './shops/shops.module';
 import { SlipVerificationsModule } from './slip-verifications/slip-verifications.module';
 import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
 import { TablesModule } from './tables/tables.module';
+import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
 
 @Module({
   imports: [
+    WebsocketGateway,
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     AuthModule.forRootAsync({

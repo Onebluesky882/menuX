@@ -1,4 +1,3 @@
-import { socket } from "@/lib/socket";
 import { useEffect } from "react";
 
 const useOrderListener = (onNewOrder: (order: any) => void) => {

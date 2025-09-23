@@ -5,6 +5,7 @@ import QuickActionOpenShop, {
 import useShop from "@/hooks/useShop";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useSocket from "../hooks/useSocket";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { setAllShops, shops, setShopById } = useShop();
@@ -20,6 +21,13 @@ const Dashboard = () => {
     navigate(`/shops/${shop.id}`);
   };
   console.log("shops ,", shops.length);
+
+  const { sendMessage } = useSocket();
+
+  const testSocket = () => {
+    sendMessage("hello from frontend");
+  };
+
   return (
     <>
       {!Array.isArray(shops) ? (
@@ -33,6 +41,16 @@ const Dashboard = () => {
             <h1 className="text-3xl md:text-4xl font-playfair font-bold text-primary mb-6">
               Dashboard
             </h1>
+
+            <div>
+              <h1>test websocket</h1>
+              <button
+                className="bg-amber-200 cursor-pointer"
+                onClick={testSocket}
+              >
+                test web socket
+              </button>
+            </div>
 
             {/* Analytics Section */}
             <section className=" bg-white/80 flex rounded-2xl shadow-md p-6 animate-fade-in">
