@@ -7,3 +7,14 @@ export default function Home() {
     </div>
   );
 }
+
+/* 
+ไอเดีย เลือกเมนูอาหารหลัก 
+
+เลือก ผัก  mock data with price 
+
+เลือกเนื้อสัตว์ mock data with price 
+
+ผ่านระบบ touch 
+
+*/
