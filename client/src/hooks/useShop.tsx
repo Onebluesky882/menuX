@@ -33,8 +33,12 @@ const useShop = () => {
   const setShopById = async (param: string) => {
     try {
       const res = await shopAPI.getById(param);
-      const shop = res.data.data;
+
+      console.log("res get shopId", res);
+      const shop = await res.data.data;
       setSelectedShop(shop);
+
+      console.log("set shop", setShops);
       return shop;
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -43,8 +47,8 @@ const useShop = () => {
     }
   };
 
-  const shops = useShopStore((state) => state.shops);
-  const selectedShop = useShopStore((state) => state.selectedShop);
+  const shops = useShopStore(state => state.shops);
+  const selectedShop = useShopStore(state => state.selectedShop);
 
   return {
     setAllShops,

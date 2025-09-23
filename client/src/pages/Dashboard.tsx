@@ -1,20 +1,23 @@
+import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
 import QuickActionOpenShop, {
   FeatureGrid,
 } from "@/components/shops/newShop/QuickOpenShop";
-import { useEffect } from "react";
 import useShop from "@/hooks/useShop";
-import { ShopCard } from "@/components/shops/dashboard/ShopListsCard";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
-  const { setAllShops, shops } = useShop();
+  const navigate = useNavigate();
+  const { setAllShops, shops, setShopById } = useShop();
   useEffect(() => {
     setAllShops();
   }, []);
 
   const handleShopId = async (id: string) => {
-    const shop = shops.find((shop) => shop.id === id);
+    const shop = shops.find(shop => shop.id === id);
     if (!shop) return;
 
-    window.location.pathname = `/shops/${shop.id}`;
+    setShopById(shop.id);
+    navigate(`/shops/${shop.id}`);
   };
   console.log("shops ,", shops.length);
   return (
@@ -44,7 +47,7 @@ const Dashboard = () => {
                   </h2>
 
                   <div className="flex">
-                    {shops.map((shop) => (
+                    {shops.map(shop => (
                       <ShopCard
                         key={shop.id}
                         shop={{

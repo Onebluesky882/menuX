@@ -19,7 +19,6 @@ import { ShopsModule } from './shops/shops.module';
 import { SlipVerificationsModule } from './slip-verifications/slip-verifications.module';
 import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
 import { TablesModule } from './tables/tables.module';
-import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
 
 @Module({
   imports: [
@@ -60,7 +59,6 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    WebsocketGateway,
   ],
 })
 export class AppModule {}

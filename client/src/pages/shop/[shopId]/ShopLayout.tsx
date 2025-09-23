@@ -1,8 +1,8 @@
-import { Link, Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import useShop from "@/hooks/useShop";
-import { ShopTabsLayout } from "@/components/shops/ShopTabLayout";
+import { useEffect } from "react";
+import { Link, Outlet } from "react-router-dom";
 import MenuManagement from "./dashboard/MenuManagement";
 import VerifyBankReceive from "./ShopPaymentForm";
 
@@ -16,6 +16,7 @@ type MenuProps = {
 
 const ShopLayout = () => {
   const { selectedShop } = useShop();
+  console.log("selectedShop", selectedShop);
 
   useEffect(() => {}, []);
   return (

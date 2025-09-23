@@ -1,26 +1,26 @@
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RiCloseCircleFill } from "react-icons/ri";
 import { FaCloudArrowUp } from "react-icons/fa6";
+import { RiCloseCircleFill } from "react-icons/ri";
 import { toast } from "sonner";
 
-import { uploadImageApi } from "@/Api/uploadImage.api";
-import useShop from "@/hooks/useShop";
-import useImages from "@/hooks/useImage";
-import { transformKeysToSnakeCase } from "@/utils/string";
-import UploadImage from "@/components/uploadImage";
-import { compressAndUpload } from "@/utils/imageCompression";
-import { v4 as uuidv4 } from "uuid";
-import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
-import { useFieldArray, useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { menuApi, menuOptionApi } from "@/Api/menu.api";
+import { uploadImageApi } from "@/Api/uploadImage.api";
+import { Button } from "@/components/ui/button";
+import UploadImage from "@/components/uploadImage";
+import useImages from "@/hooks/useImage";
+import useShop from "@/hooks/useShop";
+import { cn } from "@/lib/utils";
+import { schema, type QuickAddMenu } from "@/schema/addMenuSchema";
+import { compressAndUpload } from "@/utils/imageCompression";
+import { transformKeysToSnakeCase } from "@/utils/string";
+import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
 export default function MenuManagement() {
   const menuId = uuidv4();
@@ -51,14 +51,18 @@ export default function MenuManagement() {
 
   /* ---------- form handlers -------------- */
   const onSubmit = (data: QuickAddMenu) => {
-    setDrafts((prev) => [...prev, { menu: data, imageFiles: [] }]);
+    const draftId = uuidv4();
+    setDrafts(prev => [
+      ...prev,
+      { menu: { ...data, id: draftId }, imageFiles: [] },
+    ]);
     toast.success("Draft menu added");
 
     reset();
   };
 
   const attachImages = (index: number, files: File[]) =>
-    setDrafts((prev) =>
+    setDrafts(prev =>
       prev.map((d, i) =>
         i === index
           ? { ...d, imageFiles: [...(d.imageFiles ?? []), ...files] }
@@ -82,7 +86,7 @@ export default function MenuManagement() {
               ...transformKeysToSnakeCase(menu),
               shopId,
             })
-            .then((res) => ({ id: menuId, result: res, menu }));
+            .then(res => ({ id: menuId, result: res, menu }));
         })
       );
 
@@ -97,7 +101,7 @@ export default function MenuManagement() {
 
         if (menu.options && menu.options.length > 0) {
           await Promise.allSettled(
-            menu.options.map((option) => {
+            menu.options.map(option => {
               menuOptionApi.create({
                 ...transformKeysToSnakeCase(option),
                 menuId,
@@ -119,13 +123,12 @@ export default function MenuManagement() {
 
         // Upload all images for this menu
         await Promise.all(
-          imageFiles.map((file) => {
+          imageFiles.map(file => {
             const previewUrl = URL.createObjectURL(file);
 
             return compressAndUpload(
               previewUrl,
-              (fd: FormData) =>
-                uploadImageApi.create(fd).then((r) => r.data.url),
+              (fd: FormData) => uploadImageApi.create(fd).then(r => r.data.url),
               { type: "menu", shopId, menuId }
             );
           })
@@ -143,12 +146,13 @@ export default function MenuManagement() {
   };
 
   const handleRemoveDraft = (idx: number) => {
-    setDrafts((prev) => prev.filter((_, i) => i !== idx));
+    setDrafts(prev => prev.filter((_, i) => i !== idx));
   };
 
+  console.log("uploadingIndex", uploadingIndex);
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-2">Menu &amp; Promotions</h1>
+      <h1 className="text-2xl font-bold mb-2">Menu & Promotions</h1>
       <p className="text-gray-600 mb-6">
         Manage your restaurant menu items and special promotions
       </p>
@@ -156,9 +160,9 @@ export default function MenuManagement() {
       <Tabs defaultValue="menu">
         <TabsList className="mb-6">
           <TabsTrigger value="menu">Regular Menu</TabsTrigger>
-          <TabsTrigger value="desserts">Dessert</TabsTrigger>
+          {/* <TabsTrigger value="desserts">Dessert</TabsTrigger>
           <TabsTrigger value="drinks">Drink</TabsTrigger>
-          <TabsTrigger value="promotions">Special</TabsTrigger>
+          <TabsTrigger value="promotions">Special</TabsTrigger> */}
         </TabsList>
 
         {/* ---------- DRAFT CARDS + UPLOAD ---------- */}
@@ -194,9 +198,9 @@ export default function MenuManagement() {
                   <UploadImage
                     trigger={uploadingIndex === idx}
                     onDialogClosed={() => setUploadingIndex(null)}
-                    onImagesSelected={(files) => {
+                    onImagesSelected={files => {
                       const fileArray = Array.from(files);
-                      fileArray.forEach((file) => {
+                      fileArray.forEach(file => {
                         addImage({
                           previewUrl: URL.createObjectURL(file),
                           status: "idle",
@@ -267,8 +271,13 @@ export default function MenuManagement() {
                   )}
                 </div>
 
-                <div className="flex-col border-5  border-dotted border-gray-200 justify-center rounded-2xl mx-30 my-4 p-5  flex gap-5 ">
-                  <h3>Options</h3>
+                <div className="flex-col   border-dotted border-gray-100 justify-center rounded-2xl  p-5  flex gap-5 ">
+                  {fields.length == 0 && (
+                    <p>
+                      <span className="text-red-500">*</span> เลือกอ็อฟชั่น
+                    </p>
+                  )}
+
                   {fields.length > 0 && (
                     <div className="space-y-4 ">
                       {fields.map((field, index) => (

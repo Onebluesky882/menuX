@@ -2,11 +2,12 @@ import { schema, type SignupField } from "@/schema/signUpField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
 import { authClient } from "../lib/auth-client";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -28,12 +29,27 @@ const SignUp = () => {
         password: field.password,
       });
 
-      console.log("signup data", data);
+      await authClient.signIn.email({
+        email: field.email,
+        password: field.password,
+      });
 
-      // const { data: session } = await authClient.getSession();
-      // console.log(" get session success", session);
-    } catch (error) {
-      console.error(error);
+      console.log("  data", data);
+
+      const { data: session } = await authClient.getSession();
+
+      if (session?.user) {
+        navigate("/dashboard");
+      }
+      console.log(" get session success", session);
+    } catch (error: any) {
+      console.error("Signup error", error);
+      if (error.response) {
+        console.log("Response error:", error.response.data);
+      }
+      if (error.message) {
+        console.log("Message:", error.message);
+      }
     } finally {
       setLoading(false);
     }

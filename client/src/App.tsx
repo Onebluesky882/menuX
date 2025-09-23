@@ -1,100 +1,15 @@
 import "@/App.css";
-import { Link } from "react-router-dom";
-import { QrCode, Utensils, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-const HeroSection = () => {
-  return (
-    <header className="relative py-12 sm:py-16 md:py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-          <span className="block">Welcome to</span>
-          <span className="block text-orange-600">MenuX</span>
-        </h1>
-        <p className="mt-6 max-w-lg mx-auto text-xl text-gray-500 sm:max-w-3xl">
-          Modernize your restaurant with our innovative dining solution. QR code
-          ordering, real-time updates, and seamless management.
-        </p>
-        <div className="mt-10 flex justify-center gap-4 flex-wrap">
-          <Button
-            asChild
-            size="lg"
-            className="bg-orange-600 hover:bg-orange-700"
-          >
-            <Link to="/dashboard">Restaurant Dashboard</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link to="login">Try now</Link>
-          </Button>
-        </div>
-      </div>
-    </header>
-  );
-};
-
-const FeatureSection = () => {
-  return (
-    <section className="py-12 bg-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Revolutionize Your Restaurant Experience
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500">
-            Everything you need to provide a modern dining experience for your
-            customers.
-          </p>
-        </div>
-
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <FeatureCard
-            icon={<QrCode className="h-10 w-10 text-orange-500" />}
-            title="Scan to Order"
-            description="Customers scan QR codes at tables to view menu and place orders digitally"
-          />
-          <FeatureCard
-            icon={<Utensils className="h-10 w-10 text-orange-500" />}
-            title="Menu Management"
-            description="Easily update your menu items, prices, and daily promotions"
-          />
-          <FeatureCard
-            icon={<LayoutDashboard className="h-10 w-10 text-orange-500" />}
-            title="Real-time Dashboard"
-            description="Monitor orders, table status, and restaurant performance in real-time"
-          />
-        </div>
-
-        {/* Call-to-action buttons */}
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          <ActionCard
-            title="Scan to Order"
-            description="Let customers order directly from their table"
-            buttonText="Setup QR Codes"
-            buttonLink="/tables"
-            color="bg-gradient-to-r from-orange-400 to-orange-500"
-          />
-          <ActionCard
-            title="Manage Tables"
-            description="Customize and organize your restaurant layout"
-            buttonText="Configure Tables"
-            buttonLink="/tables"
-            color="bg-gradient-to-r from-blue-400 to-blue-500"
-          />
-          <ActionCard
-            title="View Dashboard"
-            description="Check analytics and monitor restaurant performance"
-            buttonText="Open Dashboard"
-            buttonLink="/dashboard"
-            color="bg-gradient-to-r from-teal-400 to-teal-500"
-          />
-        </div>
-      </div>
-    </section>
-  );
-};
+import { LayoutDashboard, QrCode, Utensils } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { authClient } from "./lib/auth-client";
 
 function App() {
+  const navigate = useNavigate();
+  const { data: session } = authClient.useSession();
+
+  if (session) navigate("/dashboard");
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-orange-50 to-white rounded-2xl shadow-2xl">
       <HeroSection />
@@ -205,6 +120,95 @@ function App() {
     </div>
   );
 }
+const HeroSection = () => {
+  return (
+    <header className="relative py-12 sm:py-16 md:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+          <span className="block">Welcome to</span>
+          <span className="block text-orange-600">MenuX</span>
+        </h1>
+        <p className="mt-6 max-w-lg mx-auto text-xl text-gray-500 sm:max-w-3xl">
+          Modernize your restaurant with our innovative dining solution. QR code
+          ordering, real-time updates, and seamless management.
+        </p>
+        <div className="mt-10 flex justify-center gap-4 flex-wrap">
+          <Button
+            asChild
+            size="lg"
+            className="bg-orange-600 hover:bg-orange-700"
+          >
+            <Link to="/dashboard">Restaurant Dashboard</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link to="login">Try now</Link>
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+const FeatureSection = () => {
+  return (
+    <section className="py-12 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Revolutionize Your Restaurant Experience
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500">
+            Everything you need to provide a modern dining experience for your
+            customers.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <FeatureCard
+            icon={<QrCode className="h-10 w-10 text-orange-500" />}
+            title="Scan to Order"
+            description="Customers scan QR codes at tables to view menu and place orders digitally"
+          />
+          <FeatureCard
+            icon={<Utensils className="h-10 w-10 text-orange-500" />}
+            title="Menu Management"
+            description="Easily update your menu items, prices, and daily promotions"
+          />
+          <FeatureCard
+            icon={<LayoutDashboard className="h-10 w-10 text-orange-500" />}
+            title="Real-time Dashboard"
+            description="Monitor orders, table status, and restaurant performance in real-time"
+          />
+        </div>
+
+        {/* Call-to-action buttons */}
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <ActionCard
+            title="Scan to Order"
+            description="Let customers order directly from their table"
+            buttonText="Setup QR Codes"
+            buttonLink="/tables"
+            color="bg-gradient-to-r from-orange-400 to-orange-500"
+          />
+          <ActionCard
+            title="Manage Tables"
+            description="Customize and organize your restaurant layout"
+            buttonText="Configure Tables"
+            buttonLink="/tables"
+            color="bg-gradient-to-r from-blue-400 to-blue-500"
+          />
+          <ActionCard
+            title="View Dashboard"
+            description="Check analytics and monitor restaurant performance"
+            buttonText="Open Dashboard"
+            buttonLink="/dashboard"
+            color="bg-gradient-to-r from-teal-400 to-teal-500"
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const FeatureCard = ({
   icon,
