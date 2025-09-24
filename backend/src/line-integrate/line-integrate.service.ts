@@ -32,4 +32,8 @@ export class LineIntegrateService {
       throw error;
     }
   }
+
+  async getUsers() {
+    return this.db.select().from(user);
+  }
 }

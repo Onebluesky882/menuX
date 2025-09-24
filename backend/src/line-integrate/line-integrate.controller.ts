@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateUserLineDto } from './line-dto';
 import { LineIntegrateService } from './line-integrate.service';
 // import { AuthGuard, UserSession } from '@mguay/nestjs-better-auth';
@@ -14,5 +14,10 @@ export class LineIntegrateController {
   @Post('create')
   createUser(@Body() data: CreateUserLineDto) {
     return this.line.create(data);
+  }
+
+  @Get()
+  async getAllUser() {
+    return await this.line.getUsers();
   }
 }
