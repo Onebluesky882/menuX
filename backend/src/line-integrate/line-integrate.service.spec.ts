@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LineUsersService } from './line_users.service';
+import { LineIntegrateService } from './line-integrate.service';
 
-describe('LineUsersService', () => {
-  let service: LineUsersService;
+describe('LineIntegrateService', () => {
+  let service: LineIntegrateService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LineUsersService],
+      providers: [LineIntegrateService],
     }).compile();
 
-    service = module.get<LineUsersService>(LineUsersService);
+    service = module.get<LineIntegrateService>(LineIntegrateService);
   });
 
   it('should be defined', () => {

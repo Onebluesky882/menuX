@@ -8,7 +8,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from './database/database-connection';
 import { DatabaseModule } from './database/database.module';
 import { ImagesModule } from './images/images.module';
-import { LineUsersModule } from './line_users/line_users.module';
+import { LineIntegrateModule } from './line-integrate/line-integrate.module';
 import { MenuOptionsModule } from './menu_options/menu_options.module';
 import { MenusModule } from './menus/menus.module';
 import { OrderItemsModule } from './order-items/order-items.module';
@@ -23,6 +23,7 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
 
 @Module({
   imports: [
+    LineIntegrateModule,
     WebsocketGateway,
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
@@ -50,11 +51,11 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
     MenusModule,
     OrderTableModule,
     OrderItemsModule,
-    LineUsersModule,
     ShopsModule,
     R2Module,
     MenuOptionsModule,
     SlipVerificationsModule,
+    LineIntegrateModule,
   ],
   providers: [
     {

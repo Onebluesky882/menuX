@@ -1,13 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { useLineLogin } from "../hooks/useLineLogin";
-
 const LineIntegrate = () => {
   const { profile, idToken, logout } = useLineLogin();
   if (!profile) {
     return <p className="text-white">กำลังโหลดข้อมูล หรือรอ login...</p>;
   }
+
+  const logoutUser = () => {
+    logout();
+    redirect("/");
+  };
 
   console.log("profle", profile);
   return (
@@ -25,7 +30,7 @@ const LineIntegrate = () => {
       )}
       <p>{idToken}</p>
 
-      <Button variant="destructive" onClick={logout}>
+      <Button variant="destructive" onClick={logoutUser}>
         Logout
       </Button>
     </div>
