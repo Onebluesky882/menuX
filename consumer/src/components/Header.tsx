@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Bell, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaShop } from "react-icons/fa6";
 import { useUserStore } from "../hooks/useUser";
 
 export const Header = () => {
@@ -47,6 +48,31 @@ export const Header = () => {
               <User className="h-5 w-5 text-gray-600" />
             </Link>
           )}
+        </div>
+      </div>
+      <div className="   grid-cols-2 grid mx-2 bg-gray-50 p-2 ">
+        <div className="flex  w-[50%] items-center border-amber-200 border ">
+          {user ? (
+            <p className="text-sm font-bold m-0">คุณ {user.lineDisplayName}</p>
+          ) : null}
+        </div>
+        <div className="col-span-1 flex gap-2  flex-row  items-center     justify-center">
+          <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
+            <FaShop size={15} className="" />
+            <p className="text-[10px]">name</p>
+          </div>
+          <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
+            <FaShop size={15} className="" />
+            <p className="text-[10px]">name</p>
+          </div>{" "}
+          <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
+            <FaShop size={15} className="" />
+            <p className="text-[10px]">name</p>
+          </div>{" "}
+          <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
+            <FaShop size={15} className="" />
+            <p className="text-[10px]">name</p>
+          </div>
         </div>
       </div>
     </header>

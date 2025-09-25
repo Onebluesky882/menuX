@@ -38,8 +38,7 @@ export default function RootLayout({
           <div className="min-h-screen flex flex-col">
             {/* Header - always shown */}
             <Header />
-
-            {children}
+            <div className="mt-32">{children}</div>
             <MobileFooter />
           </div>
         </ThemeProvider>
