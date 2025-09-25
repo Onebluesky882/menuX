@@ -39,6 +39,7 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
           trustedOrigins: [
             configService.getOrThrow('WEB_SERVICE_01'),
             configService.getOrThrow('WEB_SERVICE_02'),
+            configService.getOrThrow('WEB_SERVICE_03'),
           ],
         }),
       }),

@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
 
   app.enableCors({
-    origin: ['http://localhost:5173'], // หรือ '*' ถ้า dev
+    origin: ['http://localhost:5173', 'http://localhost:3001'], // หรือ '*' ถ้า dev
     credentials: true, // ถ้าใช้ cookies / session
   });
   // Access Express instance

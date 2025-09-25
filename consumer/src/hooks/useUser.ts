@@ -12,14 +12,13 @@ type UserState = {
   clearUserSate: () => void;
 };
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>(set => ({
   user: null,
 
-  setUser: (user) => {
+  setUser: user => {
     set({ user });
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fetchProfile: async (_id) => {
+  fetchProfile: async _id => {
     try {
       // const user = apiUser;
     } catch (error) {

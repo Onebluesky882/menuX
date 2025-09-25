@@ -1,10 +1,13 @@
-import React from "react";
-import { User, Bell } from "lucide-react";
+"use client";
 import { Button } from "@/components/ui/button";
+import { Bell, User } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { ModeToggle } from "./ToggleMode";
 
 export const Header = () => {
+  const [redirect, setRedirect] = useState(false);
+
   return (
     <header className="   sticky top-0 z-50 mt-2 ml-2 max-sm:m-2  max-sm:pt-2 ">
       <div className="px-2 py-2 flex items-center justify-between bg-white  shadow-sm rounded-sm  ">
@@ -27,9 +30,9 @@ export const Header = () => {
             <Bell className="h-5 w-5 text-gray-600" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Link href={"/line-Integrate"}>
             <User className="h-5 w-5 text-gray-600" />
-          </Button>
+          </Link>
           <div className="bg-black rounded-2xl">
             <ModeToggle />
           </div>
