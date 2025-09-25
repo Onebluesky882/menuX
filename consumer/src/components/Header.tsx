@@ -4,16 +4,12 @@ import { Bell, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useUserStore } from "../hooks/useUser";
-import { ModeToggle } from "./ToggleMode";
 
 export const Header = () => {
   const user = useUserStore(state => state.user);
 
-  console.log("image ", user?.linePictureUrl);
-
-  console.log("user line ", user);
   return (
-    <header className="   sticky top-0 z-50 mt-2 ml-2 max-sm:m-2  max-sm:pt-2 ">
+    <header className="   fixed  top-0 z-50  w-full   ">
       <div className="px-2 py-2 flex items-center justify-between bg-white  shadow-sm rounded-sm  ">
         <div className="flex flex-co items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
@@ -23,7 +19,6 @@ export const Header = () => {
           </div>
 
           <div>
-            {" "}
             <h1 className="text-xl font-bold text-gray-800">MenuX</h1>
             <p className="text-xs text-gray-500">Delivering happiness</p>
           </div>
@@ -34,9 +29,6 @@ export const Header = () => {
             <Bell className="h-5 w-5 text-gray-600" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
           </Button>
-          <div className="bg-black rounded-2xl">
-            <ModeToggle />
-          </div>
 
           {user ? (
             <div>
