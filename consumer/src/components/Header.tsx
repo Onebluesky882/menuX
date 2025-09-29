@@ -36,8 +36,8 @@ export const Header = () => {
               <Link href={"/profile"}>
                 <Image
                   src={user.linePictureUrl}
-                  height={50}
-                  width={50}
+                  height={45}
+                  width={45}
                   alt={user.lineDisplayName}
                   className="rounded-full"
                 />
