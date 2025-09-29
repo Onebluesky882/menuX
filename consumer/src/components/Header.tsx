@@ -13,16 +13,9 @@ export const Header = () => {
     <header className="   fixed  top-0 z-50  w-full   ">
       <div className="px-2 py-2 flex items-center justify-between bg-white  shadow-sm rounded-sm  ">
         <div className="flex flex-co items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
-            <Link href={"/"}>
-              <span className="text-white font-bold text-lg">F</span>{" "}
-            </Link>
-          </div>
-
-          <div>
+          <Link href={"/"} className="cursor-pointer">
             <h1 className="text-xl font-bold text-gray-800">MenuX</h1>
-            <p className="text-xs text-gray-500">Delivering happiness</p>
-          </div>
+          </Link>
         </div>
 
         <div className="flex items-center space-x-2">

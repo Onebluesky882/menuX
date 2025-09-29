@@ -1,9 +1,8 @@
 "use client";
 
 import { FaShop } from "react-icons/fa6";
-import { useUserStore } from "../hooks/useUser";
 const Homepage = () => {
-  const user = useUserStore(state => state.user);
+  // const user = useUserStore(state => state.user);
   return (
     <div className="min-h-screen bg-gray-100 p-2 rounded-2xl  wrap-normal">
       <div className="my-2">

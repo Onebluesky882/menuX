@@ -1,12 +1,8 @@
 "use client";
 import liff from "@line/liff";
-import { useEffect, useState } from "react";
-import { LineUser } from "../types/lineUser";
+import { useEffect } from "react";
 import { useUserStore } from "./useUser";
 export const useLineLogin = () => {
-  const [profile, setProfile] = useState<LineUser | null>(null);
-  const [idToken, setIdToken] = useState<string | null>(null);
-
   const { user, setUser, clearUserState } = useUserStore();
   const initLine = async () => {
     try {
@@ -17,23 +13,15 @@ export const useLineLogin = () => {
       await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID });
 
       // ถ้ายังไม่ login → redirect ไป LINE Login
-      if (!liff.isLoggedIn()) {
-        liff.login();
-        return;
+      if (liff.isLoggedIn()) {
+        const fetchedProfile = await liff.getProfile();
+        // ดึงข้อมูลโปรไฟล์
+        setUser({
+          id: fetchedProfile.userId,
+          lineDisplayName: fetchedProfile.displayName,
+          linePictureUrl: fetchedProfile.pictureUrl ?? "/avatar.png",
+        });
       }
-
-      // ดึงข้อมูลโปรไฟล์
-      const fetchedProfile = await liff.getProfile();
-      const token = liff.getIDToken();
-
-      setProfile(fetchedProfile as any);
-      setIdToken(token);
-
-      setUser({
-        id: fetchedProfile.userId,
-        lineDisplayName: fetchedProfile.displayName,
-        linePictureUrl: fetchedProfile.pictureUrl ?? "/avatar.png",
-      });
     } catch (err) {
       console.error("LINE LIFF login error:", err);
     }
@@ -47,8 +35,6 @@ export const useLineLogin = () => {
 
   const logout = () => {
     liff.logout();
-    setProfile(null);
-    setIdToken(null);
     clearUserState();
   };
 
@@ -56,5 +42,5 @@ export const useLineLogin = () => {
     initLine();
   }, []);
 
-  return { user, idToken, login, logout };
+  return { user, login, logout };
 };

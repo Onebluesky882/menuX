@@ -1,5 +1,6 @@
 "use client";
 
+Image;
 import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +10,7 @@ import { GiRank3 } from "react-icons/gi";
 import { MdHistory } from "react-icons/md";
 import { useLineLogin } from "../hooks/useLineLogin";
 const MobileFooter = () => {
-  const { user, login, logout } = useLineLogin();
+  const { user } = useLineLogin();
 
   const router = useRouter();
   return (
