@@ -4,6 +4,9 @@ import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AiOutlineHome } from "react-icons/ai";
+import { GiRank3 } from "react-icons/gi";
+import { MdHistory } from "react-icons/md";
 import { useLineLogin } from "../hooks/useLineLogin";
 const MobileFooter = () => {
   const { user, login, logout } = useLineLogin();
@@ -11,18 +14,21 @@ const MobileFooter = () => {
   const router = useRouter();
   return (
     <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-t border-t flex justify-around items-center py-3 z-50">
+      <Link
+        href={"/"}
+        className="flex flex-col items-center text-gray-600 hover:text-green-500"
+      >
+        <AiOutlineHome color="#383838" />
+        <span className="text-xs font-semibold">Home</span>
+      </Link>{" "}
       <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
-        <span className="text-xl">🏠</span>
-        <span className="text-xs">Home</span>
-      </button>{" "}
-      <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
-        <span className="text-xl">🏠</span>
-        <span className="text-xs">Shop</span>
+        <GiRank3 color="#383838" />
+        <span className="text-xs font-semibold">Popular</span>
       </button>
       <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
-        <span className="text-xl">👤</span>
-        <span className="text-xs">Order</span>
-      </button>{" "}
+        <MdHistory />
+        <span className="text-xs font-semibold">Order</span>
+      </button>
       <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
         {user ? (
           <div>
@@ -42,7 +48,9 @@ const MobileFooter = () => {
           </Link>
         )}
 
-        <span className="text-xs">{user?.lineDisplayName ?? "Log-in"}</span>
+        <span className="text-xs font-semibold">
+          {user?.lineDisplayName ?? "Log-in"}
+        </span>
       </button>
     </div>
   );

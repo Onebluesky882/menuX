@@ -39,7 +39,7 @@ export const Header = () => {
                   height={45}
                   width={45}
                   alt={user.lineDisplayName}
-                  className="rounded-full"
+                  className="rounded-full  "
                 />
               </Link>
             </div>
