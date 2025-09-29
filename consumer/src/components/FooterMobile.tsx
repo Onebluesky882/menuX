@@ -22,14 +22,20 @@ const MobileFooter = () => {
         <AiOutlineHome color="#383838" />
         <span className="text-xs font-semibold">Home</span>
       </Link>{" "}
-      <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
+      <Link
+        href={"/popular"}
+        className="flex flex-col items-center text-gray-600 hover:text-green-500"
+      >
         <GiRank3 color="#383838" />
         <span className="text-xs font-semibold">Popular</span>
-      </button>
-      <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
+      </Link>
+      <Link
+        href={"/order"}
+        className="flex flex-col items-center text-gray-600 hover:text-green-500"
+      >
         <MdHistory />
         <span className="text-xs font-semibold">Order</span>
-      </button>
+      </Link>
       <button className="flex flex-col items-center text-gray-600 hover:text-green-500">
         {user ? (
           <div>
