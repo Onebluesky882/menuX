@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLineLogin } from "../hooks/useLineLogin";
 
@@ -18,6 +19,7 @@ const mockCart = [
 export default function Profile() {
   const { user, login, logout } = useLineLogin();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
@@ -31,15 +33,16 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       setLoading(true);
-      await logout();
+      logout();
+      router.push("/");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-100 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl dark:bg-gray-800">
+    <div className="flex items-center justify-center  bg-gradient-to-br from-green-100 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="w-full max-w-md p-8  rounded-2xl shadow-xl dark:bg-gray-800">
         {!user ? (
           <div className="flex flex-col items-center">
             <h1 className="text-3xl font-extrabold text-gray-800 mb-6 dark:text-white">

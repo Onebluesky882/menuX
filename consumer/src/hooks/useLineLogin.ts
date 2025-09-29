@@ -3,13 +3,11 @@ import liff from "@line/liff";
 import { useEffect, useState } from "react";
 import { LineUser } from "../types/lineUser";
 import { useUserStore } from "./useUser";
-
 export const useLineLogin = () => {
   const [profile, setProfile] = useState<LineUser | null>(null);
   const [idToken, setIdToken] = useState<string | null>(null);
 
   const { user, setUser, clearUserState } = useUserStore();
-
   const initLine = async () => {
     try {
       if (!process.env.NEXT_PUBLIC_LIFF_ID) {
