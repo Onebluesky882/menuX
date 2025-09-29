@@ -1,5 +1,6 @@
 "use client";
 
+import { ModeToggle } from "../../components/ToggleMode";
 import LineIntegrate from "../../pre-load/Profile";
 
 const Page = () => {
@@ -52,6 +53,9 @@ const Page = () => {
             <h2 className="text-xl font-bold mb-2">🏆 สะสมแต้ม</h2>
             <p className="text-sm text-gray-500">ดูแต้มและแลกรางวัล</p>
           </div>
+        </div>
+        <div className="bg-black rounded-2xl">
+          <ModeToggle />
         </div>
       </div>
       {/* Profile Section */}
