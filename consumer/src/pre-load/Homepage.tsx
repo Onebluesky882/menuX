@@ -7,8 +7,6 @@ const Homepage = () => {
     <div className="min-h-screen bg-gray-100 p-2 rounded-2xl  wrap-normal">
       <div className="my-2">
         {/* section 1  */}
-        <div className="h-20 border-2 my-2">section 1</div>
-        {/* section 2  */}
         <SectionMenu />
         {/* section  */}
         <div className="h-20 border-2 my-2">section 1</div>
@@ -30,10 +28,15 @@ const SectionMenu = () => {
     { id: 6, name: "Shop 6" },
   ];
   return (
-    <div className="grid grid-cols-3   justify-center  border-2   overflow-x-auto  ">
-      {items.map(item => (
-        <MenuIcon key={item.id} />
-      ))}
+    <div className="  ">
+      <div>
+        <h3>ร้านค้าเปิดให้บริการ</h3>
+      </div>
+      <div className="grid grid-cols-3 ">
+        {items.map(item => (
+          <MenuIcon key={item.id} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -23,35 +23,17 @@ export const Header = () => {
             <Bell className="h-5 w-5 text-gray-600" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
           </Button>
-
-          {user ? (
-            <div>
-              <Link href={"/profile"}>
-                <Image
-                  src={user.linePictureUrl}
-                  height={45}
-                  width={45}
-                  alt={user.lineDisplayName}
-                  className="rounded-full  "
-                />
-              </Link>
-            </div>
-          ) : (
-            <Link href={"/profile"}>
-              <User className="h-5 w-5 text-gray-600" />
-            </Link>
-          )}
         </div>
       </div>
-      <TabMenuProfile user={user} />
+      <UserCard user={user} />
     </header>
   );
 };
 
 const TabMenuProfile = ({ user }: any) => {
   return (
-    <div className="   grid-cols-2 grid mx-2 bg-gray-50 p-2 ">
-      <div className="flex  w-[50%] items-center   ">
+    <div className="  grid mx-2   p-2   ">
+      <div className="flex  items-center   ">
         {user ? (
           <p className="text-sm font-bold m-0">คุณ {user.lineDisplayName}</p>
         ) : null}
@@ -73,6 +55,38 @@ const TabMenuProfile = ({ user }: any) => {
           <FaShop size={15} className="" />
           <p className="text-[10px]">name</p>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const UserCard = ({ user }: any) => {
+  return (
+    <div className="m-2 relative p-[2px] rounded-lg bg-gradient-to-tr from-green-500 to-blue-500">
+      <div className="rounded-lg bg-white py-2 px-2 grid-cols-2 grid ">
+        {user ? (
+          <>
+            <div className="">
+              <Link href={"/profile"}>
+                <Image
+                  src={user.linePictureUrl}
+                  height={45}
+                  width={45}
+                  alt={user.lineDisplayName}
+                  className="rounded-full  "
+                />
+                <p>คุณ{user.lineDisplayName}</p>
+              </Link>
+            </div>
+            <div>
+              <TabMenuProfile />
+            </div>
+          </>
+        ) : (
+          <Link href={"/profile"}>
+            <User className="h-5 w-5 text-gray-600" />
+          </Link>
+        )}
       </div>
     </div>
   );
