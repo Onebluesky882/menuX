@@ -1,4 +1,3 @@
-import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -27,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] `}
       >
         <ThemeProvider
           attribute="class"
@@ -35,10 +34,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            {/* Header - always shown */}
-            <Header />
-            <div className="mt-32">{children}</div>
+          <div
+            className="min-h-screen flex flex-col bg-gray-50
+          "
+          >
+            <div className=" ">{children}</div>
             <MobileFooter />
           </div>
         </ThemeProvider>

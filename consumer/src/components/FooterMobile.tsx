@@ -55,9 +55,9 @@ const MobileFooter = () => {
           </Link>
         )}
 
-        <span className="text-xs font-semibold">
+        <Link href={"/profile"} className="text-xs font-semibold">
           {user?.lineDisplayName ?? "Log-in"}
-        </span>
+        </Link>
       </button>
     </div>
   );

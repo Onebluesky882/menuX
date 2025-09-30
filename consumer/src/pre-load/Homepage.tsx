@@ -1,11 +1,13 @@
 "use client";
 
 import { FaShop } from "react-icons/fa6";
+import { HeadHomePage } from "../components/Header";
 const Homepage = () => {
-  // const user = useUserStore(state => state.user);
   return (
-    <div className="min-h-screen bg-gray-100 p-2 rounded-2xl  wrap-normal">
+    <div className="min-h-screen   rounded-2xl  wrap-normal">
       <div className="my-2">
+        {/* head */}
+        <HeadHomePage />
         {/* section 1  */}
         <SectionMenu />
         {/* section  */}
