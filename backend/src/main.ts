@@ -1,6 +1,4 @@
-import { AuthService } from '@mguay/nestjs-better-auth';
 import { NestFactory } from '@nestjs/core';
-import { toNodeHandler } from 'better-auth/node';
 import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
@@ -13,15 +11,16 @@ async function bootstrap() {
   const expressApp = app.getHttpAdapter().getInstance();
 
   // Access BetterAuth instance from AuthService
-  const authService = app.get<AuthService>(AuthService);
+  // const authService = app.get<AuthService>(AuthService);
 
-  expressApp.all(
-    /^\/api\/auth\/.*/,
-    toNodeHandler(authService.instance.handler),
-  );
+  // expressApp.all(
+  //   /^\/api\/auth\/.*/,
+  //   toNodeHandler(authService.instance.handler),
+  // );
 
   expressApp.use(require('express').json());
   app.setGlobalPrefix('/api');
+  console.log(`NestJS running on ${process.env.PORT} `);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

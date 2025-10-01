@@ -54,7 +54,9 @@ export class MenusService {
   }
 
   async getAll(shopId: string) {
+    console.log('get all menu');
     try {
+      console.log('shopId param:', shopId);
       const result = await this.db
         .select({
           id: menus.id,
@@ -65,7 +67,7 @@ export class MenusService {
         })
         .from(menus)
         .where(eq(menus.shopId, shopId));
-
+      console.log('result', result);
       return {
         success: true,
         data: result,
@@ -111,13 +113,15 @@ export class MenusService {
     }
   }
 
-  async getMenusWithDetailsByShopId(shopId: string) {
+  async getMenusShopId(shopId: string) {
     try {
+      console.log('getMenusShopId');
       const menuWithRelations = await this.db.query.menus.findMany({
         where: eq(menus.shopId, shopId),
         with: {
-          images: true,
           menuOptions: true,
+          // todo image later
+          // images: true,
         },
       });
 

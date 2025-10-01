@@ -24,10 +24,6 @@ const Dashboard = () => {
 
   const { sendMessage } = useSocket();
 
-  const testSocket = () => {
-    sendMessage("hello from frontend");
-  };
-
   return (
     <>
       {!Array.isArray(shops) ? (
@@ -43,11 +39,7 @@ const Dashboard = () => {
             </h1>
 
             <div>
-              <h1>test websocket</h1>
-              <button
-                className="bg-amber-200 cursor-pointer"
-                onClick={testSocket}
-              >
+              <button className="bg-amber-200 cursor-pointer">
                 test web socket
               </button>
             </div>

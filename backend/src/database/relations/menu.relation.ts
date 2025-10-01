@@ -1,28 +1,28 @@
 import { relations } from 'drizzle-orm';
 import { images, menuOptions, menus, shops } from '../schema';
 
-//  menu reference shop
-export const menuRelationShop = relations(menus, ({ one }) => ({
+//  Parent: shops
+export const shopRelations = relations(shops, ({ many }) => ({
+  menus: many(menus, { relationName: 'shopMenus' }),
+}));
+
+// menus (Child) → shop (Parent) + menuOptions/images (Child)
+export const menuRelations = relations(menus, ({ one, many }) => ({
   shop: one(shops, {
     fields: [menus.shopId],
     references: [shops.id],
+    relationName: 'shopMenus', // must match parent
   }),
+  menuOptions: many(menuOptions, { relationName: 'menuOptions' }),
+  images: many(images, { relationName: 'menuImages' }),
 }));
 
-// schema/relations/menuOptionsRelations.ts
-
+// menuOptions (Child) → menus (Parent)
 export const menuOptionRelations = relations(menuOptions, ({ one }) => ({
   menu: one(menus, {
     fields: [menuOptions.menuId],
     references: [menus.id],
-    relationName: 'menuOptions', // ต้องตรงกับใน menuRelations
-  }),
-}));
-
-export const tableRelationShop = relations(images, ({ one }) => ({
-  shop: one(shops, {
-    fields: [images.shopId],
-    references: [shops.id],
+    relationName: 'menuOptions', // must match parent
   }),
 }));
 
@@ -37,40 +37,4 @@ Export ครบทุก relation ใน schema index
 Import ใน database config ด้วย schema
 
 
-
- Parent Table (menus) - ใช้ many()
-export const menuRelations = relations(menus, ({ many }) => ({
-  images: many(images, {
-    relationName: 'menuImages', // ชื่อต้องตรงกัน
-  }),
-  menuOptions: many(menuOptions, {
-    relationName: 'menuOptions', // ชื่อต้องตรงกัน
-  }),
-}));
-
- Child Table (images) - ใช้ one()
-export const imageRelations = relations(images, ({ one }) => ({
-  menu: one(menus, {
-    fields: [images.menuId],
-    references: [menus.id],
-    relationName: 'menuImages', // ชื่อต้องตรงกัน
-  }),
-}));
-
- Child Table (menuOptions) - ใช้ one()
-export const menuOptionRelations = relations(menuOptions, ({ one }) => ({
-  menu: one(menus, {
-    fields: [menuOptions.menuId],
-    references: [menus.id],
-    relationName: 'menuOptions', // ชื่อต้องตรงกัน
-  }),
-}));
-*/
-export const menuRelations = relations(menus, ({ many }) => ({
-  images: many(images, {
-    relationName: 'menuImages', // optional
-  }),
-  menuOptions: many(menuOptions, {
-    relationName: 'menuOptions', // optional
-  }),
-}));
+ */

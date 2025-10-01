@@ -1,7 +1,6 @@
-import { AuthGuard, AuthModule } from '@mguay/nestjs-better-auth';
+import { AuthModule } from '@mguay/nestjs-better-auth';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -59,10 +58,11 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
     LineIntegrateModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    // global guard
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
   ],
 })
 export class AppModule {}

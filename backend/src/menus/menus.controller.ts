@@ -25,11 +25,18 @@ export class MenusController {
 
     return this.menusService.create(body, userId);
   }
-
-  @Get()
-  getAll(@Query('shopId') shopId: string) {
+  @Get('/:shopId')
+  getAll(@Param('shopId') shopId: string) {
+    console.log('shopId controller :', shopId);
     return this.menusService.getAll(shopId);
   }
+
+  @Get('/:shopId')
+  async getMenuWithDetail(@Param('shopId') shopId: string) {
+    console.log('shopId  controller:', shopId);
+    return this.menusService.getMenusShopId(shopId);
+  }
+
   // get by id
   @Get('name')
   getById(@Query('name') name: string, @Query('shopId') shopId: string) {
@@ -50,10 +57,5 @@ export class MenusController {
   @Delete(':id')
   delete(@Param('id') id: string, @Query('shopId') shopId: string) {
     return this.menusService.delete(id, shopId);
-  }
-
-  @Get('options/:shopId')
-  async getMenuWithDetail(@Param('shopId') shopId: string) {
-    return this.menusService.getMenusWithDetailsByShopId(shopId);
   }
 }

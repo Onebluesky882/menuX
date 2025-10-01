@@ -54,18 +54,4 @@ export class MenuOptionsService {
       this.logger.error('Failed to create menu option:', error);
     }
   }
-
-  async getMenuOptionId(menuId: string) {
-    try {
-      const result = await this.db.query.menuOptions.findMany({
-        where: eq(menus.id, menuId),
-      });
-      return {
-        success: true,
-        data: result,
-      };
-    } catch (error) {
-      this.logger.error('failed to get getMenuOptionId ', error);
-    }
-  }
 }
