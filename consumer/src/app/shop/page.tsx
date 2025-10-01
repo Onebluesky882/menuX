@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { PiRankingBold } from "react-icons/pi";
 import useCart, { Menu } from "../../hooks/useCart";
 
 type CategoriesProps = {
@@ -70,11 +71,11 @@ const page = () => {
   console.log("selectMenu", cart);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-6">
+    <>
       {/* Header ร้าน */}
       <ShopSections />
 
-      <div className="grid grid-cols-8 gap-4">
+      <div className="flex flex-row">
         {/*  Sidebar Category */}
         <Categories categories={categories} onClick={id => setSelectCat(id)} />
         {/* Section Menu */}
@@ -83,14 +84,14 @@ const page = () => {
       <div>
         <CartCard cart={cart} />
       </div>
-    </div>
+    </>
   );
 };
 export default page;
 
 const Categories = ({ categories, onClick }: CategoriesProps) => {
   return (
-    <div className="col-span-2 bg-white rounded-xl shadow p-4 space-y-2">
+    <div className="w-[20%]  bg-white rounded-l-lg shadow p-4 space-y-2">
       <h2 className="text-lg font-semibold mb-3">หมวดหมู่</h2>
       {categories.map(cat => (
         <button
@@ -107,7 +108,7 @@ const Categories = ({ categories, onClick }: CategoriesProps) => {
 
 const MenuCard = ({ menus, onClick }: MenuProps) => {
   return (
-    <div className="col-span-6 bg-white rounded-xl shadow p-4">
+    <div className=" w-[80%]   bg-white rounded-r-lg shadow p-4">
       <h2 className="text-lg font-semibold mb-3">เมนูอาหาร</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {menus.map((item: any) => (
@@ -127,13 +128,21 @@ const MenuCard = ({ menus, onClick }: MenuProps) => {
 
 const ShopSections = () => {
   return (
-    <div className="bg-white border rounded-xl shadow-md p-6 mb-6">
-      <h1 className="text-2xl font-bold text-gray-800 text-center">
-        🏪 {`shop name`}
-      </h1>
-      <p className="text-sm text-gray-500 text-center mt-1">
-        อร่อย สะอาด รวดเร็ว
-      </p>
+    <div className="bg-white border rounded-xl shadow-sm p-6 mb-2 flex flex-row justify-between items-center">
+      <div className="border rounded-full p-2">
+        <PiRankingBold color="#E4E5E7" size={20} />
+      </div>
+      <div className="">
+        <h1 className="text-2xl font-bold text-gray-800 text-center">
+          🏪 {`shop name`}
+        </h1>
+        <p className="text-sm text-gray-500 text-center mt-1">
+          อร่อย สะอาด รวดเร็ว
+        </p>
+      </div>
+      <div className="border rounded-full p-2">
+        <PiRankingBold color="#E4E5E7" size={20} />
+      </div>
     </div>
   );
 };

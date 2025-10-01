@@ -34,13 +34,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div
-            className="min-h-screen flex flex-col bg-gray-50
-          "
-          >
-            <div className=" ">{children}</div>
-            <MobileFooter />
-          </div>
+          <main className="flex-1  py-2 max-sm:px-2 sm:py-4 md:px-8 md:py-6 min-h-screen flex flex-col bg-gray-50">
+            {children}
+          </main>
+          <MobileFooter />
         </ThemeProvider>
       </body>
     </html>
