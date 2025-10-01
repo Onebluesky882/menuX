@@ -68,8 +68,6 @@ const page = () => {
     setCart(prev => addCart(prev, menu));
   };
 
-  console.log("selectMenu", cart);
-
   return (
     <>
       {/* Header ร้าน */}

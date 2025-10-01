@@ -1,49 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { menuApi } from "../api/menu.api";
-import { shopApi } from "../api/shop.api";
-
-type MenuItem = {
-  id: string;
-  name: string;
-  price: string;
-  available: boolean;
-  shopId: string;
-};
+import useMenu from "../hooks/useMenu";
+import useShop from "../hooks/useShop";
 
 const ShopMenu = ({ shopId }: { shopId: string }) => {
-  const [menus, setMenus] = useState<MenuItem[]>([]);
-  const [shop, setShop] = useState<any>();
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
+  const { shop, fetchShop } = useShop();
+  const { menus, fetchShopMenus } = useMenu();
   useEffect(() => {
-    const fetchMenus = async () => {
+    const loadData = () => {
       try {
-        const res = await menuApi.getMenuByShopId(shopId);
-        setMenus(res.data.data);
+        setLoading(true);
+        fetchShop(shopId);
+        fetchShopMenus(shopId);
       } catch (error) {
-        console.error("Failed to fetch menus", error);
+        console.error("Failed to fetch data", error);
       } finally {
         setLoading(false);
       }
     };
-    const fetchShopId = async () => {
-      try {
-        const res = await shopApi.getShopBtId(shopId);
-        setShop(res.data.data);
-      } catch (error) {
-        console.error("Failed to fetch menus", error);
-      }
-    };
-    fetchShopId();
-    fetchMenus();
+    loadData();
   }, [shopId]);
 
+  console.log("menus", menus);
   if (loading) return <p>กำลังโหลด...</p>;
 
   if (!menus.length) return <p>ไม่มีเมนูในร้านนี้</p>;
-
+  console.log("menus", menus);
   return (
     <>
       <h1 className="text-xl font-bold mb-4">เมนูร้าน {shop?.name}</h1>

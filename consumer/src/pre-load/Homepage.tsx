@@ -24,7 +24,12 @@ export default Homepage;
 const SectionShop = () => {
   const items = [
     { id: 1, name: "shop", path: "/shop" },
-    { id: 2, name: "order", path: "/order" },
+    {
+      id: 2,
+      name: "menu",
+      path: "/menus/70eace24-3038-4c89-b66e-6c5af038eb0b",
+    },
+    { id: 3, name: "order", path: "/order" },
   ];
   return (
     <div className="  ">
