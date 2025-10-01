@@ -1,6 +1,5 @@
 import { axiosInstance } from ".";
 
 export const shopApi = {
-  getAllShop: () => axiosInstance.get("/shops/consumer"),
-  getShopBtId: (id: string) => axiosInstance.get(`/shops/${id}`),
+  getShopBtId: (id: string) => axiosInstance.get(`api/shops/${id}`),
 };
