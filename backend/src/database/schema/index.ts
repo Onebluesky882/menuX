@@ -9,7 +9,6 @@ import { orderTable } from './orderTable';
 import { shops } from './shops';
 import { shopTables } from './shopTables';
 import { slipVerifications } from './slipVerifications';
-import { tableGridLayout } from './tableGridsLayout';
 
 export * from './auth-user';
 export * from './images';
@@ -22,7 +21,6 @@ export * from './orderTable';
 export * from './shops';
 export * from './shopTables';
 export * from './slipVerifications';
-export * from './tableGridsLayout';
 
 export * from '../relations/image.relation';
 export * from '../relations/menu.relation';
@@ -39,7 +37,6 @@ export const schema = {
   shopTables,
   orderTable,
   images,
-  tableGridLayout,
   menus,
   orderItems,
   lineUser,

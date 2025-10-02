@@ -16,8 +16,6 @@ import { OrdersModule } from './orders/orders.module';
 import { R2Module } from './r2/r2.module';
 import { ShopsModule } from './shops/shops.module';
 import { SlipVerificationsModule } from './slip-verifications/slip-verifications.module';
-import { TableGridLayoutModule } from './table-grid-layout/table-grid-layout.module';
-import { TablesModule } from './tables/tables.module';
 import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
 
 @Module({
@@ -44,10 +42,8 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
       }),
       inject: [DATABASE_CONNECTION, ConfigService],
     }),
-    TablesModule,
     ImagesModule,
     OrdersModule,
-    TableGridLayoutModule,
     MenusModule,
     OrderTableModule,
     OrderItemsModule,

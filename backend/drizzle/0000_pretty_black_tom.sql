@@ -146,7 +146,6 @@ CREATE TABLE "shop_tables" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text,
 	"number" numeric,
-	"layout_id" uuid,
 	"position" text,
 	"table_link" text NOT NULL,
 	"status" text NOT NULL,
@@ -172,13 +171,6 @@ CREATE TABLE "slip-verifications" (
 	CONSTRAINT "slip-verifications_slip_code_unique" UNIQUE("slip_code")
 );
 --> statement-breakpoint
-CREATE TABLE "table_grids_layout" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"rows" numeric,
-	"columns" numeric,
-	"shop_id" uuid NOT NULL
-);
---> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "images" ADD CONSTRAINT "images_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -197,8 +189,6 @@ ALTER TABLE "order_table" ADD CONSTRAINT "order_table_shop_id_shops_id_fk" FOREI
 ALTER TABLE "order_table" ADD CONSTRAINT "order_table_table_number_shop_tables_id_fk" FOREIGN KEY ("table_number") REFERENCES "public"."shop_tables"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_table" ADD CONSTRAINT "order_table_create_by_id_user_id_fk" FOREIGN KEY ("create_by_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "shops" ADD CONSTRAINT "shops_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_layout_id_table_grids_layout_id_fk" FOREIGN KEY ("layout_id") REFERENCES "public"."table_grids_layout"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "shop_tables" ADD CONSTRAINT "shop_tables_created_by_id_user_id_fk" FOREIGN KEY ("created_by_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "slip-verifications" ADD CONSTRAINT "slip-verifications_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "table_grids_layout" ADD CONSTRAINT "table_grids_layout_shop_id_shops_id_fk" FOREIGN KEY ("shop_id") REFERENCES "public"."shops"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "slip-verifications" ADD CONSTRAINT "slip-verifications_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;

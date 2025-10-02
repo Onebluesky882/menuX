@@ -1,5 +1,5 @@
 {
-  "id": "dc8eef0b-4c12-479d-8d43-ec219cfe0b15",
+  "id": "03c9f98b-6d76-41d4-9ae6-1a531a85e41a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1117,12 +1117,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "layout_id": {
-          "name": "layout_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "position": {
           "name": "position",
           "type": "text",
@@ -1163,19 +1157,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "shop_tables_layout_id_table_grids_layout_id_fk": {
-          "name": "shop_tables_layout_id_table_grids_layout_id_fk",
-          "tableFrom": "shop_tables",
-          "tableTo": "table_grids_layout",
-          "columnsFrom": [
-            "layout_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "shop_tables_shop_id_shops_id_fk": {
           "name": "shop_tables_shop_id_shops_id_fk",
           "tableFrom": "shop_tables",
@@ -1320,58 +1301,6 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.table_grids_layout": {
-      "name": "table_grids_layout",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "rows": {
-          "name": "rows",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "columns": {
-          "name": "columns",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "shop_id": {
-          "name": "shop_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "table_grids_layout_shop_id_shops_id_fk": {
-          "name": "table_grids_layout_shop_id_shops_id_fk",
-          "tableFrom": "table_grids_layout",
-          "tableTo": "shops",
-          "columnsFrom": [
-            "shop_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
