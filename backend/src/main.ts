@@ -1,7 +1,6 @@
 import { AuthService } from '@mguay/nestjs-better-auth';
 import { NestFactory } from '@nestjs/core';
 import { toNodeHandler } from 'better-auth/node';
-import 'dotenv/config';
 import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
