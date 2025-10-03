@@ -25,8 +25,8 @@ export const HeadCard = () => {
 
 const UserCard = ({ user }: UserCardProps) => {
   return (
-    <div className=" relative p-[2px] rounded-lg bg-gradient-to-tr from-green-400 to-blue-500">
-      <div className="rounded-lg bg-white py-2 px-2 grid-cols-2 grid ">
+    <div className=" relative p-[2px] rounded-lg shadow-sm bg-gradient-to-tr from-green-400 to-blue-500">
+      <div className="rounded-lg bg-white py-2 px-2  ">
         {user ? (
           <>
             <div className="flex ">
@@ -46,15 +46,24 @@ const UserCard = ({ user }: UserCardProps) => {
                   {user.lineDisplayName}
                 </p>
               </div>
-            </div>
-
-            <div>
-              <TabMenuProfile user={user} />
+              <div>
+                <TabMenuProfile user={user} />
+              </div>
             </div>
           </>
         ) : (
           <Link href={"/profile"}>
-            <User className="h-2 w-5 text-gray-600" />
+            <div className="flex flex-row justify-between ">
+              <div className="mx-2 w-full flex-1  gap-4 flex-row flex items-center   rounded-sm   ">
+                <User
+                  size={45}
+                  className=" text-gray-500 border rounded-full"
+                />
+              </div>
+              <div>
+                <TabMenuProfile user={user} />
+              </div>
+            </div>
           </Link>
         )}
       </div>
@@ -73,19 +82,19 @@ const TabMenuProfile = ({ user }: UserCardProps) => {
       <div className="col-span-1 flex gap-2  flex-row  items-center     justify-center">
         <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
           <FaShop size={15} className="" />
-          <p className="text-[10px]">name</p>
+          <p className="text-[10px]">เมนู</p>
         </div>
         <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
           <FaShop size={15} className="" />
-          <p className="text-[10px]">name</p>
+          <p className="text-[10px]">ร้าน</p>
         </div>{" "}
         <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
           <FaShop size={15} className="" />
-          <p className="text-[10px]">name</p>
+          <p className="text-[10px]">บันทึก</p>
         </div>{" "}
         <div className="border rounded-full h-12 w-12 flex  flex-col items-center justify-center">
           <FaShop size={15} className="" />
-          <p className="text-[10px]">name</p>
+          <p className="text-[10px]">รายการ</p>
         </div>
       </div>
     </div>

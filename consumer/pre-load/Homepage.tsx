@@ -1,56 +1,37 @@
 "use client";
 
-import Link from "next/link";
-import { FaShop } from "react-icons/fa6";
+import { useEffect } from "react";
 import { HeadCard } from "../components/homepage/header";
-const Homepage = () => {
-  return (
-    <div className=" ">
-      <div className="my-2">
-        {/* head */}
-        <HeadCard />
-        {/* section 1  */}
-        <SectionShop />
-        {/* section  */}
+import { SectionShop } from "../components/homepage/section";
+import useShop from "../hooks/useShop";
 
-        {/* section 3  */}
+const Homepage = () => {
+  const { fetchAllShops, activeShops } = useShop();
+
+  useEffect(() => {
+    fetchAllShops();
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-4 p-4 max-w-5xl mx-auto">
+      {/* Header Card */}
+      <HeadCard />
+
+      {/* ร้านค้าเปิดบริการ */}
+      <div className="bg-white rounded-xl shadow p-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">
+          🍜 ร้านค้าที่เปิดบริการ
+        </h2>
+        {activeShops.length > 0 ? (
+          <SectionShop shops={activeShops} />
+        ) : (
+          <p className="text-gray-500 text-center py-6">
+            😔 ตอนนี้ยังไม่มีร้านเปิดบริการ
+          </p>
+        )}
       </div>
     </div>
   );
 };
 
 export default Homepage;
-
-const SectionShop = () => {
-  const items = [
-    { id: 1, name: "shop", path: "/shop" },
-    {
-      id: 2,
-      name: "menu",
-      path: "/menus/70eace24-3038-4c89-b66e-6c5af038eb0b",
-    },
-    { id: 3, name: "order", path: "/order" },
-  ];
-  return (
-    <div className="  ">
-      <div className="grid grid-cols-2 rounded-sm my-2 border-0.5 border-gray-100 shadow-sm overflow-auto ">
-        {items.map(item => (
-          <MenuIcon key={item.id} name={item.name} path={item.path} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const MenuIcon = ({ name, path }: any) => {
-  return (
-    <div className="col-span-1  p-2 flex flex-col  items-center     justify-center   shadow-sm  hover:shadow-l    transition cursor-pointer">
-      <div className="border rounded-full h-20 w-20 flex  flex-col items-center justify-center">
-        <Link href={path}>
-          <FaShop size={20} className="" />
-          <p className="text-[10px]">{name}</p>
-        </Link>
-      </div>
-    </div>
-  );
-};
