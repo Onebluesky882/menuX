@@ -16,11 +16,10 @@ import { ShopsService } from './shops.service';
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly ShopsService: ShopsService) {}
-  //getAll
-  // @UseGuards(ShopAccessGuard)
 
-  @Get('consumer')
+  @Get()
   getAllShopCLient() {
+    console.log('here get all shops');
     return this.ShopsService.getAllShopNoJWT();
   }
 

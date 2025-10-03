@@ -12,7 +12,7 @@ const Homepage = () => {
         {/* section 1  */}
         <SectionShop />
         {/* section  */}
-        <div className="h-20 border-2 my-2">section 1</div>
+
         {/* section 3  */}
       </div>
     </div>

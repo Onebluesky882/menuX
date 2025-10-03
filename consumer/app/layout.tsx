@@ -35,7 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex-1  py-2 max-sm:px-2 sm:py-4 md:px-8 md:py-6 min-h-screen flex flex-col bg-gray-50">
+          <main className="flex-1  py-2 max-sm:px-2 sm:py-4 md:px-8 md:py-6 min-h-screen flex flex-col bg-gray-50 overflow-x-hidden">
             {children}
           </main>
           <MobileFooter />

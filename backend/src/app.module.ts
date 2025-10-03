@@ -34,9 +34,11 @@ import { WebsocketGateway } from './websocket-gateway/websocket.gateway';
           emailAndPassword: { enabled: true },
 
           trustedOrigins: [
-            configService.getOrThrow('WEB_SERVICE_01'),
-            configService.getOrThrow('WEB_SERVICE_02'),
+            configService.getOrThrow('WEB_SERVICE_dev_01'),
+            configService.getOrThrow('WEB_SERVICE_dev_02'),
             configService.getOrThrow('WEB_SERVICE_03'),
+            configService.getOrThrow('WEB_SERVICE_04'),
+            configService.getOrThrow('WEB_SERVICE_05'),
           ],
         }),
       }),
