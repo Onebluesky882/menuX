@@ -71,8 +71,16 @@ const Categories = ({ categories, onClick }: CategoriesProps) => {
   );
 };
 
+type Menu = {
+  id: number;
+  name: string;
+  price: number;
+  categoryId?: number; // optional
+  amount?: number; // optional
+};
+
 type MenuProps = {
-  menus: { id: number; name: string; price: number }[];
+  menus: Menu[];
   onClick: (id: number) => void;
 };
 

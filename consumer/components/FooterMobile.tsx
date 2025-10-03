@@ -4,7 +4,6 @@ Image;
 import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { AiOutlineHome } from "react-icons/ai";
 import { GiRank3 } from "react-icons/gi";
 import { MdHistory } from "react-icons/md";
@@ -12,7 +11,6 @@ import { useLineLogin } from "../hooks/useLineLogin";
 const MobileFooter = () => {
   const { user } = useLineLogin();
 
-  const router = useRouter();
   return (
     <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-t border-t flex justify-around items-center py-3 z-50">
       <Link
