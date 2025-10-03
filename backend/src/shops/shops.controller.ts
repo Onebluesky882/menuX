@@ -19,7 +19,6 @@ export class ShopsController {
 
   @Get()
   getAllShopCLient() {
-    console.log('here get all shops');
     return this.ShopsService.getAllShopNoJWT();
   }
 
