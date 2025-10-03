@@ -8,11 +8,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      process.env.WEB_SERVICE_dev_01,
-      process.env.WEB_SERVICE_dev_02,
-      process.env.WEB_SERVICE_03,
-      process.env.WEB_SERVICE_04,
-      process.env.WEB_SERVICE_05,
+      'http://localhost:5173',
+      'http://localhost:3001',
+      'https://menux-client.vercel.app',
+      'https://menux-production.up.railway.app',
+      'https://menux-consumer.vercel.app',
     ],
     credentials: true, // ถ้าใช้ cookies / session
   });
