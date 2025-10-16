@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import {
   CartCard,
   Categories,
+  MenuCard,
   ShopSections,
 } from "../../components/menu/MenuCard";
 import useMenu from "../../hooks/useMenu";
@@ -36,7 +37,7 @@ const ShopPage = ({ shopId }: { shopId: string }) => {
         />
 
         {/* Section Menu */}
-        {/* <MenuCard menus={menus} onClick={id => console.log("เลือกเมนู", id)} /> */}
+        <MenuCard menus={menus} onClick={id => console.log("เลือกเมนู", id)} />
       </div>
 
       {/* ตะกร้าสั่งซื้อ */}
