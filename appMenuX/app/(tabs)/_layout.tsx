@@ -28,18 +28,28 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="explore"
+        name="menu"
         options={{
-          title: "Explore",
+          title: "menu",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="order"
+        options={{
+          title: "order",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="menu"
+        name="ranking"
         options={{
-          title: "menu",
+          title: "ranking",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
